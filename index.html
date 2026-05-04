@@ -276,7 +276,7 @@ header.scrolled{
 .ticker-track{
   display:flex;width:max-content;
   direction:ltr;
-  animation:tickerRun 24s linear infinite;
+  animation:tickerRun 36s linear infinite;
 }
 .ticker-item{
   display:flex;align-items:center;gap:16px;padding:0 40px;
@@ -285,7 +285,7 @@ header.scrolled{
   color:rgba(255,255,255,.82);white-space:nowrap;
 }
 .ticker-dot{width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:.7;flex-shrink:0}
-@keyframes tickerRun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes tickerRun{from{transform:translateX(0)}to{transform:translateX(-33.3333%)}}
 
 /* ═══ SECTION COMMONS ══════════════════════════════ */
 .sec{padding:96px 24px}
@@ -322,9 +322,11 @@ header.scrolled{
   gap:14px;max-width:700px;margin:0 auto;
 }
 .gi:nth-child(1){aspect-ratio:3/4}
-.gi:nth-child(2){aspect-ratio:3/4;margin-top:32px}
-.gi:nth-child(3){aspect-ratio:4/3}
-.gi:nth-child(4){aspect-ratio:3/4;margin-top:-32px}
+.gi:nth-child(2){aspect-ratio:3/4;margin-top:36px}
+.gi:nth-child(3){aspect-ratio:16/9;grid-column:1/-1}
+/* נוספות — להוסיף כשיש תמונות חדשות */
+.gi:nth-child(4){aspect-ratio:3/4}
+.gi:nth-child(5){aspect-ratio:3/4;margin-top:36px}
 .gi{
   position:relative;border-radius:var(--r);overflow:hidden;
   cursor:pointer;box-shadow:var(--sh-sm);
@@ -526,13 +528,13 @@ footer{
     <img src="images/logo.png" alt="Good Lak Beauty Studio" class="hero-logo">
     <span class="hero-kicker">Beauty Studio · אופקים</span>
     <h1>
-      ציפורניים, גבות<br>
-      ו<span class="hl">איפור קבוע</span><br>
-      שישאיר אותך <em style="font-style:italic">מרהיבה</em>
+      הזמן שלך<br>
+      <span class="hl">לעצמך</span><br>
+      <em style="font-style:italic">מתחיל כאן</em>
     </h1>
     <p class="hero-sub">
-      גאיה מ-Good Lak. תוצאות אמיתיות, אווירה חמה.<br>
-      תרגישי יפה - בלי לצאת מהעיר.
+      צוות GOOD LAK מזמינות אותך להנות מהזמן שלך<br>
+      עם יחס אישי ותוצאה מושלמת
     </p>
     <div class="hero-pills">
       <span class="pill">💅 ציפורניים</span>
@@ -557,14 +559,21 @@ footer{
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
     <span class="ticker-item">💅 ציפורניים<span class="ticker-dot"></span></span>
-    <span class="ticker-item">✨ לק ג׳ל מבנה<span class="ticker-dot"></span></span>
+    <span class="ticker-item">✨ לק ג׳ל מבנה אנטומי<span class="ticker-dot"></span></span>
     <span class="ticker-item">🪮 גבות<span class="ticker-dot"></span></span>
     <span class="ticker-item">✨ איפור קבוע<span class="ticker-dot"></span></span>
     <span class="ticker-item">🦶 פדיקור<span class="ticker-dot"></span></span>
     <span class="ticker-item">💅 בנייה אקריל<span class="ticker-dot"></span></span>
     <span class="ticker-item">🌸 Good Lak · אופקים<span class="ticker-dot"></span></span>
     <span class="ticker-item">💅 ציפורניים<span class="ticker-dot"></span></span>
-    <span class="ticker-item">✨ לק ג׳ל מבנה<span class="ticker-dot"></span></span>
+    <span class="ticker-item">✨ לק ג׳ל מבנה אנטומי<span class="ticker-dot"></span></span>
+    <span class="ticker-item">🪮 גבות<span class="ticker-dot"></span></span>
+    <span class="ticker-item">✨ איפור קבוע<span class="ticker-dot"></span></span>
+    <span class="ticker-item">🦶 פדיקור<span class="ticker-dot"></span></span>
+    <span class="ticker-item">💅 בנייה אקריל<span class="ticker-dot"></span></span>
+    <span class="ticker-item">🌸 Good Lak · אופקים<span class="ticker-dot"></span></span>
+    <span class="ticker-item">💅 ציפורניים<span class="ticker-dot"></span></span>
+    <span class="ticker-item">✨ לק ג׳ל מבנה אנטומי<span class="ticker-dot"></span></span>
     <span class="ticker-item">🪮 גבות<span class="ticker-dot"></span></span>
     <span class="ticker-item">✨ איפור קבוע<span class="ticker-dot"></span></span>
     <span class="ticker-item">🦶 פדיקור<span class="ticker-dot"></span></span>
@@ -581,10 +590,11 @@ footer{
   <p class="sec-sub rv d2">כל טיפול - יצירה קטנה</p>
   <div class="gold-rule rv d2"></div>
   <div class="gallery-grid">
-    <div class="gi rv d1"><img src="images/nails-1.jpg" alt="בנייה אקריל" loading="lazy"><div class="gi-cap">בנייה אקריל</div></div>
-    <div class="gi rv d2"><img src="images/nails-2.jpg" alt="עיצוב ג׳ל" loading="lazy"><div class="gi-cap">עיצוב ג׳ל</div></div>
-    <div class="gi rv d3"><img src="images/eyebrows.jpg" alt="איפור קבוע" loading="lazy"><div class="gi-cap">איפור קבוע - לפני ואחרי</div></div>
-    <div class="gi rv d4"><img src="images/nails-3.jpg" alt="לק ג׳ל" loading="lazy"><div class="gi-cap">לק ג׳ל</div></div>
+    <div class="gi rv d1"><img src="images/nails-2.jpg" alt="ציפורניים" loading="lazy"></div>
+    <div class="gi rv d2"><img src="images/nails-3.jpg" alt="ציפורניים" loading="lazy"></div>
+    <div class="gi rv d3"><img src="images/eyebrows.jpg" alt="איפור קבוע" loading="lazy"></div>
+    <!-- תמונה 4 — להוסיף תמונה חדשה: <div class="gi rv d4"><img src="images/NEW.jpg" alt="" loading="lazy"></div> -->
+    <!-- תמונה 5 — להוסיף תמונה חדשה: <div class="gi rv"><img src="images/NEW2.jpg" alt="" loading="lazy"></div> -->
   </div>
 </section>
 
@@ -593,23 +603,23 @@ footer{
 <section class="sec svc-sec">
   <span class="lbl rv">השירותים שלי</span>
   <h2 class="sec-title rv d1">מה אני מציעה</h2>
-  <p class="sec-sub rv d2">כל טיפול בידיים מקצועיות, עם לב שלם</p>
+  <p class="sec-sub rv d2">כי את מגיעה לתוצאה שמדברת בעד עצמה</p>
   <div class="gold-rule rv d2"></div>
   <div class="svc-grid">
     <div class="svc rv d1">
       <div class="svc-icon">💅</div>
       <div class="svc-name">ציפורניים</div>
-      <p class="svc-desc">לק ג'ל מבנה, בנייה באקריל ועיצוב אישי - ציפורניים שמספרות עלייך</p>
+      <p class="svc-desc">לק ג'ל מבנה אנטומי ובנייה באקריל — ציפורניים שמספרות עלייך</p>
     </div>
     <div class="svc rv d2">
       <div class="svc-icon">🪮</div>
       <div class="svc-name">גבות</div>
-      <p class="svc-desc">עיצוב, חוט ושיזוף - מסגרת מושלמת שמשדרגת את כל המראה</p>
+      <p class="svc-desc">עיצוב גבות, שעווה וצבע — מסגרת מושלמת שמשדרגת את כל המראה</p>
     </div>
     <div class="svc rv d3">
       <div class="svc-icon">✨</div>
       <div class="svc-name">איפור קבוע</div>
-      <p class="svc-desc">גבות, שפתיים ואייליינר - קומי יפה ומוכנה, כל בוקר, ללא מאמץ</p>
+      <p class="svc-desc">גבות בכל השיטות ושפתיים — קומי יפה ומוכנה כל בוקר, ללא מאמץ</p>
     </div>
     <div class="svc rv d4">
       <div class="svc-icon">🦶</div>
