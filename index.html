@@ -276,7 +276,7 @@ header.scrolled{
 .ticker-track{
   display:flex;width:max-content;
   direction:ltr;
-  animation:tickerRun 36s linear infinite;
+  will-change:transform;
 }
 .ticker-item{
   display:flex;align-items:center;gap:16px;padding:0 40px;
@@ -285,7 +285,6 @@ header.scrolled{
   color:rgba(255,255,255,.82);white-space:nowrap;
 }
 .ticker-dot{width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:.7;flex-shrink:0}
-@keyframes tickerRun{from{transform:translateX(0)}to{transform:translateX(-33.3333%)}}
 
 /* ═══ SECTION COMMONS ══════════════════════════════ */
 .sec{padding:96px 24px}
@@ -616,21 +615,7 @@ footer{
 
 <!-- ══ TICKER ══════════════════════════════════════ -->
 <div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <span class="ticker-item">💅 ציפורניים<span class="ticker-dot"></span></span>
-    <span class="ticker-item">✨ לק ג׳ל מבנה אנטומי<span class="ticker-dot"></span></span>
-    <span class="ticker-item">🪮 גבות<span class="ticker-dot"></span></span>
-    <span class="ticker-item">✨ איפור קבוע<span class="ticker-dot"></span></span>
-    <span class="ticker-item">🦶 פדיקור<span class="ticker-dot"></span></span>
-    <span class="ticker-item">💅 בנייה אקריל<span class="ticker-dot"></span></span>
-    <span class="ticker-item">🌸 Good Lak · אופקים<span class="ticker-dot"></span></span>
-    <span class="ticker-item">💅 ציפורניים<span class="ticker-dot"></span></span>
-    <span class="ticker-item">✨ לק ג׳ל מבנה אנטומי<span class="ticker-dot"></span></span>
-    <span class="ticker-item">🪮 גבות<span class="ticker-dot"></span></span>
-    <span class="ticker-item">✨ איפור קבוע<span class="ticker-dot"></span></span>
-    <span class="ticker-item">🦶 פדיקור<span class="ticker-dot"></span></span>
-    <span class="ticker-item">💅 בנייה אקריל<span class="ticker-dot"></span></span>
-    <span class="ticker-item">🌸 Good Lak · אופקים<span class="ticker-dot"></span></span>
+  <div class="ticker-track" id="tickerTrack">
     <span class="ticker-item">💅 ציפורניים<span class="ticker-dot"></span></span>
     <span class="ticker-item">✨ לק ג׳ל מבנה אנטומי<span class="ticker-dot"></span></span>
     <span class="ticker-item">🪮 גבות<span class="ticker-dot"></span></span>
@@ -989,6 +974,31 @@ footer{
     if(pills)pills.style.transform=`translateY(${sy*0.02}px)`;
   }
   window.addEventListener('scroll',onPar,{passive:true});
+})();
+
+/* ── Infinite Ticker (JS) ──────────────────── */
+(function(){
+  const track=document.getElementById('tickerTrack');
+  if(!track)return;
+  // clone until track is wider than 3x viewport
+  const orig=[...track.children];
+  function fill(){
+    while(track.scrollWidth<window.innerWidth*3){
+      orig.forEach(item=>track.appendChild(item.cloneNode(true)));
+    }
+  }
+  fill();
+  window.addEventListener('resize',()=>{fill()},{passive:true});
+  // animate with rAF — moves by 1px per frame, resets when first-set scrolls out
+  const setW=orig.reduce((s,el)=>s+el.offsetWidth,0)||track.scrollWidth/Math.max(1,Math.round(track.children.length/orig.length));
+  let pos=0;
+  const speed=0.6; // px per frame
+  (function loop(){
+    pos+=speed;
+    if(pos>=setW)pos-=setW;
+    track.style.transform=`translateX(-${pos}px)`;
+    requestAnimationFrame(loop);
+  })();
 })();
 
 /* ── Magnetic buttons ──────────────────────── */
