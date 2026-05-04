@@ -426,6 +426,47 @@ header.scrolled{
 }
 .svc-desc{font-size:13px;color:var(--muted);line-height:1.7}
 
+/* ═══ CERTIFICATIONS ════════════════════════════════ */
+.cert-sec{background:var(--ivory2)}
+.cert-wall{
+  max-width:560px;margin:0 auto 36px;
+  border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--sh-lg);
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+}
+.cert-wall:hover{transform:scale(1.02)}
+.cert-wall img{width:100%;height:auto;display:block}
+.cert-strip{
+  overflow-x:auto;padding:4px 0 16px;
+  scrollbar-width:thin;scrollbar-color:var(--rose-lt) transparent;
+}
+.cert-strip::-webkit-scrollbar{height:4px}
+.cert-strip::-webkit-scrollbar-thumb{background:var(--rose-lt);border-radius:2px}
+.cert-row{display:flex;gap:12px;padding:0 24px;width:max-content}
+.cert-thumb{
+  width:150px;height:200px;flex-shrink:0;
+  border-radius:12px;overflow:hidden;
+  box-shadow:var(--sh-sm);cursor:pointer;
+  transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s;
+}
+.cert-thumb:hover{transform:translateY(-8px) scale(1.04) rotateZ(1deg);box-shadow:var(--sh-lg)}
+.cert-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+/* lightbox */
+.cert-lb{
+  position:fixed;inset:0;z-index:10000;
+  background:rgba(10,5,5,.88);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;
+  cursor:zoom-out;padding:20px;
+}
+.cert-lb.open{display:flex}
+.cert-lb img{
+  max-width:92vw;max-height:92vh;
+  border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.6);
+  animation:lbIn .35s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes lbIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+
 /* ═══ REVIEWS ══════════════════════════════════════ */
 .rev-sec{background:#fff}
 .rev-grid{display:grid;gap:16px;max-width:700px;margin:0 auto}
@@ -711,6 +752,30 @@ footer{
   </div>
 </section>
 
+
+<!-- ══ CERTIFICATIONS ══════════════════════════════ -->
+<section class="sec cert-sec">
+  <span class="lbl rv">הכשרה מקצועית</span>
+  <h2 class="sec-title rv d1">הסמכות שלנו</h2>
+  <p class="sec-sub rv d2">כל תעודה מייצגת קורס, הכשרה ומחויבות — כדי שתקבלי את הטוב ביותר</p>
+  <div class="gold-rule rv d2"></div>
+  <div class="cert-wall rv d1">
+    <img src="images/cert-9.jpg" alt="קיר הסמכות של Good Lak" loading="lazy">
+  </div>
+  <div class="cert-strip rv d2">
+    <div class="cert-row">
+      <div class="cert-thumb"><img src="images/cert-1.jpg" alt="סמכות AIRnails" loading="lazy"></div>
+      <div class="cert-thumb"><img src="images/cert-2.jpg" alt="סמכות Nail Studio מורה" loading="lazy"></div>
+      <div class="cert-thumb"><img src="images/cert-3.jpg" alt="סמכות איפור קבוע" loading="lazy"></div>
+      <div class="cert-thumb"><img src="images/cert-4.jpg" alt="סמכות Microblading" loading="lazy"></div>
+      <div class="cert-thumb"><img src="images/cert-5.jpg" alt="סמכות גיזוז עמלות" loading="lazy"></div>
+      <div class="cert-thumb"><img src="images/cert-6.jpg" alt="סמכות OPI" loading="lazy"></div>
+      <div class="cert-thumb"><img src="images/cert-7.jpg" alt="סמכות Victory" loading="lazy"></div>
+      <div class="cert-thumb"><img src="images/cert-8.jpg" alt="סמכות ibd" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+<div class="cert-lb" id="certLb"><img id="certLbImg" src="" alt="תעודה"></div>
 
 <!-- ══ REVIEWS ═════════════════════════════════════ -->
 <section class="sec rev-sec">
@@ -999,6 +1064,21 @@ footer{
     track.style.transform=`translateX(-${pos}px)`;
     requestAnimationFrame(loop);
   })();
+})();
+
+/* ── Certificate Lightbox ──────────────────── */
+(function(){
+  const lb=document.getElementById('certLb');
+  const lbImg=document.getElementById('certLbImg');
+  if(!lb)return;
+  document.querySelectorAll('.cert-thumb,.cert-wall').forEach(el=>{
+    el.addEventListener('click',()=>{
+      lbImg.src=el.querySelector('img').src;
+      lb.classList.add('open');
+    });
+  });
+  lb.addEventListener('click',()=>lb.classList.remove('open'));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('open')});
 })();
 
 /* ── Magnetic buttons ──────────────────────── */
