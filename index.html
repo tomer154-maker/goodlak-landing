@@ -227,6 +227,8 @@ header.scrolled{
 }
 .hero h1 .hl{
   font-style:italic;
+  display:inline-block;
+  padding-inline-end:6px;
   background:linear-gradient(120deg,var(--burg),var(--rose),var(--gold));
   background-size:200% auto;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -398,6 +400,16 @@ header.scrolled{
   background:#fff;
   border:1px solid rgba(122,21,21,.07);box-shadow:var(--sh-sm);
 }
+.svc-hint{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);opacity:0.55;white-space:nowrap;pointer-events:none;
+}
+@media(hover:none){.svc-hint{display:none}}
+@media(hover:none){
+  .svc:hover .svc-inner,.svc.flipped .svc-inner{transform:none}
+  .svc{cursor:default}
+}
 .svc-back{
   transform:rotateY(180deg);
   background:linear-gradient(145deg,var(--burg) 0%,#5A0E0E 100%);
@@ -429,43 +441,32 @@ header.scrolled{
 /* ═══ CERTIFICATIONS ════════════════════════════════ */
 .cert-sec{background:var(--ivory2)}
 .cert-wall{
-  max-width:560px;margin:0 auto 36px;
+  max-width:480px;margin:0 auto 28px;
   border-radius:var(--r);overflow:hidden;
   box-shadow:var(--sh-lg);
-  transition:transform .4s cubic-bezier(.16,1,.3,1);
 }
-.cert-wall:hover{transform:scale(1.02)}
-.cert-wall img{width:100%;height:auto;display:block}
+.cert-wall img{
+  width:100%;height:auto;display:block;
+  transition:opacity .4s ease;
+}
 .cert-strip{
+  max-width:700px;margin:0 auto;
   overflow-x:auto;padding:4px 0 16px;
   scrollbar-width:thin;scrollbar-color:var(--rose-lt) transparent;
 }
 .cert-strip::-webkit-scrollbar{height:4px}
 .cert-strip::-webkit-scrollbar-thumb{background:var(--rose-lt);border-radius:2px}
-.cert-row{display:flex;gap:12px;padding:0 24px;width:max-content}
+.cert-row{display:flex;gap:12px;padding:0 4px;width:max-content;margin:0 auto}
 .cert-thumb{
-  width:150px;height:200px;flex-shrink:0;
-  border-radius:12px;overflow:hidden;
+  width:120px;height:160px;flex-shrink:0;
+  border-radius:10px;overflow:hidden;
   box-shadow:var(--sh-sm);cursor:pointer;
-  transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s;
+  transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s,outline .2s;
+  outline:2px solid transparent;
 }
-.cert-thumb:hover{transform:translateY(-8px) scale(1.04) rotateZ(1deg);box-shadow:var(--sh-lg)}
+.cert-thumb:hover{transform:translateY(-6px) scale(1.04);box-shadow:var(--sh)}
+.cert-thumb.active{outline:2px solid var(--burg)}
 .cert-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-/* lightbox */
-.cert-lb{
-  position:fixed;inset:0;z-index:10000;
-  background:rgba(10,5,5,.88);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  display:none;align-items:center;justify-content:center;
-  cursor:zoom-out;padding:20px;
-}
-.cert-lb.open{display:flex}
-.cert-lb img{
-  max-width:92vw;max-height:92vh;
-  border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.6);
-  animation:lbIn .35s cubic-bezier(.16,1,.3,1) both;
-}
-@keyframes lbIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
 
 /* ═══ REVIEWS ══════════════════════════════════════ */
 .rev-sec{background:#fff}
@@ -702,6 +703,7 @@ footer{
         <div class="svc-front">
           <div class="svc-icon">💅</div>
           <div class="svc-name">ציפורניים</div>
+          <span class="svc-hint">✦ העבירי לפרטים</span>
         </div>
         <div class="svc-back">
           <div class="svc-name">ציפורניים</div>
@@ -715,6 +717,7 @@ footer{
         <div class="svc-front">
           <div class="svc-icon">🪮</div>
           <div class="svc-name">גבות</div>
+          <span class="svc-hint">✦ העבירי לפרטים</span>
         </div>
         <div class="svc-back">
           <div class="svc-name">גבות</div>
@@ -728,6 +731,7 @@ footer{
         <div class="svc-front">
           <div class="svc-icon">✨</div>
           <div class="svc-name">איפור קבוע</div>
+          <span class="svc-hint">✦ העבירי לפרטים</span>
         </div>
         <div class="svc-back">
           <div class="svc-name">איפור קבוע</div>
@@ -741,6 +745,7 @@ footer{
         <div class="svc-front">
           <div class="svc-icon">🦶</div>
           <div class="svc-name">פדיקור</div>
+          <span class="svc-hint">✦ העבירי לפרטים</span>
         </div>
         <div class="svc-back">
           <div class="svc-name">פדיקור</div>
@@ -775,7 +780,6 @@ footer{
     </div>
   </div>
 </section>
-<div class="cert-lb" id="certLb"><img id="certLbImg" src="" alt="תעודה"></div>
 
 <!-- ══ REVIEWS ═════════════════════════════════════ -->
 <section class="sec rev-sec">
@@ -1013,13 +1017,6 @@ footer{
   update();
 })();
 
-/* ── Flip cards — tap on mobile ────────────── */
-(function(){
-  if(!matchMedia('(hover:none)').matches)return;
-  document.querySelectorAll('.svc').forEach(card=>{
-    card.addEventListener('click',()=>card.classList.toggle('flipped'));
-  });
-})();
 
 /* ── Parallax on scroll ─────────────────────── */
 (function(){
@@ -1066,19 +1063,22 @@ footer{
   })();
 })();
 
-/* ── Certificate Lightbox ──────────────────── */
+/* ── Certificate Swap ──────────────────────── */
 (function(){
-  const lb=document.getElementById('certLb');
-  const lbImg=document.getElementById('certLbImg');
-  if(!lb)return;
-  document.querySelectorAll('.cert-thumb,.cert-wall').forEach(el=>{
-    el.addEventListener('click',()=>{
-      lbImg.src=el.querySelector('img').src;
-      lb.classList.add('open');
+  const wallImg=document.querySelector('.cert-wall img');
+  const thumbs=[...document.querySelectorAll('.cert-thumb')];
+  if(!wallImg||!thumbs.length)return;
+  thumbs.forEach(thumb=>{
+    thumb.addEventListener('click',()=>{
+      wallImg.style.opacity='0';
+      setTimeout(()=>{
+        wallImg.src=thumb.querySelector('img').src;
+        wallImg.style.opacity='1';
+      },200);
+      thumbs.forEach(t=>t.classList.remove('active'));
+      thumb.classList.add('active');
     });
   });
-  lb.addEventListener('click',()=>lb.classList.remove('open'));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('open')});
 })();
 
 /* ── Magnetic buttons ──────────────────────── */
