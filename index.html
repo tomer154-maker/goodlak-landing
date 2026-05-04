@@ -1042,25 +1042,25 @@ footer{
 (function(){
   const track=document.getElementById('tickerTrack');
   if(!track)return;
-  // clone until track is wider than 3x viewport
   const orig=[...track.children];
-  function fill(){
-    while(track.scrollWidth<window.innerWidth*3){
+
+  requestAnimationFrame(function init(){
+    const setW=track.scrollWidth;
+    if(!setW){requestAnimationFrame(init);return;}
+
+    // clone until at least 3× viewport
+    while(track.scrollWidth < window.innerWidth*3 + setW){
       orig.forEach(item=>track.appendChild(item.cloneNode(true)));
     }
-  }
-  fill();
-  window.addEventListener('resize',()=>{fill()},{passive:true});
-  // animate with rAF — moves by 1px per frame, resets when first-set scrolls out
-  const setW=orig.reduce((s,el)=>s+el.offsetWidth,0)||track.scrollWidth/Math.max(1,Math.round(track.children.length/orig.length));
-  let pos=0;
-  const speed=0.6; // px per frame
-  (function loop(){
-    pos+=speed;
-    if(pos>=setW)pos-=setW;
-    track.style.transform=`translateX(-${pos}px)`;
-    requestAnimationFrame(loop);
-  })();
+
+    let pos=0;
+    (function loop(){
+      pos+=0.7;
+      if(pos>=setW)pos-=setW;
+      track.style.transform=`translateX(-${pos}px)`;
+      requestAnimationFrame(loop);
+    })();
+  });
 })();
 
 /* ── Certificate Swap ──────────────────────── */
