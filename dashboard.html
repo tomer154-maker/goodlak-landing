@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Good Lak · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ivory:#FAF6F1;--ivory2:#F3EDE6;--ivory3:#EDE4DA;
+  --burg:#7A1515;--burg2:#9C1E1E;
+  --rose:#C4687A;--rose-lt:#EDD3DA;
+  --gold:#C5914A;--gold-lt:#F2E4D0;
+  --text:#1A0A0A;--muted:#8A7070;
+  --white:#fff;
+  --shadow:0 2px 16px rgba(122,21,21,.09);
+  --r:14px;
+}
+body{font-family:'Rubik',sans-serif;background:var(--ivory);color:var(--text);min-height:100vh}
+[hidden]{display:none!important}
+a{text-decoration:none;color:inherit}
+
+/* ─── LOGIN ──────────────────────────────── */
+#pg-login{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+  background:
+    radial-gradient(ellipse at 70% 0%,rgba(196,104,122,.20),transparent 55%),
+    radial-gradient(ellipse at 10% 100%,rgba(197,145,74,.16),transparent 50%),
+    var(--ivory);
+}
+.login-card{
+  background:var(--white);border-radius:20px;padding:44px 36px;
+  width:100%;max-width:360px;box-shadow:0 12px 48px rgba(122,21,21,.13);text-align:center;
+}
+.login-wordmark{font-size:30px;font-weight:800;color:var(--burg);margin-bottom:4px;letter-spacing:-.5px}
+.login-wordmark em{color:var(--gold);font-style:normal}
+.login-subtitle{font-size:13px;color:var(--muted);margin-bottom:32px;font-weight:400}
+.login-input{
+  width:100%;padding:14px 18px;border:1.5px solid var(--ivory3);
+  border-radius:11px;font-family:'Rubik',sans-serif;font-size:16px;
+  color:var(--text);background:var(--ivory);text-align:center;letter-spacing:3px;
+  outline:none;transition:border-color .2s;
+}
+.login-input:focus{border-color:var(--rose)}
+.login-input::placeholder{letter-spacing:0;font-size:14px;color:var(--muted)}
+.login-btn{
+  margin-top:14px;width:100%;padding:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--burg),var(--burg2));
+  color:#fff;border-radius:11px;font-family:'Rubik',sans-serif;
+  font-size:15px;font-weight:600;transition:opacity .2s,transform .15s;
+}
+.login-btn:hover{opacity:.9;transform:translateY(-1px)}
+.login-btn:active{transform:translateY(0)}
+.login-err{color:var(--rose);font-size:13px;margin-top:10px;min-height:18px;font-weight:500}
+
+/* ─── HEADER ─────────────────────────────── */
+.view-header{
+  background:linear-gradient(135deg,var(--burg),var(--burg2));
+  color:#fff;padding:13px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 14px rgba(0,0,0,.18);
+}
+.view-header.rose-hdr{background:linear-gradient(135deg,var(--rose),#a84060)}
+.hdr-left{display:flex;flex-direction:column}
+.hdr-logo{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.hdr-logo em{color:var(--gold-lt);font-style:normal}
+.hdr-role{font-size:11px;opacity:.72;font-weight:400;margin-top:1px}
+.logout-btn{
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);
+  color:#fff;padding:6px 15px;border-radius:50px;font-family:'Rubik',sans-serif;
+  font-size:12px;font-weight:500;cursor:pointer;transition:background .2s;
+}
+.logout-btn:hover{background:rgba(255,255,255,.26)}
+
+/* ─── TABS ───────────────────────────────── */
+.tabs{display:flex;background:var(--ivory2);border-bottom:1px solid var(--ivory3)}
+.tab-btn{
+  flex:1;padding:13px 6px;border:none;background:transparent;
+  font-family:'Rubik',sans-serif;font-size:13px;font-weight:500;
+  color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;
+  transition:all .2s;
+}
+.tab-btn.active{color:var(--burg);border-bottom-color:var(--burg);background:var(--ivory)}
+
+/* ─── LAYOUT ─────────────────────────────── */
+.view-body{padding:18px;max-width:960px;margin:0 auto}
+
+/* ─── STAT CARDS ─────────────────────────── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:480px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+.stat-card{
+  background:var(--white);border-radius:var(--r);padding:16px 12px;
+  box-shadow:var(--shadow);text-align:center;
+}
+.stat-lbl{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px}
+.stat-val{font-size:28px;font-weight:800;color:var(--burg);line-height:1}
+.stat-val.gold{color:var(--gold)}
+.stat-val.sm{font-size:15px;font-weight:700;padding-top:4px}
+.stat-sub{font-size:10px;color:var(--muted);margin-top:4px}
+
+/* ─── SOURCE CHIPS ───────────────────────── */
+.section-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin:18px 0 10px}
+.sources{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.src-chip{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--white);border-radius:50px;padding:6px 14px;
+  box-shadow:var(--shadow);font-size:13px;font-weight:500;
+}
+.src-count{
+  background:var(--burg);color:#fff;border-radius:50px;
+  padding:2px 9px;font-size:11px;font-weight:700;
+}
+
+/* ─── SEARCH + REFRESH ───────────────────── */
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.search-input{
+  flex:1;padding:10px 16px;border:1.5px solid var(--ivory3);
+  border-radius:10px;font-family:'Rubik',sans-serif;font-size:14px;
+  color:var(--text);background:var(--white);outline:none;transition:border .2s;
+}
+.search-input:focus{border-color:var(--rose)}
+.refresh-btn{
+  background:var(--white);border:1.5px solid var(--ivory3);
+  color:var(--muted);padding:9px 14px;border-radius:10px;
+  font-family:'Rubik',sans-serif;font-size:13px;cursor:pointer;
+  transition:all .2s;white-space:nowrap;box-shadow:var(--shadow);
+}
+.refresh-btn:hover{border-color:var(--burg);color:var(--burg)}
+
+/* ─── TABLE ──────────────────────────────── */
+.table-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;background:var(--white);font-size:13px;min-width:440px}
+thead th{
+  background:var(--ivory2);padding:11px 14px;text-align:right;
+  font-weight:600;font-size:11px;color:var(--muted);white-space:nowrap;letter-spacing:.3px;
+}
+tbody td{padding:11px 14px;border-top:1px solid var(--ivory3);vertical-align:middle}
+tbody tr:hover{background:var(--ivory)}
+.badge{display:inline-block;padding:3px 10px;border-radius:50px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-fb{background:#EEF2FF;color:#4338CA}
+.badge-ig{background:#FCE7F3;color:#9D174D}
+.badge-direct{background:#ECFDF5;color:#065F46}
+.badge-land{background:var(--gold-lt);color:#92400E}
+.badge-other{background:var(--ivory3);color:var(--muted)}
+
+/* ─── EMPTY / LOADING ────────────────────── */
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted);font-size:13px;line-height:1.8}
+.empty-icon{font-size:36px;display:block;margin-bottom:10px}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--ivory3);border-top-color:var(--burg);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-row{text-align:center;padding:30px}
+
+/* ─── BOT SECTION (Gaya) ─────────────────── */
+.bot-section{text-align:center;padding:28px 0 20px;border-bottom:1px solid var(--ivory3);margin-bottom:20px}
+.bot-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--gold),#9a6b2a);
+  color:#fff;padding:18px 38px;border-radius:50px;
+  font-family:'Rubik',sans-serif;font-size:17px;font-weight:700;
+  box-shadow:0 6px 28px rgba(197,145,74,.42);
+  transition:transform .2s,box-shadow .2s;
+}
+.bot-btn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(197,145,74,.52)}
+.bot-icon{font-size:24px}
+.bot-hint{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6}
+
+/* ─── POST CARDS (Gaya) ──────────────────── */
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:4px}
+.post-card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.post-date{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.post-type-badge{
+  display:inline-block;font-size:11px;font-weight:600;
+  padding:3px 11px;border-radius:50px;background:var(--rose-lt);color:var(--burg);margin-bottom:12px;
+}
+.post-metrics{display:flex;gap:16px;flex-wrap:wrap}
+.pm{text-align:center}
+.pm-val{font-size:22px;font-weight:800;color:var(--burg);line-height:1}
+.pm-lbl{font-size:10px;color:var(--muted);display:block;margin-top:2px}
+.post-link{
+  margin-top:12px;display:inline-block;font-size:12px;
+  color:var(--gold);font-weight:600;
+}
+.post-link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ LOGIN ════════════════ -->
+<div id="pg-login">
+  <div class="login-card">
+    <div class="login-wordmark">Good <em>Lak</em></div>
+    <div class="login-subtitle">מרכז הניהול</div>
+    <input type="password" id="pw-input" class="login-input" placeholder="הכנס סיסמה" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">כניסה למערכת</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- ════════════════ TOMER VIEW ════════════════ -->
+<div id="pg-tomer" hidden>
+  <div class="view-header">
+    <div class="hdr-left">
+      <div class="hdr-logo">Good <em>Lak</em></div>
+      <div class="hdr-role">לוח ניהול · תומר</div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">יציאה</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tbtn-bookings" onclick="switchTab('bookings')">👥 לקוחות חדשות</button>
+    <button class="tab-btn" id="tbtn-content" onclick="switchTab('content')">📸 ביצועי תוכן</button>
+  </div>
+
+  <div class="view-body">
+
+    <!-- BOOKINGS TAB -->
+    <div id="tab-bookings">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-lbl">לקוחות החודש</div>
+          <div class="stat-val" id="b-month">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">סה״כ לקוחות</div>
+          <div class="stat-val" id="b-total">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">ערוץ מוביל</div>
+          <div class="stat-val gold sm" id="b-top">—</div>
+        </div>
+      </div>
+
+      <div class="section-title">חלוקה לפי ערוץ</div>
+      <div class="sources" id="b-sources"></div>
+
+      <div class="section-title">כל ההזמנות</div>
+      <div class="toolbar">
+        <input type="search" id="b-search" class="search-input" placeholder="🔍  חיפוש לפי שם לקוחה..." oninput="filterBookings()">
+        <button class="refresh-btn" onclick="loadBookings()">↻ רענן</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>תאריך תור</th>
+            <th>שם לקוחה</th>
+            <th>שירות</th>
+            <th>ערוץ</th>
+            <th>נרשמה ב</th>
+          </tr></thead>
+          <tbody id="b-tbody">
+            <tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="b-empty" class="empty-state" hidden>
+        <span class="empty-icon">📋</span>
+        אין הזמנות עדיין
+      </div>
+    </div>
+
+    <!-- CONTENT TAB -->
+    <div id="tab-content" hidden>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-lbl">סה״כ Reach</div>
+          <div class="stat-val" id="c-reach">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">ממוצע אינטראקציות</div>
+          <div class="stat-val" id="c-avg">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">פוסטים במעקב</div>
+          <div class="stat-val" id="c-count">—</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div style="flex:1"></div>
+        <button class="refresh-btn" onclick="loadContent()">↻ רענן</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>תאריך</th><th>סוג</th>
+            <th>👁 Reach</th><th>❤️</th><th>💬</th>
+            <th>🔖 שמורים</th><th>✨ סה״כ</th><th>קישור</th>
+          </tr></thead>
+          <tbody id="c-tbody">
+            <tr class="loading-row"><td colspan="8"><div class="spinner"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="c-empty" class="empty-state" hidden>
+        <span class="empty-icon">📸</span>
+        הנתונים יופיעו כאן לאחר שהאוטומציה תרוץ לראשונה<br>
+        <small>(כל לילה בשעה 2:00)</small>
+      </div>
+    </div>
+
+  </div><!-- /view-body -->
+</div><!-- /pg-tomer -->
+
+<!-- ════════════════ GAYA VIEW ════════════════ -->
+<div id="pg-gaya" hidden>
+  <div class="view-header rose-hdr">
+    <div class="hdr-left">
+      <div class="hdr-logo">Good <em>Lak</em></div>
+      <div class="hdr-role">הבוט שלי · גאיה 💅</div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">יציאה</button>
+  </div>
+
+  <div class="view-body">
+
+    <!-- BOT BUTTON -->
+    <div class="bot-section">
+      <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
+        <span class="bot-icon">🤖</span> פתחי את בוט התוכן
+      </a>
+      <div class="bot-hint">
+        שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-lbl">Reach החודש</div>
+        <div class="stat-val" id="g-reach">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">ממוצע אינטראקציות</div>
+        <div class="stat-val" id="g-avg">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">פוסטים החודש</div>
+        <div class="stat-val" id="g-posts">—</div>
+      </div>
+    </div>
+
+    <!-- RECENT POSTS -->
+    <div class="section-title">הפוסטים האחרונים</div>
+    <div id="g-grid" class="posts-grid"></div>
+    <div id="g-loading" class="empty-state"><div class="spinner"></div></div>
+    <div id="g-empty" class="empty-state" hidden>
+      <span class="empty-icon">🌸</span>
+      הנתונים יופיעו כאן לאחר שהפוסטים הראשונים ייסרקו<br>
+      <small>(האוטומציה רצה כל לילה בשעה 2:00)</small>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─── CONSTANTS ────────────────────────────
+const ROLES = {'Tomer123':'tomer','Gaya123':'gaya'};
+const API = {
+  bookings: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/bookings',
+  content:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content'
+};
+let bRows = [], cRows = [], contentLoaded = false;
+
+// ─── AUTH ─────────────────────────────────
+function doLogin() {
+  const pw = document.getElementById('pw-input').value.trim();
+  const role = ROLES[pw];
+  if (role) {
+    sessionStorage.setItem('gl_role', role);
+    showView(role);
+  } else {
+    const err = document.getElementById('login-err');
+    err.textContent = 'סיסמה שגויה — נסה שנית';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function doLogout() {
+  sessionStorage.removeItem('gl_role');
+  ['pg-tomer','pg-gaya'].forEach(id => document.getElementById(id).hidden = true);
+  document.getElementById('pg-login').removeAttribute('hidden');
+  document.getElementById('pw-input').value = '';
+  document.getElementById('login-err').textContent = '';
+  bRows = []; cRows = []; contentLoaded = false;
+}
+
+function showView(role) {
+  document.getElementById('pg-login').hidden = true;
+  if (role === 'tomer') {
+    document.getElementById('pg-tomer').removeAttribute('hidden');
+    loadBookings();
+  } else {
+    document.getElementById('pg-gaya').removeAttribute('hidden');
+    loadGaya();
+  }
+}
+
+// ─── DATA ─────────────────────────────────
+async function fetchRows(url) {
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return [];
+    const d = await r.json();
+    return Array.isArray(d.rows) ? d.rows : [];
+  } catch { return []; }
+}
+
+async function loadBookings() {
+  bRows = await fetchRows(API.bookings);
+  renderBookings();
+}
+
+async function loadContent() {
+  cRows = await fetchRows(API.content);
+  contentLoaded = true;
+  renderContent();
+}
+
+async function loadGaya() {
+  document.getElementById('g-loading').removeAttribute('hidden');
+  cRows = await fetchRows(API.content);
+  document.getElementById('g-loading').hidden = true;
+  renderGaya();
+}
+
+// ─── TABS ─────────────────────────────────
+function switchTab(tab) {
+  const isBookings = tab === 'bookings';
+  document.getElementById('tab-bookings').hidden = !isBookings;
+  document.getElementById('tab-content').hidden = isBookings;
+  document.getElementById('tbtn-bookings').classList.toggle('active', isBookings);
+  document.getElementById('tbtn-content').classList.toggle('active', !isBookings);
+  if (!isBookings && !contentLoaded) loadContent();
+}
+
+// ─── HELPERS ──────────────────────────────
+function fmtDate(d) {
+  if (!d) return '—';
+  if (d.includes('/')) return d.split(' ')[0];
+  try { return new Date(d).toLocaleDateString('he-IL'); } catch { return d; }
+}
+
+function num(v) { return Number(v) || 0; }
+
+function sourceBadge(ch) {
+  const c = (ch || '').toLowerCase();
+  if (c.includes('פייסבוק')) return `<span class="badge badge-fb">${ch}</span>`;
+  if (c.includes('אינסטגרם')) return `<span class="badge badge-ig">${ch}</span>`;
+  if (c.includes('ישיר') || c.includes('אורגני')) return `<span class="badge badge-direct">${ch}</span>`;
+  if (c.includes('נחיתה')) return `<span class="badge badge-land">${ch}</span>`;
+  return `<span class="badge badge-other">${ch || '—'}</span>`;
+}
+
+function currentMonthHe() {
+  const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  const n = new Date();
+  return `${months[n.getMonth()]} ${n.getFullYear()}`;
+}
+
+// ─── RENDER BOOKINGS ──────────────────────
+function renderBookings() {
+  const rows = bRows;
+  if (!rows.length) {
+    document.getElementById('b-tbody').innerHTML = '';
+    document.getElementById('b-empty').hidden = false;
+    return;
+  }
+  document.getElementById('b-empty').hidden = true;
+
+  const curMonth = currentMonthHe();
+  const monthCount = rows.filter(r => r['חודש'] === curMonth).length;
+  document.getElementById('b-month').textContent = monthCount;
+  document.getElementById('b-total').textContent = rows.length;
+
+  // Source counts
+  const srcMap = {};
+  rows.forEach(r => { const k = r['ערוץ'] || 'אחר'; srcMap[k] = (srcMap[k] || 0) + 1; });
+  const sorted = Object.entries(srcMap).sort((a,b) => b[1] - a[1]);
+  document.getElementById('b-top').textContent = sorted[0]?.[0] || '—';
+  document.getElementById('b-sources').innerHTML = sorted.map(([ch,n]) =>
+    `<div class="src-chip">${ch}<span class="src-count">${n}</span></div>`
+  ).join('');
+
+  renderBookingRows(rows);
+}
+
+function renderBookingRows(rows) {
+  if (!rows.length) {
+    document.getElementById('b-tbody').innerHTML = `<tr><td colspan="5" class="loading-row" style="color:var(--muted)">אין תוצאות לחיפוש זה</td></tr>`;
+    return;
+  }
+  document.getElementById('b-tbody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${fmtDate(r['תאריך תור'])}</td>
+      <td><strong>${r['שם לקוחה'] || '—'}</strong></td>
+      <td>${r['שירות'] || '—'}</td>
+      <td>${sourceBadge(r['ערוץ'])}</td>
+      <td style="color:var(--muted);font-size:12px">${fmtDate(r['תאריך קביעה'])}</td>
+    </tr>`).join('');
+}
+
+function filterBookings() {
+  const q = document.getElementById('b-search').value.trim().toLowerCase();
+  renderBookingRows(q ? bRows.filter(r => (r['שם לקוחה'] || '').toLowerCase().includes(q)) : bRows);
+}
+
+// ─── RENDER CONTENT (Tomer) ───────────────
+function renderContent() {
+  const rows = cRows;
+  if (!rows.length) {
+    document.getElementById('c-tbody').innerHTML = '';
+    document.getElementById('c-empty').hidden = false;
+    return;
+  }
+  document.getElementById('c-empty').hidden = true;
+
+  const totalReach = rows.reduce((s,r) => s + num(r.reach), 0);
+  const avgInt = Math.round(rows.reduce((s,r) => s + num(r.totalInteractions), 0) / rows.length);
+  document.getElementById('c-reach').textContent = totalReach.toLocaleString('he-IL');
+  document.getElementById('c-avg').textContent = avgInt.toLocaleString('he-IL');
+  document.getElementById('c-count').textContent = rows.length;
+
+  const sorted = [...rows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+  document.getElementById('c-tbody').innerHTML = sorted.map(r => `
+    <tr>
+      <td style="white-space:nowrap">${fmtDate(r.timestamp)}</td>
+      <td>${r.mediaType || '—'}</td>
+      <td><strong>${num(r.reach).toLocaleString()}</strong></td>
+      <td>${num(r.likeCount)}</td>
+      <td>${num(r.commentsCount)}</td>
+      <td>${num(r.saved)}</td>
+      <td style="font-weight:600">${num(r.totalInteractions)}</td>
+      <td>${r.permalink ? `<a href="${r.permalink}" target="_blank" style="color:var(--gold);font-size:16px">↗</a>` : '—'}</td>
+    </tr>`).join('');
+}
+
+// ─── RENDER GAYA ──────────────────────────
+function renderGaya() {
+  const rows = cRows;
+
+  // Stats
+  const now = new Date();
+  const ym = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const thisMonth = rows.filter(r => (r.timestamp || '').startsWith(ym));
+  const reachMonth = thisMonth.reduce((s,r) => s + num(r.reach), 0);
+  const avgInt = rows.length ? Math.round(rows.reduce((s,r) => s + num(r.totalInteractions), 0) / rows.length) : 0;
+  document.getElementById('g-reach').textContent = reachMonth.toLocaleString('he-IL');
+  document.getElementById('g-avg').textContent = avgInt.toLocaleString('he-IL');
+  document.getElementById('g-posts').textContent = thisMonth.length;
+
+  if (!rows.length) {
+    document.getElementById('g-empty').hidden = false;
+    return;
+  }
+
+  const recent = [...rows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
+  document.getElementById('g-grid').innerHTML = recent.map(r => `
+    <div class="post-card">
+      <div class="post-date">${fmtDate(r.timestamp)}</div>
+      <span class="post-type-badge">${r.mediaType || 'פוסט'}</span>
+      <div class="post-metrics">
+        <div class="pm">
+          <div class="pm-val">${num(r.reach).toLocaleString()}</div>
+          <span class="pm-lbl">👁 Reach</span>
+        </div>
+        <div class="pm">
+          <div class="pm-val">${num(r.likeCount)}</div>
+          <span class="pm-lbl">❤️ לייקים</span>
+        </div>
+        <div class="pm">
+          <div class="pm-val">${num(r.totalInteractions)}</div>
+          <span class="pm-lbl">✨ אינטראקציות</span>
+        </div>
+      </div>
+      ${r.permalink ? `<a class="post-link" href="${r.permalink}" target="_blank">צפי בפוסט ↗</a>` : ''}
+    </div>`).join('');
+}
+
+// ─── INIT ──────────────────────────────────
+(function init() {
+  const role = sessionStorage.getItem('gl_role');
+  if (role === 'tomer' || role === 'gaya') showView(role);
+})();
+</script>
+</body>
+</html>
