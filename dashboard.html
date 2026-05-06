@@ -89,7 +89,8 @@ a{text-decoration:none;color:inherit}
 
 /* ─── STAT CARDS ─────────────────────────── */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-@media(max-width:480px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+.stats-row.s4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:600px){.stats-row,.stats-row.s4{grid-template-columns:repeat(2,1fr)}}
 .stat-card{
   background:var(--white);border-radius:var(--r);padding:16px 12px;
   box-shadow:var(--shadow);text-align:center;
@@ -143,6 +144,8 @@ tbody tr:hover{background:var(--ivory)}
 .badge-ig{background:#FCE7F3;color:#9D174D}
 .badge-direct{background:#ECFDF5;color:#065F46}
 .badge-land{background:var(--gold-lt);color:#92400E}
+.badge-existing{background:#F3F4F6;color:#374151}
+.badge-returning{background:#FEF9C3;color:#854D0E}
 .badge-other{background:var(--ivory3);color:var(--muted)}
 
 /* ─── EMPTY / LOADING ────────────────────── */
@@ -209,7 +212,7 @@ tbody tr:hover{background:var(--ivory)}
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" id="tbtn-bookings" onclick="switchTab('bookings')">👥 לקוחות חדשות</button>
+    <button class="tab-btn active" id="tbtn-bookings" onclick="switchTab('bookings')">👥 כל הלקוחות</button>
     <button class="tab-btn" id="tbtn-content" onclick="switchTab('content')">📸 ביצועי תוכן</button>
   </div>
 
@@ -217,22 +220,27 @@ tbody tr:hover{background:var(--ivory)}
 
     <!-- BOOKINGS TAB -->
     <div id="tab-bookings">
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-lbl">לקוחות החודש</div>
-          <div class="stat-val" id="b-month">—</div>
-        </div>
+      <div class="stats-row s4">
         <div class="stat-card">
           <div class="stat-lbl">סה״כ לקוחות</div>
           <div class="stat-val" id="b-total">—</div>
         </div>
         <div class="stat-card">
-          <div class="stat-lbl">ערוץ מוביל</div>
-          <div class="stat-val gold sm" id="b-top">—</div>
+          <div class="stat-lbl">✨ חדשות (פרסום)</div>
+          <div class="stat-val" id="b-new">—</div>
+          <div class="stat-sub" id="b-new-month"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">🔄 חוזרות</div>
+          <div class="stat-val" id="b-returning">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">📋 לפני פרסום</div>
+          <div class="stat-val" id="b-existing">—</div>
         </div>
       </div>
 
-      <div class="section-title">חלוקה לפי ערוץ</div>
+      <div class="section-title">אטריבוציה — לקוחות חדשות בלבד</div>
       <div class="sources" id="b-sources"></div>
 
       <div class="section-title">כל ההזמנות</div>
@@ -445,7 +453,9 @@ function fmtDate(d) {
 
 function num(v) { return Number(v) || 0; }
 
-function sourceBadge(ch) {
+function sourceBadge(ch, src, isNew) {
+  if (src === 'existing') return `<span class="badge badge-existing">לפני פרסום</span>`;
+  if (isNew === 'לא') return `<span class="badge badge-returning">חוזרת</span>`;
   const c = (ch || '').toLowerCase();
   if (c.includes('פייסבוק')) return `<span class="badge badge-fb">${ch}</span>`;
   if (c.includes('אינסטגרם')) return `<span class="badge badge-ig">${ch}</span>`;
@@ -470,19 +480,26 @@ function renderBookings() {
   }
   document.getElementById('b-empty').hidden = true;
 
-  const curMonth = currentMonthHe();
-  const monthCount = rows.filter(r => r['חודש'] === curMonth).length;
-  document.getElementById('b-month').textContent = monthCount;
-  document.getElementById('b-total').textContent = rows.length;
+  const existing   = rows.filter(r => r['מקור'] === 'existing');
+  const fromMktg   = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
+  const returning  = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] === 'לא');
 
-  // Source counts
+  const curMonth = currentMonthHe();
+  const newThisMonth = fromMktg.filter(r => r['חודש'] === curMonth).length;
+
+  document.getElementById('b-total').textContent = rows.length;
+  document.getElementById('b-new').textContent = fromMktg.length;
+  document.getElementById('b-new-month').textContent = newThisMonth ? `החודש: ${newThisMonth}` : '';
+  document.getElementById('b-returning').textContent = returning.length;
+  document.getElementById('b-existing').textContent = existing.length;
+
+  // Attribution breakdown — new-from-marketing only
   const srcMap = {};
-  rows.forEach(r => { const k = r['ערוץ'] || 'אחר'; srcMap[k] = (srcMap[k] || 0) + 1; });
+  fromMktg.forEach(r => { const k = r['ערוץ'] || 'אחר'; srcMap[k] = (srcMap[k] || 0) + 1; });
   const sorted = Object.entries(srcMap).sort((a,b) => b[1] - a[1]);
-  document.getElementById('b-top').textContent = sorted[0]?.[0] || '—';
-  document.getElementById('b-sources').innerHTML = sorted.map(([ch,n]) =>
-    `<div class="src-chip">${ch}<span class="src-count">${n}</span></div>`
-  ).join('');
+  document.getElementById('b-sources').innerHTML = sorted.length
+    ? sorted.map(([ch,n]) => `<div class="src-chip">${ch}<span class="src-count">${n}</span></div>`).join('')
+    : '<span style="color:var(--muted);font-size:13px">יופיע כאן כשלקוחות חדשות יכנסו דרך הפרסום</span>';
 
   renderBookingRows(rows);
 }
@@ -497,7 +514,7 @@ function renderBookingRows(rows) {
       <td>${fmtDate(r['תאריך תור'])}</td>
       <td><strong>${r['שם לקוחה'] || '—'}</strong></td>
       <td>${r['שירות'] || '—'}</td>
-      <td>${sourceBadge(r['ערוץ'])}</td>
+      <td>${sourceBadge(r['ערוץ'], r['מקור'], r['לקוחה חדשה'])}</td>
       <td style="color:var(--muted);font-size:12px">${fmtDate(r['תאריך קביעה'])}</td>
     </tr>`).join('');
 }
