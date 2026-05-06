@@ -186,6 +186,25 @@ tbody tr:hover{background:var(--ivory)}
   color:var(--gold);font-weight:600;
 }
 .post-link:hover{text-decoration:underline}
+
+/* ─── BOOKING LIST (Gaya) ────────────────── */
+.booking-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.booking-item{
+  background:var(--white);border-radius:var(--r);padding:14px 16px;
+  box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.booking-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--rose-lt),var(--gold-lt));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;color:var(--burg);flex-shrink:0;
+}
+.booking-info{flex:1;min-width:0}
+.booking-name{font-weight:600;font-size:14px;color:var(--text)}
+.booking-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.booking-right{text-align:left;flex-shrink:0}
+.booking-date{font-size:12px;font-weight:600;color:var(--burg)}
+.booking-time{font-size:11px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -332,7 +351,37 @@ tbody tr:hover{background:var(--ivory)}
       </div>
     </div>
 
-    <!-- STATS -->
+    <!-- BOOKING STATS -->
+    <div class="section-title">📅 הזמנות</div>
+    <div class="stats-row s4">
+      <div class="stat-card">
+        <div class="stat-lbl">הזמנות החודש</div>
+        <div class="stat-val" id="g-b-month">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">✨ חדשות החודש</div>
+        <div class="stat-val" id="g-b-new">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">🔄 חוזרות החודש</div>
+        <div class="stat-val" id="g-b-ret">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">סה״כ לקוחות</div>
+        <div class="stat-val" id="g-b-total">—</div>
+      </div>
+    </div>
+
+    <!-- RECENT BOOKINGS -->
+    <div class="section-title">הזמנות אחרונות</div>
+    <div id="g-bookings-list"></div>
+    <div id="g-bookings-loading" class="empty-state"><div class="spinner"></div></div>
+    <div id="g-bookings-empty" class="empty-state" hidden>
+      <span class="empty-icon">📋</span>אין הזמנות עדיין
+    </div>
+
+    <!-- INSTAGRAM STATS -->
+    <div class="section-title" style="margin-top:28px">📸 אינסטגרם</div>
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-lbl">Reach החודש</div>
@@ -351,7 +400,7 @@ tbody tr:hover{background:var(--ivory)}
     <!-- RECENT POSTS -->
     <div class="section-title">הפוסטים האחרונים</div>
     <div id="g-grid" class="posts-grid"></div>
-    <div id="g-loading" class="empty-state"><div class="spinner"></div></div>
+    <div id="g-loading" class="empty-state" hidden><div class="spinner"></div></div>
     <div id="g-empty" class="empty-state" hidden>
       <span class="empty-icon">🌸</span>
       הנתונים יופיעו כאן לאחר שהפוסטים הראשונים ייסרקו<br>
@@ -428,9 +477,9 @@ async function loadContent() {
 }
 
 async function loadGaya() {
-  document.getElementById('g-loading').removeAttribute('hidden');
-  cRows = await fetchRows(API.content);
-  document.getElementById('g-loading').hidden = true;
+  [bRows, cRows] = await Promise.all([fetchRows(API.bookings), fetchRows(API.content)]);
+  document.getElementById('g-bookings-loading').hidden = true;
+  renderGayaBookings();
   renderGaya();
 }
 
@@ -552,6 +601,62 @@ function renderContent() {
       <td style="font-weight:600">${num(r.totalInteractions)}</td>
       <td>${r.permalink ? `<a href="${r.permalink}" target="_blank" style="color:var(--gold);font-size:16px">↗</a>` : '—'}</td>
     </tr>`).join('');
+}
+
+// ─── RENDER GAYA BOOKINGS ─────────────────
+function renderGayaBookings() {
+  const rows = bRows;
+  const curMonth = currentMonthHe();
+
+  const thisMonth   = rows.filter(r => r['חודש'] === curMonth);
+  const newMonth    = thisMonth.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
+  const retMonth    = thisMonth.filter(r => r['לקוחה חדשה'] === 'לא');
+
+  document.getElementById('g-b-month').textContent  = thisMonth.length;
+  document.getElementById('g-b-new').textContent    = newMonth.length;
+  document.getElementById('g-b-ret').textContent    = retMonth.length;
+  document.getElementById('g-b-total').textContent  = rows.length;
+
+  if (!rows.length) {
+    document.getElementById('g-bookings-empty').hidden = false;
+    return;
+  }
+  document.getElementById('g-bookings-empty').hidden = true;
+
+  const recent = [...rows]
+    .filter(r => r['שם לקוחה'] && r['שם לקוחה'] !== 'דוגמה - מחקי שורה זו')
+    .sort((a, b) => {
+      const da = a['תאריך תור'] ? a['תאריך תור'].split('/').reverse().join('-') : '';
+      const db = b['תאריך תור'] ? b['תאריך תור'].split('/').reverse().join('-') : '';
+      return db.localeCompare(da);
+    })
+    .slice(0, 12);
+
+  document.getElementById('g-bookings-list').innerHTML = `
+    <div class="booking-list">
+      ${recent.map(r => {
+        const name = r['שם לקוחה'] || '—';
+        const initial = name.trim()[0] || '?';
+        const isRet = r['לקוחה חדשה'] === 'לא';
+        const isExist = r['מקור'] === 'existing';
+        const tag = isExist ? '' : isRet
+          ? '<span class="badge badge-returning" style="font-size:10px">חוזרת</span>'
+          : '<span class="badge badge-ig" style="font-size:10px">חדשה</span>';
+        const dateParts = (r['תאריך תור'] || '').split(' ');
+        return `
+          <div class="booking-item">
+            <div class="booking-avatar">${initial}</div>
+            <div class="booking-info">
+              <div class="booking-name">${name} ${tag}</div>
+              <div class="booking-sub">${r['שירות'] || '—'}</div>
+            </div>
+            <div class="booking-right">
+              <div class="booking-date">${dateParts[0] || '—'}</div>
+              <div class="booking-time">${dateParts[1] || ''}</div>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>`;
 }
 
 // ─── RENDER GAYA ──────────────────────────
