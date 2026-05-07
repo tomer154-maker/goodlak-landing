@@ -558,7 +558,7 @@ function fmtDate(d) {
   try { return new Date(d).toLocaleDateString('he-IL'); } catch { return d; }
 }
 
-function num(v) { return Number(v) || 0; }
+function num(v) { const n = Number(v); return isNaN(n) || n > 1000000000 ? 0 : n; }
 
 function parseAppDate(s) {
   if (!s) return null;
