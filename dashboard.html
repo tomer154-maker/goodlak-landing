@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Good Lak · Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -205,6 +206,42 @@ tbody tr:hover{background:var(--ivory)}
 .booking-right{text-align:left;flex-shrink:0}
 .booking-date{font-size:12px;font-weight:600;color:var(--burg)}
 .booking-time{font-size:11px;color:var(--muted)}
+
+/* ─── CHART ──────────────────────────────── */
+.chart-card{background:var(--white);border-radius:var(--r);padding:18px 18px 10px;box-shadow:var(--shadow);margin-bottom:18px}
+
+/* ─── TOP SERVICES ───────────────────────── */
+.services-list{background:var(--white);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:18px;display:flex;flex-direction:column;gap:12px}
+.svc-row{display:flex;align-items:center;gap:10px}
+.svc-name{font-size:12px;font-weight:500;color:var(--text);width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.svc-bar-wrap{flex:1;height:8px;background:var(--ivory3);border-radius:4px;overflow:hidden}
+.svc-bar{height:100%;background:linear-gradient(90deg,var(--burg),var(--rose));border-radius:4px}
+.svc-count{font-size:12px;font-weight:700;color:var(--burg);min-width:22px;text-align:center}
+
+/* ─── SCHEDULE ───────────────────────────── */
+.sched-day-header{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin:14px 0 8px;padding-right:2px}
+.sched-list{display:flex;flex-direction:column;gap:8px;margin-bottom:4px}
+.sched-item{
+  background:var(--white);border-radius:12px;padding:11px 14px;
+  box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;
+}
+.sched-item.today{border-right:3px solid var(--burg)}
+.sched-day-lbl{font-size:11px;font-weight:700;color:var(--muted);min-width:46px;text-align:center}
+.sched-time{font-size:14px;font-weight:800;color:var(--burg);min-width:44px;text-align:center;direction:ltr;flex-shrink:0}
+.sched-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.sched-name{font-size:13px;font-weight:600;color:var(--text)}
+.sched-svc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ─── WHATSAPP ───────────────────────────── */
+.wa-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#25D366;color:#fff;border-radius:50px;
+  padding:6px 13px;font-size:12px;font-weight:600;
+  white-space:nowrap;flex-shrink:0;transition:opacity .2s;
+}
+.wa-btn:hover{opacity:.85}
+.wa-sm{font-size:19px;flex-shrink:0;transition:transform .2s}
+.wa-sm:hover{transform:scale(1.15)}
 </style>
 </head>
 <body>
@@ -259,6 +296,21 @@ tbody tr:hover{background:var(--ivory)}
         </div>
       </div>
 
+      <!-- TREND CHART -->
+      <div class="section-title">📈 מגמה חודשית — הזמנות</div>
+      <div class="chart-card">
+        <canvas id="trend-chart" height="140"></canvas>
+      </div>
+
+      <!-- TOP SERVICES -->
+      <div class="section-title">💅 שירותים פופולריים</div>
+      <div id="b-services" class="services-list"></div>
+
+      <!-- UPCOMING 7 DAYS -->
+      <div class="section-title">📆 לו״ז 7 ימים הבאים</div>
+      <div id="b-upcoming" style="margin-bottom:18px"></div>
+
+      <!-- ATTRIBUTION -->
       <div class="section-title">אטריבוציה — לקוחות חדשות בלבד</div>
       <div class="sources" id="b-sources"></div>
 
@@ -351,8 +403,12 @@ tbody tr:hover{background:var(--ivory)}
       </div>
     </div>
 
+    <!-- TODAY / TOMORROW SCHEDULE -->
+    <div class="section-title">📆 לו״ז היום ומחר</div>
+    <div id="g-schedule"><div class="empty-state" style="padding:20px"><div class="spinner"></div></div></div>
+
     <!-- BOOKING STATS -->
-    <div class="section-title">📅 הזמנות</div>
+    <div class="section-title" style="margin-top:24px">📅 הזמנות</div>
     <div class="stats-row s4">
       <div class="stat-card">
         <div class="stat-lbl">הזמנות החודש</div>
@@ -442,6 +498,7 @@ function doLogout() {
   document.getElementById('pw-input').value = '';
   document.getElementById('login-err').textContent = '';
   bRows = []; cRows = []; contentLoaded = false;
+  if (trendChart) { trendChart.destroy(); trendChart = null; }
 }
 
 function showView(role) {
@@ -479,6 +536,7 @@ async function loadContent() {
 async function loadGaya() {
   [bRows, cRows] = await Promise.all([fetchRows(API.bookings), fetchRows(API.content)]);
   document.getElementById('g-bookings-loading').hidden = true;
+  renderGayaSchedule(bRows);
   renderGayaBookings();
   renderGaya();
 }
@@ -502,6 +560,16 @@ function fmtDate(d) {
 
 function num(v) { return Number(v) || 0; }
 
+function parseAppDate(s) {
+  if (!s) return null;
+  try {
+    const parts = s.trim().split(' ');
+    const [dd, mm, yyyy] = parts[0].split('/');
+    const time = parts[1] || '00:00';
+    return new Date(`${yyyy}-${mm}-${dd}T${time}:00`);
+  } catch { return null; }
+}
+
 function sourceBadge(ch, src, isNew) {
   if (src === 'existing') return `<span class="badge badge-existing">לפני פרסום</span>`;
   if (isNew === 'לא') return `<span class="badge badge-returning">חוזרת</span>`;
@@ -519,6 +587,144 @@ function currentMonthHe() {
   return `${months[n.getMonth()]} ${n.getFullYear()}`;
 }
 
+function waLink(phone) {
+  const p = (phone || '').replace(/\D/g,'').replace(/^0/,'');
+  return p ? `https://wa.me/972${p}` : '';
+}
+
+// ─── TREND CHART ──────────────────────────
+let trendChart = null;
+function renderTrend(rows) {
+  const HE_M = ['ינו','פבר','מרץ','אפר','מאי','יוני','יולי','אוג','ספט','אוק','נוב','דצמ'];
+  const now = new Date();
+  const months = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({ y: d.getFullYear(), m: d.getMonth(), label: `${HE_M[d.getMonth()]} ${String(d.getFullYear()).slice(2)}` });
+  }
+  const counts = months.map(({y, m}) =>
+    rows.filter(r => {
+      const d = parseAppDate(r['תאריך תור']);
+      return d && d.getFullYear() === y && d.getMonth() === m;
+    }).length
+  );
+  const ctx = document.getElementById('trend-chart').getContext('2d');
+  if (trendChart) trendChart.destroy();
+  trendChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: months.map(m => m.label),
+      datasets: [{
+        data: counts,
+        backgroundColor: counts.map((_, i) => i === 5 ? '#7A1515' : '#EDD3DA'),
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { rtl: true } },
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Rubik', size: 11 }, color: '#8A7070' }, grid: { color: '#F3EDE6' } },
+        x: { ticks: { font: { family: 'Rubik', size: 11 }, color: '#8A7070' }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ─── TOP SERVICES ─────────────────────────
+function renderTopServices(rows) {
+  const map = {};
+  rows.forEach(r => {
+    (r['שירות'] || '').split('~').forEach(s => {
+      s = s.trim();
+      if (s && s !== '(אירוע פרטי)') map[s] = (map[s] || 0) + 1;
+    });
+  });
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const max = sorted[0]?.[1] || 1;
+  document.getElementById('b-services').innerHTML = sorted.length
+    ? sorted.map(([name, count]) => `
+      <div class="svc-row">
+        <span class="svc-name">${name}</span>
+        <div class="svc-bar-wrap"><div class="svc-bar" style="width:${Math.round(count / max * 100)}%"></div></div>
+        <span class="svc-count">${count}</span>
+      </div>`).join('')
+    : '<span style="color:var(--muted);font-size:13px">—</span>';
+}
+
+// ─── UPCOMING 7 DAYS (Tomer) ──────────────
+function renderUpcoming(rows) {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const end = new Date(today); end.setDate(end.getDate() + 7);
+  const HE_DAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+
+  const upcoming = rows
+    .filter(r => { const d = parseAppDate(r['תאריך תור']); return d && d >= today && d < end; })
+    .sort((a, b) => parseAppDate(a['תאריך תור']) - parseAppDate(b['תאריך תור']));
+
+  if (!upcoming.length) {
+    document.getElementById('b-upcoming').innerHTML = `<div style="color:var(--muted);font-size:13px;padding:4px 0">אין תורים ב-7 הימים הבאים</div>`;
+    return;
+  }
+  document.getElementById('b-upcoming').innerHTML = `
+    <div class="sched-list">
+      ${upcoming.map(r => {
+        const d = parseAppDate(r['תאריך תור']);
+        const isToday = d.toDateString() === today.toDateString();
+        const dayLabel = isToday ? 'היום' : HE_DAYS[d.getDay()];
+        const time = (r['תאריך תור'] || '').split(' ')[1] || '';
+        return `<div class="sched-item${isToday ? ' today' : ''}">
+          <div class="sched-day-lbl">${dayLabel}</div>
+          <div class="sched-time">${time}</div>
+          <div class="sched-info">
+            <span class="sched-name">${r['שם לקוחה'] || '—'}</span>
+            <span class="sched-svc">${(r['שירות'] || '').split('~')[0]}</span>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+// ─── GAYA SCHEDULE (today / tomorrow) ─────
+function renderGayaSchedule(rows) {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const filter = (target) => rows
+    .filter(r => {
+      const d = parseAppDate(r['תאריך תור']);
+      return d && d.toDateString() === target.toDateString();
+    })
+    .sort((a, b) => parseAppDate(a['תאריך תור']) - parseAppDate(b['תאריך תור']));
+
+  const todayRows = filter(today);
+  const tomRows = filter(tomorrow);
+
+  const renderDay = (label, dayRows) => {
+    if (!dayRows.length) return `<div class="sched-day-header">${label} — אין תורים 🌿</div>`;
+    return `
+      <div class="sched-day-header">${label} — ${dayRows.length} תורים</div>
+      <div class="sched-list">
+        ${dayRows.map(r => {
+          const time = (r['תאריך תור'] || '').split(' ')[1] || '';
+          const wa = waLink(r['טלפון']);
+          return `<div class="sched-item">
+            <div class="sched-time">${time}</div>
+            <div class="sched-info">
+              <span class="sched-name">${r['שם לקוחה'] || '—'}</span>
+              <span class="sched-svc">${(r['שירות'] || '').split('~')[0]}</span>
+            </div>
+            ${wa ? `<a href="${wa}" target="_blank" class="wa-btn">💬 WhatsApp</a>` : ''}
+          </div>`;
+        }).join('')}
+      </div>`;
+  };
+
+  document.getElementById('g-schedule').innerHTML =
+    renderDay('היום', todayRows) + renderDay('מחר', tomRows);
+}
+
 // ─── RENDER BOOKINGS ──────────────────────
 function renderBookings() {
   const rows = bRows;
@@ -529,9 +735,9 @@ function renderBookings() {
   }
   document.getElementById('b-empty').hidden = true;
 
-  const existing   = rows.filter(r => r['מקור'] === 'existing');
-  const fromMktg   = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
-  const returning  = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] === 'לא');
+  const existing  = rows.filter(r => r['מקור'] === 'existing');
+  const fromMktg  = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
+  const returning = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] === 'לא');
 
   const curMonth = currentMonthHe();
   const newThisMonth = fromMktg.filter(r => r['חודש'] === curMonth).length;
@@ -542,12 +748,16 @@ function renderBookings() {
   document.getElementById('b-returning').textContent = returning.length;
   document.getElementById('b-existing').textContent = existing.length;
 
-  // Attribution breakdown — new-from-marketing only
+  renderTrend(rows);
+  renderTopServices(rows);
+  renderUpcoming(rows);
+
+  // Attribution breakdown
   const srcMap = {};
   fromMktg.forEach(r => { const k = r['ערוץ'] || 'אחר'; srcMap[k] = (srcMap[k] || 0) + 1; });
-  const sorted = Object.entries(srcMap).sort((a,b) => b[1] - a[1]);
+  const sorted = Object.entries(srcMap).sort((a, b) => b[1] - a[1]);
   document.getElementById('b-sources').innerHTML = sorted.length
-    ? sorted.map(([ch,n]) => `<div class="src-chip">${ch}<span class="src-count">${n}</span></div>`).join('')
+    ? sorted.map(([ch, n]) => `<div class="src-chip">${ch}<span class="src-count">${n}</span></div>`).join('')
     : '<span style="color:var(--muted);font-size:13px">יופיע כאן כשלקוחות חדשות יכנסו דרך הפרסום</span>';
 
   renderBookingRows(rows);
@@ -583,13 +793,13 @@ function renderContent() {
   }
   document.getElementById('c-empty').hidden = true;
 
-  const totalReach = rows.reduce((s,r) => s + num(r.reach), 0);
-  const avgInt = Math.round(rows.reduce((s,r) => s + num(r.totalInteractions), 0) / rows.length);
+  const totalReach = rows.reduce((s, r) => s + num(r.reach), 0);
+  const avgInt = Math.round(rows.reduce((s, r) => s + num(r.totalInteractions), 0) / rows.length);
   document.getElementById('c-reach').textContent = totalReach.toLocaleString('he-IL');
   document.getElementById('c-avg').textContent = avgInt.toLocaleString('he-IL');
   document.getElementById('c-count').textContent = rows.length;
 
-  const sorted = [...rows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const sorted = [...rows].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   document.getElementById('c-tbody').innerHTML = sorted.map(r => `
     <tr>
       <td style="white-space:nowrap">${fmtDate(r.timestamp)}</td>
@@ -608,14 +818,14 @@ function renderGayaBookings() {
   const rows = bRows;
   const curMonth = currentMonthHe();
 
-  const thisMonth   = rows.filter(r => r['חודש'] === curMonth);
-  const newMonth    = thisMonth.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
-  const retMonth    = thisMonth.filter(r => r['לקוחה חדשה'] === 'לא');
+  const thisMonth = rows.filter(r => r['חודש'] === curMonth);
+  const newMonth  = thisMonth.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
+  const retMonth  = thisMonth.filter(r => r['לקוחה חדשה'] === 'לא');
 
-  document.getElementById('g-b-month').textContent  = thisMonth.length;
-  document.getElementById('g-b-new').textContent    = newMonth.length;
-  document.getElementById('g-b-ret').textContent    = retMonth.length;
-  document.getElementById('g-b-total').textContent  = rows.length;
+  document.getElementById('g-b-month').textContent = thisMonth.length;
+  document.getElementById('g-b-new').textContent   = newMonth.length;
+  document.getElementById('g-b-ret').textContent   = retMonth.length;
+  document.getElementById('g-b-total').textContent = rows.length;
 
   if (!rows.length) {
     document.getElementById('g-bookings-empty').hidden = false;
@@ -643,6 +853,7 @@ function renderGayaBookings() {
           ? '<span class="badge badge-returning" style="font-size:10px">חוזרת</span>'
           : '<span class="badge badge-ig" style="font-size:10px">חדשה</span>';
         const dateParts = (r['תאריך תור'] || '').split(' ');
+        const wa = waLink(r['טלפון']);
         return `
           <div class="booking-item">
             <div class="booking-avatar">${initial}</div>
@@ -654,6 +865,7 @@ function renderGayaBookings() {
               <div class="booking-date">${dateParts[0] || '—'}</div>
               <div class="booking-time">${dateParts[1] || ''}</div>
             </div>
+            ${wa ? `<a href="${wa}" target="_blank" class="wa-sm">💬</a>` : ''}
           </div>`;
       }).join('')}
     </div>`;
@@ -663,12 +875,11 @@ function renderGayaBookings() {
 function renderGaya() {
   const rows = cRows;
 
-  // Stats
   const now = new Date();
-  const ym = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const ym = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   const thisMonth = rows.filter(r => (r.timestamp || '').startsWith(ym));
-  const reachMonth = thisMonth.reduce((s,r) => s + num(r.reach), 0);
-  const avgInt = rows.length ? Math.round(rows.reduce((s,r) => s + num(r.totalInteractions), 0) / rows.length) : 0;
+  const reachMonth = thisMonth.reduce((s, r) => s + num(r.reach), 0);
+  const avgInt = rows.length ? Math.round(rows.reduce((s, r) => s + num(r.totalInteractions), 0) / rows.length) : 0;
   document.getElementById('g-reach').textContent = reachMonth.toLocaleString('he-IL');
   document.getElementById('g-avg').textContent = avgInt.toLocaleString('he-IL');
   document.getElementById('g-posts').textContent = thisMonth.length;
@@ -678,7 +889,7 @@ function renderGaya() {
     return;
   }
 
-  const recent = [...rows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
+  const recent = [...rows].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
   document.getElementById('g-grid').innerHTML = recent.map(r => `
     <div class="post-card">
       <div class="post-date">${fmtDate(r.timestamp)}</div>
