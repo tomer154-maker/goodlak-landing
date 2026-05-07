@@ -536,9 +536,9 @@ async function loadContent() {
 async function loadGaya() {
   [bRows, cRows] = await Promise.all([fetchRows(API.bookings), fetchRows(API.content)]);
   document.getElementById('g-bookings-loading').hidden = true;
-  renderGayaSchedule(bRows);
-  renderGayaBookings();
-  renderGaya();
+  try { renderGayaSchedule(bRows); } catch(e) { console.error('renderGayaSchedule error:', e); }
+  try { renderGayaBookings(); } catch(e) { console.error('renderGayaBookings error:', e); }
+  try { renderGaya(); } catch(e) { console.error('renderGaya error:', e); }
 }
 
 // ─── TABS ─────────────────────────────────
