@@ -232,6 +232,35 @@ tbody tr:hover{background:var(--ivory)}
 .sched-name{font-size:13px;font-weight:600;color:var(--text)}
 .sched-svc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+/* ─── PUBLISH QUEUE ─────────────────────── */
+.queue-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.queue-item{
+  background:var(--white);border-radius:var(--r);padding:14px 16px;
+  display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);
+}
+.queue-thumb{
+  width:52px;height:52px;border-radius:9px;object-fit:cover;flex-shrink:0;
+  background:var(--ivory3);display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+}
+.queue-thumb img{width:100%;height:100%;border-radius:9px;object-fit:cover}
+.queue-info{flex:1;min-width:0}
+.queue-type{font-size:10px;font-weight:700;color:var(--white);background:var(--burg);
+  border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:4px}
+.queue-type.story{background:var(--rose)}
+.queue-caption{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.queue-time{font-size:11px;color:var(--muted);margin-top:3px}
+.queue-status{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;
+  background:var(--gold-lt);color:var(--gold);margin-top:2px;display:inline-block}
+.queue-status.published{background:#e8f5e9;color:#388e3c}
+.queue-status.failed{background:#fce4ec;color:#c62828}
+.cancel-btn{
+  border:1.5px solid var(--ivory3);background:var(--white);color:var(--muted);
+  border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;flex-shrink:0;
+  font-family:'Rubik',sans-serif;transition:all .2s;
+}
+.cancel-btn:hover{border-color:var(--rose);color:var(--rose)}
+
 /* ─── WHATSAPP ───────────────────────────── */
 .wa-btn{
   display:inline-flex;align-items:center;gap:5px;
@@ -399,7 +428,7 @@ tbody tr:hover{background:var(--ivory)}
         <span class="bot-icon">🤖</span> פתחי את בוט התוכן
       </a>
       <div class="bot-hint">
-        שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
+        שלחי תמונה לבוט ← AI כותב כיתוב בעברית ← בחרי פוסט / סטורי ← תזמני לשעה שרוצה 🌸
       </div>
     </div>
 
@@ -434,6 +463,13 @@ tbody tr:hover{background:var(--ivory)}
     <div id="g-bookings-loading" class="empty-state"><div class="spinner"></div></div>
     <div id="g-bookings-empty" class="empty-state" hidden>
       <span class="empty-icon">📋</span>אין הזמנות עדיין
+    </div>
+
+    <!-- PUBLISH QUEUE -->
+    <div class="section-title" style="margin-top:28px">📅 תור פרסום</div>
+    <div id="g-queue-list"><div class="empty-state" style="padding:20px"><div class="spinner"></div></div></div>
+    <div id="g-queue-empty" class="empty-state" hidden>
+      <span class="empty-icon">🌿</span>אין פוסטים מתוזמנים
     </div>
 
     <!-- INSTAGRAM STATS -->
@@ -471,7 +507,9 @@ tbody tr:hover{background:var(--ivory)}
 const ROLES = {'Tomer123':'tomer','Gaya123':'gaya'};
 const API = {
   bookings: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/bookings',
-  content:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content'
+  content:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content',
+  schedule: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/schedule',
+  cancel:   'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/cancel-schedule'
 };
 let bRows = [], cRows = [], contentLoaded = false;
 
@@ -539,6 +577,63 @@ async function loadGaya() {
   try { renderGayaSchedule(bRows); } catch(e) { console.error('renderGayaSchedule error:', e); }
   try { renderGayaBookings(); } catch(e) { console.error('renderGayaBookings error:', e); }
   try { renderGaya(); } catch(e) { console.error('renderGaya error:', e); }
+  loadQueue();
+}
+
+async function loadQueue() {
+  try {
+    const rows = await fetchRows(API.schedule);
+    renderQueue(rows);
+  } catch(e) {
+    document.getElementById('g-queue-list').innerHTML = '';
+    document.getElementById('g-queue-empty').hidden = false;
+  }
+}
+
+async function cancelSchedule(schedId, btn) {
+  if (!confirm('לבטל את הפרסום המתוזמן הזה?')) return;
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    await fetch(API.cancel, {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify({sched_id: schedId})
+    });
+    loadQueue();
+  } catch(e) { btn.disabled = false; btn.textContent = 'ביטול'; }
+}
+
+function renderQueue(rows) {
+  const el = document.getElementById('g-queue-list');
+  const empty = document.getElementById('g-queue-empty');
+  const pending = (rows || []).filter(r => r.status === 'pending' || r.status === 'published').slice(0, 20);
+  if (!pending.length) { el.innerHTML = ''; empty.hidden = false; return; }
+  empty.hidden = true;
+  el.innerHTML = `<div class="queue-list">${pending.map(r => {
+    const isStory = r.type === 'STORY';
+    const typeLabel = isStory ? '🎬 סטורי' : '📸 פוסט';
+    const typeClass = isStory ? 'story' : '';
+    const caption = (r.caption || '').substring(0, 60) + (r.caption?.length > 60 ? '…' : '');
+    const schedTime = r.scheduled_time ? r.scheduled_time.replace('T', ' ').substring(0, 16) : '';
+    const statusLabel = r.status === 'published' ? 'פורסם ✅' : r.status === 'failed' ? 'נכשל ❌' : 'ממתין ⏳';
+    const statusClass = r.status === 'published' ? 'published' : r.status === 'failed' ? 'failed' : '';
+    const thumb = r.image_url
+      ? `<img src="${r.image_url}" alt="" onerror="this.parentNode.textContent='🖼'">`
+      : (isStory ? '🎬' : '📸');
+    const cancelBtn = r.status === 'pending'
+      ? `<button class="cancel-btn" onclick="cancelSchedule('${r.sched_id}',this)">ביטול</button>`
+      : '';
+    return `<div class="queue-item">
+      <div class="queue-thumb">${thumb}</div>
+      <div class="queue-info">
+        <span class="queue-type ${typeClass}">${typeLabel}</span>
+        ${caption ? `<div class="queue-caption">${caption}</div>` : ''}
+        <div class="queue-time">📅 ${schedTime}</div>
+        <span class="queue-status ${statusClass}">${statusLabel}</span>
+      </div>
+      ${cancelBtn}
+    </div>`;
+  }).join('')}</div>`;
 }
 
 // ─── TABS ─────────────────────────────────
