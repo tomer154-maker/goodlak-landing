@@ -205,6 +205,8 @@ tbody tr:hover{background:var(--ivory)}
   box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
 .days-badge{background:var(--rose-lt);color:var(--rose);border-radius:8px;
   padding:3px 9px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.noshow-row{opacity:.45}
+.noshow-row td{text-decoration:line-through}
 
 /* POST CARDS */
 .posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:4px}
@@ -410,6 +412,15 @@ tbody tr:hover{background:var(--ivory)}
       <div class="section-title">הכנסות לפי חודש</div>
       <div class="rev-chart" id="rev-chart">
         <div style="text-align:center;padding:20px;color:var(--muted)"><div class="spinner"></div></div>
+      </div>
+
+      <div class="section-title" style="margin-top:24px">📋 ביקורים שהושלמו החודש <span id="rev-clients-count" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--rose)"></span></div>
+      <div class="cm-note">ניתן לערוך את המחיר הסופי ששולם. לחיצה על 🗑️ מסמנת לקוחה כ"לא הגיעה" ומסירה אותה מסכום ההכנסות.</div>
+      <div class="table-wrap" style="margin-bottom:24px">
+        <table>
+          <thead><tr><th>שם לקוחה</th><th>שירות</th><th>תאריך תור</th><th>מחיר (₪)</th><th></th></tr></thead>
+          <tbody id="rev-clients-tbody"><tr><td colspan="5" class="loading-row"><div class="spinner"></div></td></tr></tbody>
+        </table>
       </div>
 
       <div class="section-title" style="margin-top:24px">🔔 לקוחות שלא חזרו <span id="inactive-count" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--rose)"></span></div>
@@ -786,6 +797,7 @@ function renderRevenue() {
   // Monthly totals
   const monthTotals = {};
   bRows.forEach(r => {
+    if (r['סטטוס'] === 'לא הגיע/ה') return;
     const month = monthKeyFromRow(r);
     if (!month) return;
     const price = num(r['מחיר אושר']) || num(r['מחיר לפי מחירון']) || calcServicePrice(r['שירות']);
@@ -804,7 +816,7 @@ function renderRevenue() {
   const prevIdx   = sortedMonths.indexOf(curMonth) - 1;
   const prevRev   = prevIdx >= 0 ? (monthTotals[sortedMonths[prevIdx]] || 0) : 0;
   const growth    = prevRev > 0 ? Math.round((curRev - prevRev) / prevRev * 100) : null;
-  const allCurRows = bRows.filter(r => monthKeyFromRow(r) === curMonth);
+  const allCurRows = bRows.filter(r => monthKeyFromRow(r) === curMonth && r['סטטוס'] !== 'לא הגיע/ה');
   const curRows    = allCurRows.filter(r => (num(r['מחיר אושר']) || num(r['מחיר לפי מחירון']) || calcServicePrice(r['שירות'])) > 0);
   const avgPrice   = curRows.length > 0 ? Math.round(curRev / curRows.length) : 0;
 
@@ -865,6 +877,7 @@ function renderRevenue() {
         <div class="days-badge">${c.daysSince} ימים</div>
       </div>`).join('');
   }
+  renderRevenueClients();
 }
 
 function findInactiveClients() {
@@ -890,6 +903,108 @@ function findInactiveClients() {
     .filter(c => !c.hasUpcoming && c.lastDate < cutoff)
     .map(c => ({ ...c, daysSince: Math.floor((today - c.lastDate) / 86400000) }))
     .sort((a, b) => b.daysSince - a.daysSince);
+}
+
+// REVENUE CLIENTS LIST
+function renderRevenueClients() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const curMonth = currentMonthHe();
+  const rows = bRows.map((r, i) => ({...r, _rowIndex: i + 2}))
+    .filter(r => {
+      const d = parseApptDate(r['תאריך תור']);
+      return d && d <= today && monthKeyFromRow(r) === curMonth && r['שם לקוחה'] && !r['שם לקוחה'].includes('אירוע פרטי');
+    })
+    .sort((a, b) => (parseApptDate(b['תאריך תור']) || 0) - (parseApptDate(a['תאריך תור']) || 0));
+
+  const countEl = document.getElementById('rev-clients-count');
+  const visible = rows.filter(r => r['סטטוס'] !== 'לא הגיע/ה').length;
+  countEl.textContent = rows.length ? `(${visible} מתוך ${rows.length})` : '';
+
+  const tbody = document.getElementById('rev-clients-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">אין ביקורים שהושלמו החודש עדיין</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(r => {
+    const isNoShow = r['סטטוס'] === 'לא הגיע/ה';
+    const price = num(r['מחיר אושר']) || num(r['מחיר לפי מחירון']) || calcServicePrice(r['שירות']);
+    const svc = (r['שירות'] || '-').split(/[,،~]/)[0].trim();
+    const rowCls = isNoShow ? 'noshow-row' : '';
+    const pricePart = isNoShow
+      ? `<span class="badge" style="background:#FEE2E2;color:#991B1B;text-decoration:none">לא הגיעה</span>`
+      : `<input type="number" class="price-input" id="revp-${r._rowIndex}" value="${price || ''}" min="1" style="width:74px">`;
+    const btnsPart = isNoShow
+      ? `<button class="approve-btn" style="background:var(--muted);font-size:11px;padding:5px 10px" onclick="undoNoShow(${r._rowIndex})">↩ בטל</button>`
+      : `<div style="display:flex;gap:5px">
+           <button class="approve-btn" style="font-size:11px;padding:5px 10px" onclick="savePriceRevRow(${r._rowIndex})">💾</button>
+           <button class="approve-btn" style="background:#991B1B;font-size:11px;padding:5px 10px" onclick="markNoShow(${r._rowIndex})">🗑️</button>
+         </div>`;
+    return `<tr id="revcl-${r._rowIndex}" class="${rowCls}">
+      <td><strong style="text-decoration:${isNoShow?'line-through':'none'}">${r['שם לקוחה']}</strong></td>
+      <td style="font-size:12px;text-decoration:${isNoShow?'line-through':'none'}">${svc}</td>
+      <td style="white-space:nowrap">${fmtDate(r['תאריך תור'])}</td>
+      <td>${pricePart}</td>
+      <td>${btnsPart}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function savePriceRevRow(rowIndex) {
+  const priceEl = document.getElementById('revp-' + rowIndex);
+  const price = Number(priceEl?.value);
+  if (!price || price <= 0) { if (priceEl) { priceEl.style.borderColor = 'var(--rose)'; priceEl.focus(); } return; }
+  const saveBtn = document.querySelector(`#revcl-${rowIndex} button[onclick*="savePriceRevRow"]`);
+  if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = '...'; }
+  try {
+    const res = await fetch(API.approve, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({rowIndex, approvedPrice: price})
+    });
+    if (res.ok) {
+      const idx = rowIndex - 2;
+      if (bRows[idx]) { bRows[idx]['מחיר אושר'] = String(price); bRows[idx]['עמלה'] = String(Math.round(price * 0.2)); bRows[idx]['סטטוס'] = bRows[idx]['סטטוס'] === '' ? '' : 'אושר'; }
+      if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = '✅'; setTimeout(() => { if (saveBtn) saveBtn.textContent = '💾'; }, 1500); }
+      renderRevenue();
+    } else {
+      if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = '💾'; }
+      alert('שגיאה, נסי שוב');
+    }
+  } catch { if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = '💾'; } alert('שגיאה בחיבור'); }
+}
+
+async function markNoShow(rowIndex) {
+  const btn = document.querySelector(`#revcl-${rowIndex} button[onclick*="markNoShow"]`);
+  if (btn) { btn.disabled = true; btn.textContent = '...'; }
+  try {
+    const res = await fetch(API.approve, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({rowIndex, noShow: true})
+    });
+    if (res.ok) {
+      const idx = rowIndex - 2;
+      if (bRows[idx]) { bRows[idx]['סטטוס'] = 'לא הגיע/ה'; bRows[idx]['מחיר אושר'] = '0'; }
+      renderRevenue();
+    } else {
+      if (btn) { btn.disabled = false; btn.textContent = '🗑️'; }
+      alert('שגיאה, נסי שוב');
+    }
+  } catch { if (btn) { btn.disabled = false; btn.textContent = '🗑️'; } alert('שגיאה בחיבור'); }
+}
+
+async function undoNoShow(rowIndex) {
+  const idx = rowIndex - 2;
+  const row = bRows[idx];
+  const price = num(row?.['מחיר לפי מחירון']) || calcServicePrice(row?.['שירות'] || '');
+  try {
+    const res = await fetch(API.approve, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({rowIndex, approvedPrice: price || 1})
+    });
+    if (res.ok) {
+      if (bRows[idx]) { bRows[idx]['סטטוס'] = price > 0 ? 'אושר' : 'ממתין לאישור'; bRows[idx]['מחיר אושר'] = String(price); }
+      renderRevenue();
+    }
+  } catch { alert('שגיאה בחיבור'); }
 }
 
 // GAYA NEW CLIENTS
