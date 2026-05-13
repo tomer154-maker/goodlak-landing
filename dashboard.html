@@ -403,7 +403,7 @@ tbody tr:hover{background:var(--ivory)}
       <div class="stats-row s4">
         <div class="stat-card"><div class="stat-lbl">💰 הכנסה החודש</div><div class="stat-val gold" id="rev-total">—</div></div>
         <div class="stat-card"><div class="stat-lbl">📈 שינוי מחודש קודם</div><div class="stat-val" id="rev-growth">—</div></div>
-        <div class="stat-card"><div class="stat-lbl">ממוצע לטיפול</div><div class="stat-val" id="rev-avg">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">תורים החודש</div><div class="stat-val" id="rev-appts">—</div><div class="stat-sub" id="rev-avg-sub"></div></div>
         <div class="stat-card"><div class="stat-lbl">🔔 לקוחות לא פעילות</div><div class="stat-val" id="rev-inactive-count">—</div></div>
       </div>
 
@@ -791,8 +791,9 @@ function renderRevenue() {
   const prevIdx   = sortedMonths.indexOf(curMonth) - 1;
   const prevRev   = prevIdx >= 0 ? (monthTotals[sortedMonths[prevIdx]] || 0) : 0;
   const growth    = prevRev > 0 ? Math.round((curRev - prevRev) / prevRev * 100) : null;
-  const curRows   = bRows.filter(r => r['חודש'] === curMonth && (num(r['מחיר אושר']) || num(r['מחיר לפי מחירון'])) > 0);
-  const avgPrice  = curRows.length > 0 ? Math.round(curRev / curRows.length) : 0;
+  const allCurRows = bRows.filter(r => r['חודש'] === curMonth);
+  const curRows    = allCurRows.filter(r => (num(r['מחיר אושר']) || num(r['מחיר לפי מחירון'])) > 0);
+  const avgPrice   = curRows.length > 0 ? Math.round(curRev / curRows.length) : 0;
 
   // Inactive
   const inactive = findInactiveClients();
@@ -803,7 +804,8 @@ function renderRevenue() {
     growthEl.textContent = (growth >= 0 ? '+' : '') + growth + '%';
     growthEl.style.color = growth > 0 ? 'var(--green)' : growth < 0 ? '#991B1B' : 'var(--muted)';
   } else { growthEl.textContent = '-'; }
-  document.getElementById('rev-avg').textContent = avgPrice ? avgPrice + '₪' : '-';
+  document.getElementById('rev-appts').textContent = allCurRows.length || '0';
+  document.getElementById('rev-avg-sub').textContent = avgPrice ? `ממוצע ${avgPrice}₪` : '';
   document.getElementById('rev-inactive-count').textContent = inactive.length || '0';
   document.getElementById('rev-inactive-count').style.color = inactive.length > 0 ? 'var(--rose)' : 'var(--burg)';
 
@@ -859,7 +861,7 @@ function findInactiveClients() {
 
   bRows.forEach(r => {
     const phone = r['טלפון'], name = r['שם לקוחה'];
-    if (!phone || !name || name.includes('אירוע פרטי') || name.includes('ללא') || r['מקור'] === 'existing') return;
+    if (!phone || !name || name.includes('אירוע פרטי') || name.includes('ללא')) return;
     const d = parseApptDate(r['תאריך תור']);
     if (!d) return;
     const isUpcoming = d >= today;
