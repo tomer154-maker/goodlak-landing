@@ -12,6 +12,7 @@
   --burg:#7A1515;--burg2:#9C1E1E;
   --rose:#C4687A;--rose-lt:#EDD3DA;
   --gold:#C5914A;--gold-lt:#F2E4D0;
+  --green:#166534;--green-lt:#DCFCE7;
   --text:#1A0A0A;--muted:#8A7070;
   --white:#fff;
   --shadow:0 2px 16px rgba(122,21,21,.09);
@@ -21,7 +22,7 @@ body{font-family:'Rubik',sans-serif;background:var(--ivory);color:var(--text);mi
 [hidden]{display:none!important}
 a{text-decoration:none;color:inherit}
 
-/* ─── LOGIN ──────────────────────────────── */
+/* LOGIN */
 #pg-login{
   display:flex;align-items:center;justify-content:center;
   min-height:100vh;padding:24px;
@@ -55,7 +56,7 @@ a{text-decoration:none;color:inherit}
 .login-btn:active{transform:translateY(0)}
 .login-err{color:var(--rose);font-size:13px;margin-top:10px;min-height:18px;font-weight:500}
 
-/* ─── HEADER ─────────────────────────────── */
+/* HEADER */
 .view-header{
   background:linear-gradient(135deg,var(--burg),var(--burg2));
   color:#fff;padding:13px 20px;
@@ -74,7 +75,7 @@ a{text-decoration:none;color:inherit}
 }
 .logout-btn:hover{background:rgba(255,255,255,.26)}
 
-/* ─── TABS ───────────────────────────────── */
+/* TABS */
 .tabs{display:flex;background:var(--ivory2);border-bottom:1px solid var(--ivory3)}
 .tab-btn{
   flex:1;padding:13px 6px;border:none;background:transparent;
@@ -83,11 +84,16 @@ a{text-decoration:none;color:inherit}
   transition:all .2s;
 }
 .tab-btn.active{color:var(--burg);border-bottom-color:var(--burg);background:var(--ivory)}
+.tab-count{
+  display:inline-block;background:var(--rose);color:#fff;
+  border-radius:50px;padding:1px 7px;font-size:10px;font-weight:700;
+  margin-right:4px;vertical-align:middle;
+}
 
-/* ─── LAYOUT ─────────────────────────────── */
+/* LAYOUT */
 .view-body{padding:18px;max-width:960px;margin:0 auto}
 
-/* ─── STAT CARDS ─────────────────────────── */
+/* STAT CARDS */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .stats-row.s4{grid-template-columns:repeat(4,1fr)}
 @media(max-width:600px){.stats-row,.stats-row.s4{grid-template-columns:repeat(2,1fr)}}
@@ -101,7 +107,7 @@ a{text-decoration:none;color:inherit}
 .stat-val.sm{font-size:15px;font-weight:700;padding-top:4px}
 .stat-sub{font-size:10px;color:var(--muted);margin-top:4px}
 
-/* ─── SOURCE CHIPS ───────────────────────── */
+/* SOURCE CHIPS */
 .section-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin:18px 0 10px}
 .sources{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
 .src-chip{
@@ -114,7 +120,7 @@ a{text-decoration:none;color:inherit}
   padding:2px 9px;font-size:11px;font-weight:700;
 }
 
-/* ─── SEARCH + REFRESH ───────────────────── */
+/* SEARCH + REFRESH */
 .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px}
 .search-input{
   flex:1;padding:10px 16px;border:1.5px solid var(--ivory3);
@@ -130,7 +136,7 @@ a{text-decoration:none;color:inherit}
 }
 .refresh-btn:hover{border-color:var(--burg);color:var(--burg)}
 
-/* ─── TABLE ──────────────────────────────── */
+/* TABLE */
 .table-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse;background:var(--white);font-size:13px;min-width:440px}
 thead th{
@@ -147,36 +153,36 @@ tbody tr:hover{background:var(--ivory)}
 .badge-existing{background:#F3F4F6;color:#374151}
 .badge-returning{background:#FEF9C3;color:#854D0E}
 .badge-other{background:var(--ivory3);color:var(--muted)}
+.badge-approved{background:var(--green-lt);color:var(--green)}
+.badge-pending{background:#FEF9C3;color:#854D0E}
+.badge-campaign{background:#EEF2FF;color:#4338CA}
+.badge-pre{background:#F3F4F6;color:#374151}
 
-/* ─── EMPTY / LOADING ────────────────────── */
+/* EMPTY / LOADING */
 .empty-state{text-align:center;padding:48px 20px;color:var(--muted);font-size:13px;line-height:1.8}
 .empty-icon{font-size:36px;display:block;margin-bottom:10px}
 .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--ivory3);border-top-color:var(--burg);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-row{text-align:center;padding:30px}
 
-/* ─── COMMISSION TAB ────────────────────── */
+/* COMMISSION TAB */
 .cm-note{font-size:12px;color:var(--muted);background:var(--ivory2);padding:10px 14px;border-radius:10px;margin-bottom:16px;line-height:1.6}
-.badge-approved{background:#DCFCE7;color:#166534}
-.badge-pending{background:#FEF9C3;color:#854D0E}
-.badge-campaign{background:#EEF2FF;color:#4338CA}
-.badge-pre{background:#F3F4F6;color:#374151}
 
-/* ─── BOT SECTION (Gaya) ─────────────────── */
-.bot-section{text-align:center;padding:28px 0 20px;border-bottom:1px solid var(--ivory3);margin-bottom:20px}
+/* BOT SECTION */
+.bot-section{text-align:center;padding:20px 0 16px;border-bottom:1px solid var(--ivory3);margin-bottom:20px}
 .bot-btn{
   display:inline-flex;align-items:center;gap:10px;
   background:linear-gradient(135deg,var(--gold),#9a6b2a);
-  color:#fff;padding:18px 38px;border-radius:50px;
-  font-family:'Rubik',sans-serif;font-size:17px;font-weight:700;
+  color:#fff;padding:16px 32px;border-radius:50px;
+  font-family:'Rubik',sans-serif;font-size:16px;font-weight:700;
   box-shadow:0 6px 28px rgba(197,145,74,.42);
   transition:transform .2s,box-shadow .2s;
 }
 .bot-btn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(197,145,74,.52)}
-.bot-icon{font-size:24px}
-.bot-hint{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6}
+.bot-icon{font-size:22px}
+.bot-hint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
 
-/* ─── POST CARDS (Gaya) ──────────────────── */
+/* POST CARDS */
 .posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:4px}
 .post-card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
 .post-date{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500}
@@ -188,13 +194,10 @@ tbody tr:hover{background:var(--ivory)}
 .pm{text-align:center}
 .pm-val{font-size:22px;font-weight:800;color:var(--burg);line-height:1}
 .pm-lbl{font-size:10px;color:var(--muted);display:block;margin-top:2px}
-.post-link{
-  margin-top:12px;display:inline-block;font-size:12px;
-  color:var(--gold);font-weight:600;
-}
+.post-link{margin-top:12px;display:inline-block;font-size:12px;color:var(--gold);font-weight:600}
 .post-link:hover{text-decoration:underline}
 
-/* ─── BOOKING LIST (Gaya) ────────────────── */
+/* BOOKING LIST */
 .booking-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
 .booking-item{
   background:var(--white);border-radius:var(--r);padding:14px 16px;
@@ -212,11 +215,29 @@ tbody tr:hover{background:var(--ivory)}
 .booking-right{text-align:left;flex-shrink:0}
 .booking-date{font-size:12px;font-weight:600;color:var(--burg)}
 .booking-time{font-size:11px;color:var(--muted)}
+
+/* APPROVE TABLE */
+.price-input{
+  width:80px;padding:6px 10px;border:1.5px solid var(--ivory3);
+  border-radius:8px;font-family:'Rubik',sans-serif;font-size:14px;font-weight:600;
+  color:var(--text);background:var(--ivory);outline:none;text-align:center;
+  transition:border-color .2s;
+}
+.price-input:focus{border-color:var(--rose)}
+.price-input:disabled{background:var(--ivory2);color:var(--muted)}
+.approve-btn{
+  padding:6px 16px;border:none;border-radius:8px;cursor:pointer;
+  background:linear-gradient(135deg,var(--green),#22543d);
+  color:#fff;font-family:'Rubik',sans-serif;font-size:12px;font-weight:600;
+  transition:opacity .2s,transform .15s;white-space:nowrap;
+}
+.approve-btn:hover{opacity:.88;transform:translateY(-1px)}
+.approve-btn:disabled{opacity:.5;cursor:default;transform:none}
 </style>
 </head>
 <body>
 
-<!-- ════════════════ LOGIN ════════════════ -->
+<!-- LOGIN -->
 <div id="pg-login">
   <div class="login-card">
     <div class="login-wordmark">Good <em>Lak</em></div>
@@ -227,7 +248,7 @@ tbody tr:hover{background:var(--ivory)}
   </div>
 </div>
 
-<!-- ════════════════ TOMER VIEW ════════════════ -->
+<!-- TOMER VIEW -->
 <div id="pg-tomer" hidden>
   <div class="view-header">
     <div class="hdr-left">
@@ -238,9 +259,9 @@ tbody tr:hover{background:var(--ivory)}
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" id="tbtn-bookings" onclick="switchTab('bookings')">👥 כל הלקוחות</button>
-    <button class="tab-btn" id="tbtn-commission" onclick="switchTab('commission')">💰 עמלות</button>
-    <button class="tab-btn" id="tbtn-content" onclick="switchTab('content')">📸 ביצועי תוכן</button>
+    <button class="tab-btn active" id="tbtn-bookings" onclick="switchTomerTab('bookings')">👥 כל הלקוחות</button>
+    <button class="tab-btn" id="tbtn-commission" onclick="switchTomerTab('commission')">💰 עמלות</button>
+    <button class="tab-btn" id="tbtn-content" onclick="switchTomerTab('content')">📸 ביצועי תוכן</button>
   </div>
 
   <div class="view-body">
@@ -317,8 +338,7 @@ tbody tr:hover{background:var(--ivory)}
       </div>
 
       <div class="cm-note">
-        💡 <strong>איך זה עובד:</strong> כל לקוחה חדשה שלא היתה ב-Good Lak בחצי שנה האחרונה - מזכה אותך ב-20% עמלה על 3 הביקורים הראשונים שלה.<br>
-        אם גאיה נתנה הנחה - היא מעדכנת את "מחיר אושר" ישירות בגיליון Google Sheets. הסטטוס ישתנה ל-אושר לאחר העדכון.
+        💡 <strong>איך זה עובד:</strong> כל לקוחה חדשה שלא היתה ב-Good Lak בחצי שנה האחרונה מזכה אותך ב-20% עמלה על 3 הביקורים הראשונים שלה. גאיה מאשרת את המחיר מהדשבורד שלה.
       </div>
 
       <div class="section-title">לקוחות מהקמפיין</div>
@@ -350,7 +370,7 @@ tbody tr:hover{background:var(--ivory)}
       </div>
     </div>
 
-    <!-- CONTENT TAB -->
+    <!-- CONTENT TAB (Tomer) -->
     <div id="tab-content" hidden>
       <div class="stats-row">
         <div class="stat-card">
@@ -389,10 +409,10 @@ tbody tr:hover{background:var(--ivory)}
       </div>
     </div>
 
-  </div><!-- /view-body -->
-</div><!-- /pg-tomer -->
+  </div>
+</div>
 
-<!-- ════════════════ GAYA VIEW ════════════════ -->
+<!-- GAYA VIEW -->
 <div id="pg-gaya" hidden>
   <div class="view-header rose-hdr">
     <div class="hdr-left">
@@ -402,87 +422,143 @@ tbody tr:hover{background:var(--ivory)}
     <button class="logout-btn" onclick="doLogout()">יציאה</button>
   </div>
 
+  <div class="tabs">
+    <button class="tab-btn active" id="tbtn-g-bookings" onclick="switchGayaTab('bookings')">📅 תורים</button>
+    <button class="tab-btn" id="tbtn-g-new" onclick="switchGayaTab('new')">✨ לקוחות חדשות</button>
+    <button class="tab-btn" id="tbtn-g-content" onclick="switchGayaTab('content')">📸 תוכן</button>
+  </div>
+
   <div class="view-body">
 
-    <!-- BOT BUTTON -->
-    <div class="bot-section">
-      <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
-        <span class="bot-icon">🤖</span> פתחי את בוט התוכן
-      </a>
-      <div class="bot-hint">
-        שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
+    <!-- GAYA - תורים -->
+    <div id="tab-g-bookings">
+      <div class="bot-section">
+        <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
+          <span class="bot-icon">🤖</span> פתחי את בוט התוכן
+        </a>
+        <div class="bot-hint">
+          שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
+        </div>
+      </div>
+
+      <div class="section-title">📅 הזמנות</div>
+      <div class="stats-row s4">
+        <div class="stat-card">
+          <div class="stat-lbl">הזמנות החודש</div>
+          <div class="stat-val" id="g-b-month">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">✨ חדשות החודש</div>
+          <div class="stat-val" id="g-b-new">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">🔄 חוזרות החודש</div>
+          <div class="stat-val" id="g-b-ret">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">סה״כ לקוחות</div>
+          <div class="stat-val" id="g-b-total">—</div>
+        </div>
+      </div>
+
+      <div class="section-title">הזמנות אחרונות</div>
+      <div id="g-bookings-list"></div>
+      <div id="g-bookings-loading" class="empty-state"><div class="spinner"></div></div>
+      <div id="g-bookings-empty" class="empty-state" hidden>
+        <span class="empty-icon">📋</span>אין הזמנות עדיין
       </div>
     </div>
 
-    <!-- BOOKING STATS -->
-    <div class="section-title">📅 הזמנות</div>
-    <div class="stats-row s4">
-      <div class="stat-card">
-        <div class="stat-lbl">הזמנות החודש</div>
-        <div class="stat-val" id="g-b-month">—</div>
+    <!-- GAYA - לקוחות חדשות -->
+    <div id="tab-g-new" hidden>
+      <div class="bot-section">
+        <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
+          <span class="bot-icon">🤖</span> פתחי את בוט התוכן
+        </a>
+        <div class="bot-hint">
+          שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-lbl">✨ חדשות החודש</div>
-        <div class="stat-val" id="g-b-new">—</div>
+
+      <div class="cm-note">
+        💡 כאן מופיעות לקוחות חדשות שנכנסו דרך הקמפיין. בדקי את המחיר שגבית לכל לקוחה (אם נתת הנחה - עדכני) ולחצי <strong>אשר</strong>.
       </div>
-      <div class="stat-card">
-        <div class="stat-lbl">🔄 חוזרות החודש</div>
-        <div class="stat-val" id="g-b-ret">—</div>
+
+      <div class="section-title">לקוחות ממתינות לאישור מחיר</div>
+      <div class="toolbar">
+        <div style="flex:1"></div>
+        <button class="refresh-btn" onclick="loadBookings().then(renderGayaNew)">↻ רענן</button>
       </div>
-      <div class="stat-card">
-        <div class="stat-lbl">סה״כ לקוחות</div>
-        <div class="stat-val" id="g-b-total">—</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>שם לקוחה</th>
+            <th>שירות</th>
+            <th>תאריך תור</th>
+            <th>מחיר (₪)</th>
+            <th>אישור</th>
+          </tr></thead>
+          <tbody id="g-new-tbody">
+            <tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="g-new-empty" class="empty-state" hidden>
+        <span class="empty-icon">✨</span>
+        אין לקוחות חדשות ממתינות לאישור
       </div>
     </div>
 
-    <!-- RECENT BOOKINGS -->
-    <div class="section-title">הזמנות אחרונות</div>
-    <div id="g-bookings-list"></div>
-    <div id="g-bookings-loading" class="empty-state"><div class="spinner"></div></div>
-    <div id="g-bookings-empty" class="empty-state" hidden>
-      <span class="empty-icon">📋</span>אין הזמנות עדיין
-    </div>
+    <!-- GAYA - תוכן -->
+    <div id="tab-g-content" hidden>
+      <div class="bot-section">
+        <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
+          <span class="bot-icon">🤖</span> פתחי את בוט התוכן
+        </a>
+        <div class="bot-hint">
+          שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
+        </div>
+      </div>
 
-    <!-- INSTAGRAM STATS -->
-    <div class="section-title" style="margin-top:28px">📸 אינסטגרם</div>
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-lbl">Reach החודש</div>
-        <div class="stat-val" id="g-reach">—</div>
+      <div class="section-title" style="margin-top:4px">📸 אינסטגרם</div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-lbl">Reach החודש</div>
+          <div class="stat-val" id="g-reach">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">ממוצע אינטראקציות</div>
+          <div class="stat-val" id="g-avg">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">פוסטים החודש</div>
+          <div class="stat-val" id="g-posts">—</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-lbl">ממוצע אינטראקציות</div>
-        <div class="stat-val" id="g-avg">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-lbl">פוסטים החודש</div>
-        <div class="stat-val" id="g-posts">—</div>
-      </div>
-    </div>
 
-    <!-- RECENT POSTS -->
-    <div class="section-title">הפוסטים האחרונים</div>
-    <div id="g-grid" class="posts-grid"></div>
-    <div id="g-loading" class="empty-state" hidden><div class="spinner"></div></div>
-    <div id="g-empty" class="empty-state" hidden>
-      <span class="empty-icon">🌸</span>
-      הנתונים יופיעו כאן לאחר שהפוסטים הראשונים ייסרקו<br>
-      <small>(האוטומציה רצה כל לילה בשעה 2:00)</small>
+      <div class="section-title">הפוסטים האחרונים</div>
+      <div id="g-grid" class="posts-grid"></div>
+      <div id="g-loading" class="empty-state" hidden><div class="spinner"></div></div>
+      <div id="g-empty" class="empty-state" hidden>
+        <span class="empty-icon">🌸</span>
+        הנתונים יופיעו כאן לאחר שהפוסטים הראשונים ייסרקו<br>
+        <small>(האוטומציה רצה כל לילה בשעה 2:00)</small>
+      </div>
     </div>
 
   </div>
 </div>
 
 <script>
-// ─── CONSTANTS ────────────────────────────
 const ROLES = {'Tomer123':'tomer','Gaya123':'gaya'};
 const API = {
   bookings: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/bookings',
-  content:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content'
+  content:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content',
+  approve:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/approve'
 };
 let bRows = [], cRows = [], contentLoaded = false;
 
-// ─── AUTH ─────────────────────────────────
+// AUTH
 function doLogin() {
   const pw = document.getElementById('pw-input').value.trim();
   const role = ROLES[pw];
@@ -491,7 +567,7 @@ function doLogin() {
     showView(role);
   } else {
     const err = document.getElementById('login-err');
-    err.textContent = 'סיסמה שגויה — נסה שנית';
+    err.textContent = 'סיסמה שגויה - נסה שנית';
     document.getElementById('pw-input').value = '';
     document.getElementById('pw-input').focus();
   }
@@ -518,7 +594,7 @@ function showView(role) {
   }
 }
 
-// ─── DATA ─────────────────────────────────
+// DATA
 async function fetchRows(url) {
   try {
     const r = await fetch(url);
@@ -544,11 +620,12 @@ async function loadGaya() {
   [bRows, cRows] = await Promise.all([fetchRows(API.bookings), fetchRows(API.content)]);
   document.getElementById('g-bookings-loading').hidden = true;
   renderGayaBookings();
+  renderGayaNew();
   renderGaya();
 }
 
-// ─── TABS ─────────────────────────────────
-function switchTab(tab) {
+// TABS - TOMER
+function switchTomerTab(tab) {
   ['bookings','commission','content'].forEach(t => {
     document.getElementById('tab-' + t).hidden = (t !== tab);
     document.getElementById('tbtn-' + t).classList.toggle('active', t === tab);
@@ -556,9 +633,17 @@ function switchTab(tab) {
   if (tab === 'content' && !contentLoaded) loadContent();
 }
 
-// ─── HELPERS ──────────────────────────────
+// TABS - GAYA
+function switchGayaTab(tab) {
+  ['bookings','new','content'].forEach(t => {
+    document.getElementById('tab-g-' + t).hidden = (t !== tab);
+    document.getElementById('tbtn-g-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+// HELPERS
 function fmtDate(d) {
-  if (!d) return '—';
+  if (!d) return '-';
   if (d.includes('/')) return d.split(' ')[0];
   try { return new Date(d).toLocaleDateString('he-IL'); } catch { return d; }
 }
@@ -573,7 +658,7 @@ function sourceBadge(ch, src, isNew) {
   if (c.includes('אינסטגרם')) return `<span class="badge badge-ig">${ch}</span>`;
   if (c.includes('ישיר') || c.includes('אורגני')) return `<span class="badge badge-direct">${ch}</span>`;
   if (c.includes('נחיתה')) return `<span class="badge badge-land">${ch}</span>`;
-  return `<span class="badge badge-other">${ch || '—'}</span>`;
+  return `<span class="badge badge-other">${ch || '-'}</span>`;
 }
 
 function currentMonthHe() {
@@ -582,7 +667,37 @@ function currentMonthHe() {
   return `${months[n.getMonth()]} ${n.getFullYear()}`;
 }
 
-// ─── RENDER BOOKINGS ──────────────────────
+const PRICES = [
+  ['מיקרובליידינג',1500],['שיטת הפודרה',1500],
+  ['בנייה באקריל',300],['פדיקור עם לק',200],
+  ['מילוי באקריל',150],['פדיקור ללא לק',150],
+  ['פדיקור רפואי',170],["לק ג'ל רגליים",120],['לק גל רגליים',120],
+  ['עיצוב גבות ושפם',60],['עיצוב גבות טבעיות',50],['עיצוב גבות',60],
+  ["לק ג'ל מבנה",140],['לק גל מבנה',140],["לק ג'ל אנטומי",140],["לק ג'ל אנסומי",140],
+  ["לק ג'ל",140],['לק גל',140],
+  ['הסרת בנייה',100],['צבע לגבות',30],['קישוטים',10],['השלמת ציפורן',10]
+];
+
+function lookupPrice(svc) {
+  const s = String(svc).trim();
+  for (const [k, v] of PRICES) { if (s.includes(k)) return v; }
+  return 0;
+}
+
+function serviceBreakdown(serviceStr) {
+  if (!serviceStr) return '-';
+  const parts = String(serviceStr).split(/[,،\n~]+/).map(s => s.trim()).filter(Boolean);
+  if (parts.length <= 1) {
+    const p = lookupPrice(parts[0] || serviceStr);
+    return `<span style="font-size:12px">${parts[0] || serviceStr}${p ? ` <span style="color:var(--muted)">· ${p}₪</span>` : ''}</span>`;
+  }
+  return parts.map(svc => {
+    const p = lookupPrice(svc);
+    return `<div style="font-size:12px;line-height:1.7">${svc}${p ? ` <span style="color:var(--muted);font-size:11px">· ${p}₪</span>` : ''}</div>`;
+  }).join('');
+}
+
+// RENDER BOOKINGS (Tomer)
 function renderBookings() {
   const rows = bRows;
   if (!rows.length) {
@@ -592,9 +707,9 @@ function renderBookings() {
   }
   document.getElementById('b-empty').hidden = true;
 
-  const existing   = rows.filter(r => r['מקור'] === 'existing');
-  const fromMktg   = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
-  const returning  = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] === 'לא');
+  const existing  = rows.filter(r => r['מקור'] === 'existing');
+  const fromMktg  = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
+  const returning = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] === 'לא');
 
   const curMonth = currentMonthHe();
   const newThisMonth = fromMktg.filter(r => r['חודש'] === curMonth).length;
@@ -605,7 +720,6 @@ function renderBookings() {
   document.getElementById('b-returning').textContent = returning.length;
   document.getElementById('b-existing').textContent = existing.length;
 
-  // Attribution breakdown — new-from-marketing only
   const srcMap = {};
   fromMktg.forEach(r => { const k = r['ערוץ'] || 'אחר'; srcMap[k] = (srcMap[k] || 0) + 1; });
   const sorted = Object.entries(srcMap).sort((a,b) => b[1] - a[1]);
@@ -624,8 +738,8 @@ function renderBookingRows(rows) {
   document.getElementById('b-tbody').innerHTML = rows.map(r => `
     <tr>
       <td>${fmtDate(r['תאריך תור'])}</td>
-      <td><strong>${r['שם לקוחה'] || '—'}</strong></td>
-      <td>${r['שירות'] || '—'}</td>
+      <td><strong>${r['שם לקוחה'] || '-'}</strong></td>
+      <td>${r['שירות'] || '-'}</td>
       <td>${sourceBadge(r['ערוץ'], r['מקור'], r['לקוחה חדשה'])}</td>
       <td style="color:var(--muted);font-size:12px">${fmtDate(r['תאריך קביעה'])}</td>
     </tr>`).join('');
@@ -636,7 +750,7 @@ function filterBookings() {
   renderBookingRows(q ? bRows.filter(r => (r['שם לקוחה'] || '').toLowerCase().includes(q)) : bRows);
 }
 
-// ─── RENDER COMMISSIONS ───────────────────
+// RENDER COMMISSIONS (Tomer)
 function renderCommissions() {
   const rows = bRows.filter(r => r['סיווג'] === 'חדש' || r['סיווג'] === 'חוזר');
 
@@ -650,13 +764,12 @@ function renderCommissions() {
   }
   document.getElementById('cm-empty').hidden = true;
 
-  const totalCommission   = rows.reduce((s, r) => s + (num(r['עמלה'])), 0);
-  const approvedCommission = rows.filter(r => r['סטטוס'] === 'אושר')
-                                  .reduce((s, r) => s + num(r['עמלה']), 0);
+  const totalCommission    = rows.reduce((s, r) => s + num(r['עמלה']), 0);
+  const approvedCommission = rows.filter(r => r['סטטוס'] === 'אושר').reduce((s, r) => s + num(r['עמלה']), 0);
   const pendingCommission  = totalCommission - approvedCommission;
   const uniqueClients      = new Set(rows.map(r => r['טלפון']).filter(Boolean)).size;
 
-  document.getElementById('cm-total').textContent    = totalCommission   ? totalCommission + '₪'   : '0';
+  document.getElementById('cm-total').textContent    = totalCommission   ? totalCommission + '₪'    : '0';
   document.getElementById('cm-approved').textContent = approvedCommission ? approvedCommission + '₪' : '0';
   document.getElementById('cm-pending').textContent  = pendingCommission  ? pendingCommission + '₪'  : '0';
   document.getElementById('cm-clients').textContent  = uniqueClients;
@@ -675,24 +788,24 @@ function renderCommissions() {
       : '<span class="badge badge-pending">⏳ ממתין</span>';
     const visitBadge = r['מספר ביקור']
       ? `<span class="badge badge-campaign">${r['מספר ביקור']}/3</span>`
-      : '—';
+      : '-';
     const approvedPrice = r['מחיר אושר'] || r['מחיר לפי מחירון'] || '';
     const commission    = r['עמלה'] || '';
     return `
       <tr>
-        <td><strong>${r['שם לקוחה'] || '—'}</strong></td>
-        <td style="font-size:12px;color:var(--muted)">${r['טלפון'] || '—'}</td>
+        <td><strong>${r['שם לקוחה'] || '-'}</strong></td>
+        <td style="font-size:12px;color:var(--muted)">${r['טלפון'] || '-'}</td>
         <td style="text-align:center">${visitBadge}</td>
-        <td style="font-size:12px">${r['שירות'] || '—'}</td>
+        <td>${serviceBreakdown(r['שירות'])}</td>
         <td style="white-space:nowrap">${fmtDate(r['תאריך תור'])}</td>
-        <td style="font-weight:600">${approvedPrice ? approvedPrice + '₪' : '—'}</td>
-        <td style="font-weight:700;color:var(--gold)">${commission ? commission + '₪' : '—'}</td>
+        <td style="font-weight:600">${approvedPrice ? approvedPrice + '₪' : '-'}</td>
+        <td style="font-weight:700;color:var(--gold)">${commission ? commission + '₪' : '-'}</td>
         <td>${statusBadge}</td>
       </tr>`;
   }).join('');
 }
 
-// ─── RENDER CONTENT (Tomer) ───────────────
+// RENDER CONTENT (Tomer)
 function renderContent() {
   const rows = cRows;
   if (!rows.length) {
@@ -712,24 +825,24 @@ function renderContent() {
   document.getElementById('c-tbody').innerHTML = sorted.map(r => `
     <tr>
       <td style="white-space:nowrap">${fmtDate(r.timestamp)}</td>
-      <td>${r.mediaType || '—'}</td>
+      <td>${r.mediaType || '-'}</td>
       <td><strong>${num(r.reach).toLocaleString()}</strong></td>
       <td>${num(r.likeCount)}</td>
       <td>${num(r.commentsCount)}</td>
       <td>${num(r.saved)}</td>
       <td style="font-weight:600">${num(r.totalInteractions)}</td>
-      <td>${r.permalink ? `<a href="${r.permalink}" target="_blank" style="color:var(--gold);font-size:16px">↗</a>` : '—'}</td>
+      <td>${r.permalink ? `<a href="${r.permalink}" target="_blank" style="color:var(--gold);font-size:16px">↗</a>` : '-'}</td>
     </tr>`).join('');
 }
 
-// ─── RENDER GAYA BOOKINGS ─────────────────
+// RENDER GAYA - BOOKINGS TAB
 function renderGayaBookings() {
   const rows = bRows;
   const curMonth = currentMonthHe();
 
-  const thisMonth   = rows.filter(r => r['חודש'] === curMonth);
-  const newMonth    = thisMonth.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
-  const retMonth    = thisMonth.filter(r => r['לקוחה חדשה'] === 'לא');
+  const thisMonth = rows.filter(r => r['חודש'] === curMonth);
+  const newMonth  = thisMonth.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
+  const retMonth  = thisMonth.filter(r => r['לקוחה חדשה'] === 'לא');
 
   document.getElementById('g-b-month').textContent  = thisMonth.length;
   document.getElementById('g-b-new').textContent    = newMonth.length;
@@ -754,7 +867,7 @@ function renderGayaBookings() {
   document.getElementById('g-bookings-list').innerHTML = `
     <div class="booking-list">
       ${recent.map(r => {
-        const name = r['שם לקוחה'] || '—';
+        const name = r['שם לקוחה'] || '-';
         const initial = name.trim()[0] || '?';
         const isRet = r['לקוחה חדשה'] === 'לא';
         const isExist = r['מקור'] === 'existing';
@@ -767,10 +880,10 @@ function renderGayaBookings() {
             <div class="booking-avatar">${initial}</div>
             <div class="booking-info">
               <div class="booking-name">${name} ${tag}</div>
-              <div class="booking-sub">${r['שירות'] || '—'}</div>
+              <div class="booking-sub">${r['שירות'] || '-'}</div>
             </div>
             <div class="booking-right">
-              <div class="booking-date">${dateParts[0] || '—'}</div>
+              <div class="booking-date">${dateParts[0] || '-'}</div>
               <div class="booking-time">${dateParts[1] || ''}</div>
             </div>
           </div>`;
@@ -778,11 +891,120 @@ function renderGayaBookings() {
     </div>`;
 }
 
-// ─── RENDER GAYA ──────────────────────────
+// RENDER GAYA - NEW CLIENTS TAB
+function renderGayaNew() {
+  const pending = bRows
+    .map((r, i) => ({ ...r, _rowIndex: i + 2 }))
+    .filter(r => r['סיווג'] === 'חדש' || r['סיווג'] === 'חוזר');
+
+  const tbody = document.getElementById('g-new-tbody');
+  const emptyEl = document.getElementById('g-new-empty');
+
+  // Update tab badge
+  const pendingCount = pending.filter(r => r['סטטוס'] !== 'אושר').length;
+  const tabBtn = document.getElementById('tbtn-g-new');
+  tabBtn.innerHTML = pendingCount > 0
+    ? `✨ לקוחות חדשות <span class="tab-count">${pendingCount}</span>`
+    : '✨ לקוחות חדשות';
+
+  if (!pending.length) {
+    tbody.innerHTML = '';
+    emptyEl.hidden = false;
+    return;
+  }
+  emptyEl.hidden = true;
+
+  const sorted = [...pending].sort((a, b) => {
+    const da = (a['תאריך תור'] || '').split('/').reverse().join('-');
+    const db = (b['תאריך תור'] || '').split('/').reverse().join('-');
+    return db.localeCompare(da);
+  });
+
+  tbody.innerHTML = sorted.map(r => {
+    const isApproved = r['סטטוס'] === 'אושר';
+    const defaultPrice = r['מחיר אושר'] || r['מחיר לפי מחירון'] || '';
+    const visitBadge = r['מספר ביקור']
+      ? `<span class="badge badge-campaign" style="font-size:10px">${r['מספר ביקור']}/3</span> `
+      : '';
+    return `
+      <tr id="grow-${r._rowIndex}">
+        <td>
+          <strong>${r['שם לקוחה'] || '-'}</strong><br>
+          <small style="color:var(--muted)">${visitBadge}${r['טלפון'] || ''}</small>
+        </td>
+        <td style="font-size:12px">${r['שירות'] || '-'}</td>
+        <td style="white-space:nowrap">${fmtDate(r['תאריך תור'])}</td>
+        <td>
+          <input type="number" class="price-input" id="gprice-${r._rowIndex}"
+            value="${defaultPrice}" min="1" ${isApproved ? 'disabled' : ''}>
+        </td>
+        <td>
+          ${isApproved
+            ? '<span class="badge badge-approved">✅ אושר</span>'
+            : `<button class="approve-btn" id="gbtn-${r._rowIndex}" onclick="approveRow(${r._rowIndex})">✅ אשר</button>`
+          }
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// APPROVE ROW
+async function approveRow(rowIndex) {
+  const priceEl = document.getElementById('gprice-' + rowIndex);
+  const btnEl   = document.getElementById('gbtn-' + rowIndex);
+  const price   = Number(priceEl.value);
+
+  if (!price || price <= 0) {
+    priceEl.style.borderColor = 'var(--rose)';
+    priceEl.focus();
+    return;
+  }
+
+  btnEl.disabled = true;
+  btnEl.textContent = '...';
+
+  try {
+    const r = await fetch(API.approve, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rowIndex, approvedPrice: price })
+    });
+
+    if (r.ok) {
+      btnEl.outerHTML = '<span class="badge badge-approved">✅ אושר</span>';
+      priceEl.disabled = true;
+
+      // Update local state
+      const idx = rowIndex - 2;
+      if (bRows[idx]) {
+        bRows[idx]['סטטוס'] = 'אושר';
+        bRows[idx]['מחיר אושר'] = String(price);
+        bRows[idx]['עמלה'] = String(Math.round(price * 0.2));
+      }
+
+      // Refresh badge count
+      const stillPending = bRows
+        .filter(row => (row['סיווג'] === 'חדש' || row['סיווג'] === 'חוזר') && row['סטטוס'] !== 'אושר').length;
+      const tabBtn = document.getElementById('tbtn-g-new');
+      tabBtn.innerHTML = stillPending > 0
+        ? `✨ לקוחות חדשות <span class="tab-count">${stillPending}</span>`
+        : '✨ לקוחות חדשות';
+    } else {
+      btnEl.disabled = false;
+      btnEl.textContent = '✅ אשר';
+      alert('שגיאה בעדכון, נסי שוב');
+    }
+  } catch(e) {
+    btnEl.disabled = false;
+    btnEl.textContent = '✅ אשר';
+    alert('שגיאה בחיבור');
+  }
+}
+
+// RENDER GAYA - CONTENT TAB
 function renderGaya() {
   const rows = cRows;
 
-  // Stats
   const now = new Date();
   const ym = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
   const thisMonth = rows.filter(r => (r.timestamp || '').startsWith(ym));
@@ -820,7 +1042,7 @@ function renderGaya() {
     </div>`).join('');
 }
 
-// ─── INIT ──────────────────────────────────
+// INIT
 (function init() {
   const role = sessionStorage.getItem('gl_role');
   if (role === 'tomer' || role === 'gaya') showView(role);
