@@ -550,10 +550,17 @@ function parseApptDate(dateStr) {
   return isNaN(d) ? null : d;
 }
 
+const HE_MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+
 function currentMonthHe() {
-  const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
   const n = new Date();
-  return `${months[n.getMonth()]} ${n.getFullYear()}`;
+  return `${HE_MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+}
+
+function monthKeyFromRow(r) {
+  const d = parseApptDate(r['תאריך תור']);
+  if (!d) return null;
+  return `${HE_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 const PRICES = [
@@ -611,7 +618,7 @@ function renderBookings() {
   const fromMktg  = bRows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
   const returning = bRows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] === 'לא');
   const curMonth = currentMonthHe();
-  const newThisMonth = fromMktg.filter(r => r['חודש'] === curMonth).length;
+  const newThisMonth = fromMktg.filter(r => monthKeyFromRow(r) === curMonth).length;
   document.getElementById('b-total').textContent = bRows.length;
   document.getElementById('b-new').textContent = fromMktg.length;
   document.getElementById('b-new-month').textContent = newThisMonth ? `החודש: ${newThisMonth}` : '';
@@ -730,8 +737,8 @@ function renderWeeklyCalendar() {
   document.getElementById('g-week-count').textContent = weekTotal;
 
   const curMonth = currentMonthHe();
-  const newMonth  = bRows.filter(r => r['חודש'] === curMonth && r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא').length;
-  const retMonth  = bRows.filter(r => r['חודש'] === curMonth && r['לקוחה חדשה'] === 'לא').length;
+  const newMonth  = bRows.filter(r => monthKeyFromRow(r) === curMonth && r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא').length;
+  const retMonth  = bRows.filter(r => monthKeyFromRow(r) === curMonth && r['לקוחה חדשה'] === 'לא').length;
   document.getElementById('g-b-new').textContent   = newMonth;
   document.getElementById('g-b-ret').textContent   = retMonth;
   document.getElementById('g-b-total').textContent = bRows.length;
@@ -779,7 +786,7 @@ function renderRevenue() {
   // Monthly totals
   const monthTotals = {};
   bRows.forEach(r => {
-    const month = r['חודש'];
+    const month = monthKeyFromRow(r);
     if (!month) return;
     const price = num(r['מחיר אושר']) || num(r['מחיר לפי מחירון']) || calcServicePrice(r['שירות']);
     if (price <= 0) return;
@@ -797,7 +804,7 @@ function renderRevenue() {
   const prevIdx   = sortedMonths.indexOf(curMonth) - 1;
   const prevRev   = prevIdx >= 0 ? (monthTotals[sortedMonths[prevIdx]] || 0) : 0;
   const growth    = prevRev > 0 ? Math.round((curRev - prevRev) / prevRev * 100) : null;
-  const allCurRows = bRows.filter(r => r['חודש'] === curMonth);
+  const allCurRows = bRows.filter(r => monthKeyFromRow(r) === curMonth);
   const curRows    = allCurRows.filter(r => (num(r['מחיר אושר']) || num(r['מחיר לפי מחירון']) || calcServicePrice(r['שירות'])) > 0);
   const avgPrice   = curRows.length > 0 ? Math.round(curRev / curRows.length) : 0;
 
