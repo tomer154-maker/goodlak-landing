@@ -23,72 +23,47 @@ body{font-family:'Rubik',sans-serif;background:var(--ivory);color:var(--text);mi
 a{text-decoration:none;color:inherit}
 
 /* LOGIN */
-#pg-login{
-  display:flex;align-items:center;justify-content:center;
-  min-height:100vh;padding:24px;
-  background:
-    radial-gradient(ellipse at 70% 0%,rgba(196,104,122,.20),transparent 55%),
-    radial-gradient(ellipse at 10% 100%,rgba(197,145,74,.16),transparent 50%),
-    var(--ivory);
-}
-.login-card{
-  background:var(--white);border-radius:20px;padding:44px 36px;
-  width:100%;max-width:360px;box-shadow:0 12px 48px rgba(122,21,21,.13);text-align:center;
-}
+#pg-login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;
+  background:radial-gradient(ellipse at 70% 0%,rgba(196,104,122,.20),transparent 55%),
+             radial-gradient(ellipse at 10% 100%,rgba(197,145,74,.16),transparent 50%),var(--ivory)}
+.login-card{background:var(--white);border-radius:20px;padding:44px 36px;width:100%;max-width:360px;
+  box-shadow:0 12px 48px rgba(122,21,21,.13);text-align:center}
 .login-wordmark{font-size:30px;font-weight:800;color:var(--burg);margin-bottom:4px;letter-spacing:-.5px}
 .login-wordmark em{color:var(--gold);font-style:normal}
-.login-subtitle{font-size:13px;color:var(--muted);margin-bottom:32px;font-weight:400}
-.login-input{
-  width:100%;padding:14px 18px;border:1.5px solid var(--ivory3);
-  border-radius:11px;font-family:'Rubik',sans-serif;font-size:16px;
-  color:var(--text);background:var(--ivory);text-align:center;letter-spacing:3px;
-  outline:none;transition:border-color .2s;
-}
+.login-subtitle{font-size:13px;color:var(--muted);margin-bottom:32px}
+.login-input{width:100%;padding:14px 18px;border:1.5px solid var(--ivory3);border-radius:11px;
+  font-family:'Rubik',sans-serif;font-size:16px;color:var(--text);background:var(--ivory);
+  text-align:center;letter-spacing:3px;outline:none;transition:border-color .2s}
 .login-input:focus{border-color:var(--rose)}
 .login-input::placeholder{letter-spacing:0;font-size:14px;color:var(--muted)}
-.login-btn{
-  margin-top:14px;width:100%;padding:14px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--burg),var(--burg2));
-  color:#fff;border-radius:11px;font-family:'Rubik',sans-serif;
-  font-size:15px;font-weight:600;transition:opacity .2s,transform .15s;
-}
+.login-btn{margin-top:14px;width:100%;padding:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--burg),var(--burg2));color:#fff;border-radius:11px;
+  font-family:'Rubik',sans-serif;font-size:15px;font-weight:600;transition:opacity .2s,transform .15s}
 .login-btn:hover{opacity:.9;transform:translateY(-1px)}
-.login-btn:active{transform:translateY(0)}
 .login-err{color:var(--rose);font-size:13px;margin-top:10px;min-height:18px;font-weight:500}
 
 /* HEADER */
-.view-header{
-  background:linear-gradient(135deg,var(--burg),var(--burg2));
-  color:#fff;padding:13px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:100;box-shadow:0 2px 14px rgba(0,0,0,.18);
-}
+.view-header{background:linear-gradient(135deg,var(--burg),var(--burg2));color:#fff;padding:13px 20px;
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 14px rgba(0,0,0,.18)}
 .view-header.rose-hdr{background:linear-gradient(135deg,var(--rose),#a84060)}
 .hdr-left{display:flex;flex-direction:column}
 .hdr-logo{font-size:17px;font-weight:800;letter-spacing:-.3px}
 .hdr-logo em{color:var(--gold-lt);font-style:normal}
 .hdr-role{font-size:11px;opacity:.72;font-weight:400;margin-top:1px}
-.logout-btn{
-  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);
-  color:#fff;padding:6px 15px;border-radius:50px;font-family:'Rubik',sans-serif;
-  font-size:12px;font-weight:500;cursor:pointer;transition:background .2s;
-}
+.logout-btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);color:#fff;
+  padding:6px 15px;border-radius:50px;font-family:'Rubik',sans-serif;font-size:12px;font-weight:500;
+  cursor:pointer;transition:background .2s}
 .logout-btn:hover{background:rgba(255,255,255,.26)}
 
 /* TABS */
-.tabs{display:flex;background:var(--ivory2);border-bottom:1px solid var(--ivory3)}
-.tab-btn{
-  flex:1;padding:13px 6px;border:none;background:transparent;
-  font-family:'Rubik',sans-serif;font-size:13px;font-weight:500;
-  color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;
-  transition:all .2s;
-}
+.tabs{display:flex;background:var(--ivory2);border-bottom:1px solid var(--ivory3);overflow-x:auto}
+.tab-btn{flex:1;min-width:60px;padding:12px 6px;border:none;background:transparent;
+  font-family:'Rubik',sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;
+  border-bottom:2.5px solid transparent;transition:all .2s;white-space:nowrap}
 .tab-btn.active{color:var(--burg);border-bottom-color:var(--burg);background:var(--ivory)}
-.tab-count{
-  display:inline-block;background:var(--rose);color:#fff;
-  border-radius:50px;padding:1px 7px;font-size:10px;font-weight:700;
-  margin-right:4px;vertical-align:middle;
-}
+.tab-count{display:inline-block;background:var(--rose);color:#fff;border-radius:50px;
+  padding:1px 6px;font-size:10px;font-weight:700;margin-right:3px;vertical-align:middle}
 
 /* LAYOUT */
 .view-body{padding:18px;max-width:960px;margin:0 auto}
@@ -96,53 +71,37 @@ a{text-decoration:none;color:inherit}
 /* STAT CARDS */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .stats-row.s4{grid-template-columns:repeat(4,1fr)}
+.stats-row.s2{grid-template-columns:repeat(2,1fr)}
 @media(max-width:600px){.stats-row,.stats-row.s4{grid-template-columns:repeat(2,1fr)}}
-.stat-card{
-  background:var(--white);border-radius:var(--r);padding:16px 12px;
-  box-shadow:var(--shadow);text-align:center;
-}
+.stat-card{background:var(--white);border-radius:var(--r);padding:16px 12px;box-shadow:var(--shadow);text-align:center}
 .stat-lbl{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px}
 .stat-val{font-size:28px;font-weight:800;color:var(--burg);line-height:1}
 .stat-val.gold{color:var(--gold)}
-.stat-val.sm{font-size:15px;font-weight:700;padding-top:4px}
 .stat-sub{font-size:10px;color:var(--muted);margin-top:4px}
 
 /* SOURCE CHIPS */
 .section-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin:18px 0 10px}
 .sources{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.src-chip{
-  display:inline-flex;align-items:center;gap:7px;
-  background:var(--white);border-radius:50px;padding:6px 14px;
-  box-shadow:var(--shadow);font-size:13px;font-weight:500;
-}
-.src-count{
-  background:var(--burg);color:#fff;border-radius:50px;
-  padding:2px 9px;font-size:11px;font-weight:700;
-}
+.src-chip{display:inline-flex;align-items:center;gap:7px;background:var(--white);border-radius:50px;
+  padding:6px 14px;box-shadow:var(--shadow);font-size:13px;font-weight:500}
+.src-count{background:var(--burg);color:#fff;border-radius:50px;padding:2px 9px;font-size:11px;font-weight:700}
 
-/* SEARCH + REFRESH */
+/* TOOLBAR */
 .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px}
-.search-input{
-  flex:1;padding:10px 16px;border:1.5px solid var(--ivory3);
-  border-radius:10px;font-family:'Rubik',sans-serif;font-size:14px;
-  color:var(--text);background:var(--white);outline:none;transition:border .2s;
-}
+.search-input{flex:1;padding:10px 16px;border:1.5px solid var(--ivory3);border-radius:10px;
+  font-family:'Rubik',sans-serif;font-size:14px;color:var(--text);background:var(--white);
+  outline:none;transition:border .2s}
 .search-input:focus{border-color:var(--rose)}
-.refresh-btn{
-  background:var(--white);border:1.5px solid var(--ivory3);
-  color:var(--muted);padding:9px 14px;border-radius:10px;
-  font-family:'Rubik',sans-serif;font-size:13px;cursor:pointer;
-  transition:all .2s;white-space:nowrap;box-shadow:var(--shadow);
-}
+.refresh-btn{background:var(--white);border:1.5px solid var(--ivory3);color:var(--muted);
+  padding:9px 14px;border-radius:10px;font-family:'Rubik',sans-serif;font-size:13px;cursor:pointer;
+  transition:all .2s;white-space:nowrap;box-shadow:var(--shadow)}
 .refresh-btn:hover{border-color:var(--burg);color:var(--burg)}
 
 /* TABLE */
 .table-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse;background:var(--white);font-size:13px;min-width:440px}
-thead th{
-  background:var(--ivory2);padding:11px 14px;text-align:right;
-  font-weight:600;font-size:11px;color:var(--muted);white-space:nowrap;letter-spacing:.3px;
-}
+thead th{background:var(--ivory2);padding:11px 14px;text-align:right;font-weight:600;font-size:11px;
+  color:var(--muted);white-space:nowrap;letter-spacing:.3px}
 tbody td{padding:11px 14px;border-top:1px solid var(--ivory3);vertical-align:middle}
 tbody tr:hover{background:var(--ivory)}
 .badge{display:inline-block;padding:3px 10px;border-radius:50px;font-size:11px;font-weight:600;white-space:nowrap}
@@ -156,59 +115,36 @@ tbody tr:hover{background:var(--ivory)}
 .badge-approved{background:var(--green-lt);color:var(--green)}
 .badge-pending{background:#FEF9C3;color:#854D0E}
 .badge-campaign{background:#EEF2FF;color:#4338CA}
-.badge-pre{background:#F3F4F6;color:#374151}
 
 /* EMPTY / LOADING */
 .empty-state{text-align:center;padding:48px 20px;color:var(--muted);font-size:13px;line-height:1.8}
 .empty-icon{font-size:36px;display:block;margin-bottom:10px}
-.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--ivory3);border-top-color:var(--burg);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--ivory3);
+  border-top-color:var(--burg);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-row{text-align:center;padding:30px}
 
-/* COMMISSION TAB */
-.cm-note{font-size:12px;color:var(--muted);background:var(--ivory2);padding:10px 14px;border-radius:10px;margin-bottom:16px;line-height:1.6}
+/* NOTE */
+.cm-note{font-size:12px;color:var(--muted);background:var(--ivory2);padding:10px 14px;
+  border-radius:10px;margin-bottom:16px;line-height:1.6}
 
-/* BOT SECTION */
-.bot-section{text-align:center;padding:20px 0 16px;border-bottom:1px solid var(--ivory3);margin-bottom:20px}
-.bot-btn{
-  display:inline-flex;align-items:center;gap:10px;
-  background:linear-gradient(135deg,var(--gold),#9a6b2a);
-  color:#fff;padding:16px 32px;border-radius:50px;
-  font-family:'Rubik',sans-serif;font-size:16px;font-weight:700;
-  box-shadow:0 6px 28px rgba(197,145,74,.42);
-  transition:transform .2s,box-shadow .2s;
-}
+/* BOT */
+.bot-section{text-align:center;padding:18px 0 14px;border-bottom:1px solid var(--ivory3);margin-bottom:18px}
+.bot-btn{display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--gold),#9a6b2a);color:#fff;padding:14px 28px;
+  border-radius:50px;font-family:'Rubik',sans-serif;font-size:15px;font-weight:700;
+  box-shadow:0 6px 28px rgba(197,145,74,.42);transition:transform .2s,box-shadow .2s}
 .bot-btn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(197,145,74,.52)}
-.bot-icon{font-size:22px}
 .bot-hint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
 
-/* POST CARDS */
-.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:4px}
-.post-card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
-.post-date{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500}
-.post-type-badge{
-  display:inline-block;font-size:11px;font-weight:600;
-  padding:3px 11px;border-radius:50px;background:var(--rose-lt);color:var(--burg);margin-bottom:12px;
-}
-.post-metrics{display:flex;gap:16px;flex-wrap:wrap}
-.pm{text-align:center}
-.pm-val{font-size:22px;font-weight:800;color:var(--burg);line-height:1}
-.pm-lbl{font-size:10px;color:var(--muted);display:block;margin-top:2px}
-.post-link{margin-top:12px;display:inline-block;font-size:12px;color:var(--gold);font-weight:600}
-.post-link:hover{text-decoration:underline}
-
 /* BOOKING LIST */
-.booking-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.booking-item{
-  background:var(--white);border-radius:var(--r);padding:14px 16px;
-  box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-}
-.booking-avatar{
-  width:38px;height:38px;border-radius:50%;
+.booking-list{display:flex;flex-direction:column;gap:10px}
+.booking-item{background:var(--white);border-radius:var(--r);padding:14px 16px;
+  box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.booking-avatar{width:38px;height:38px;border-radius:50%;
   background:linear-gradient(135deg,var(--rose-lt),var(--gold-lt));
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:700;color:var(--burg);flex-shrink:0;
-}
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;
+  color:var(--burg);flex-shrink:0}
 .booking-info{flex:1;min-width:0}
 .booking-name{font-weight:600;font-size:14px;color:var(--text)}
 .booking-sub{font-size:12px;color:var(--muted);margin-top:2px}
@@ -216,23 +152,72 @@ tbody tr:hover{background:var(--ivory)}
 .booking-date{font-size:12px;font-weight:600;color:var(--burg)}
 .booking-time{font-size:11px;color:var(--muted)}
 
-/* APPROVE TABLE */
-.price-input{
-  width:80px;padding:6px 10px;border:1.5px solid var(--ivory3);
-  border-radius:8px;font-family:'Rubik',sans-serif;font-size:14px;font-weight:600;
-  color:var(--text);background:var(--ivory);outline:none;text-align:center;
-  transition:border-color .2s;
-}
+/* APPROVE */
+.price-input{width:80px;padding:6px 10px;border:1.5px solid var(--ivory3);border-radius:8px;
+  font-family:'Rubik',sans-serif;font-size:14px;font-weight:600;color:var(--text);
+  background:var(--ivory);outline:none;text-align:center;transition:border-color .2s}
 .price-input:focus{border-color:var(--rose)}
 .price-input:disabled{background:var(--ivory2);color:var(--muted)}
-.approve-btn{
-  padding:6px 16px;border:none;border-radius:8px;cursor:pointer;
-  background:linear-gradient(135deg,var(--green),#22543d);
-  color:#fff;font-family:'Rubik',sans-serif;font-size:12px;font-weight:600;
-  transition:opacity .2s,transform .15s;white-space:nowrap;
-}
+.approve-btn{padding:6px 16px;border:none;border-radius:8px;cursor:pointer;
+  background:linear-gradient(135deg,var(--green),#22543d);color:#fff;
+  font-family:'Rubik',sans-serif;font-size:12px;font-weight:600;
+  transition:opacity .2s,transform .15s;white-space:nowrap}
 .approve-btn:hover{opacity:.88;transform:translateY(-1px)}
 .approve-btn:disabled{opacity:.5;cursor:default;transform:none}
+
+/* WEEKLY CALENDAR */
+.cal-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:4px;padding-bottom:4px}
+.cal-grid{display:flex;gap:8px;min-width:max-content}
+.cal-day{width:136px;flex-shrink:0}
+.cal-day-hdr{background:var(--ivory2);border-radius:10px 10px 0 0;padding:10px 10px 8px;text-align:center}
+.cal-day.today .cal-day-hdr{background:linear-gradient(160deg,var(--rose-lt),#f5dde5)}
+.cal-today-lbl{font-size:9px;font-weight:800;color:var(--rose);letter-spacing:.8px;margin-bottom:2px}
+.cal-day-name{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.4px}
+.cal-day-num{font-size:24px;font-weight:800;color:var(--burg);line-height:1.1;margin-top:2px}
+.cal-day.today .cal-day-num{color:var(--rose)}
+.cal-appt-count{font-size:10px;color:var(--muted);margin-top:2px}
+.cal-body{background:var(--white);border-radius:0 0 10px 10px;padding:8px;min-height:64px;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.cal-appt{border-radius:8px;padding:7px 9px;border-right:3px solid transparent;cursor:default}
+.cal-appt.new-c{background:#FFF0F3;border-right-color:var(--rose)}
+.cal-appt.ret-c{background:#FDF8EE;border-right-color:var(--gold)}
+.cal-appt.oth-c{background:var(--ivory);border-right-color:var(--ivory3)}
+.cal-time{font-size:10px;font-weight:700;color:var(--muted)}
+.cal-name{font-size:12px;font-weight:700;color:var(--text);margin-top:1px}
+.cal-svc{font-size:10px;color:var(--muted);margin-top:1px;line-height:1.3}
+.cal-empty-day{text-align:center;padding:18px 0;color:var(--ivory3);font-size:22px}
+
+/* REVENUE CHART */
+.rev-chart{display:flex;flex-direction:column;gap:14px;margin:10px 0 22px}
+.rev-row{display:flex;align-items:center;gap:10px}
+.rev-lbl{font-size:12px;font-weight:600;color:var(--text);width:68px;text-align:right;flex-shrink:0}
+.rev-track{flex:1;background:var(--ivory2);border-radius:50px;height:20px;overflow:hidden}
+.rev-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--rose-lt),var(--burg));transition:width .7s cubic-bezier(.4,0,.2,1)}
+.rev-fill.cur{background:linear-gradient(90deg,var(--gold-lt),var(--gold))}
+.rev-amt{font-size:12px;font-weight:700;color:var(--burg);width:62px;text-align:left;flex-shrink:0}
+.growth-badge{display:inline-block;padding:2px 8px;border-radius:50px;font-size:11px;font-weight:700}
+.growth-up{background:var(--green-lt);color:var(--green)}
+.growth-dn{background:#FEE2E2;color:#991B1B}
+.growth-fl{background:var(--ivory2);color:var(--muted)}
+
+/* INACTIVE CLIENTS */
+.inactive-item{background:var(--white);border-radius:var(--r);padding:11px 14px;
+  box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+.days-badge{background:var(--rose-lt);color:var(--rose);border-radius:8px;
+  padding:3px 9px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
+
+/* POST CARDS */
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:4px}
+.post-card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.post-date{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.post-type-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 11px;
+  border-radius:50px;background:var(--rose-lt);color:var(--burg);margin-bottom:12px}
+.post-metrics{display:flex;gap:16px;flex-wrap:wrap}
+.pm{text-align:center}
+.pm-val{font-size:22px;font-weight:800;color:var(--burg);line-height:1}
+.pm-lbl{font-size:10px;color:var(--muted);display:block;margin-top:2px}
+.post-link{margin-top:12px;display:inline-block;font-size:12px;color:var(--gold);font-weight:600}
+.post-link:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -259,9 +244,9 @@ tbody tr:hover{background:var(--ivory)}
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" id="tbtn-bookings" onclick="switchTomerTab('bookings')">👥 כל הלקוחות</button>
+    <button class="tab-btn active" id="tbtn-bookings" onclick="switchTomerTab('bookings')">👥 לקוחות</button>
     <button class="tab-btn" id="tbtn-commission" onclick="switchTomerTab('commission')">💰 עמלות</button>
-    <button class="tab-btn" id="tbtn-content" onclick="switchTomerTab('content')">📸 ביצועי תוכן</button>
+    <button class="tab-btn" id="tbtn-content" onclick="switchTomerTab('content')">📸 תוכן</button>
   </div>
 
   <div class="view-body">
@@ -269,78 +254,38 @@ tbody tr:hover{background:var(--ivory)}
     <!-- BOOKINGS TAB -->
     <div id="tab-bookings">
       <div class="stats-row s4">
-        <div class="stat-card">
-          <div class="stat-lbl">סה״כ לקוחות</div>
-          <div class="stat-val" id="b-total">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">✨ חדשות (פרסום)</div>
-          <div class="stat-val" id="b-new">—</div>
-          <div class="stat-sub" id="b-new-month"></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">🔄 חוזרות</div>
-          <div class="stat-val" id="b-returning">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">📋 לפני פרסום</div>
-          <div class="stat-val" id="b-existing">—</div>
-        </div>
+        <div class="stat-card"><div class="stat-lbl">סה״כ לקוחות</div><div class="stat-val" id="b-total">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">✨ חדשות (פרסום)</div><div class="stat-val" id="b-new">—</div><div class="stat-sub" id="b-new-month"></div></div>
+        <div class="stat-card"><div class="stat-lbl">🔄 חוזרות</div><div class="stat-val" id="b-returning">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">📋 לפני פרסום</div><div class="stat-val" id="b-existing">—</div></div>
       </div>
-
       <div class="section-title">אטריבוציה — לקוחות חדשות בלבד</div>
       <div class="sources" id="b-sources"></div>
-
       <div class="section-title">כל ההזמנות</div>
       <div class="toolbar">
-        <input type="search" id="b-search" class="search-input" placeholder="🔍  חיפוש לפי שם לקוחה..." oninput="filterBookings()">
+        <input type="search" id="b-search" class="search-input" placeholder="🔍  חיפוש לפי שם..." oninput="filterBookings()">
         <button class="refresh-btn" onclick="loadBookings()">↻ רענן</button>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr>
-            <th>תאריך תור</th>
-            <th>שם לקוחה</th>
-            <th>שירות</th>
-            <th>ערוץ</th>
-            <th>נרשמה ב</th>
-          </tr></thead>
-          <tbody id="b-tbody">
-            <tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr>
-          </tbody>
+          <thead><tr><th>תאריך תור</th><th>שם לקוחה</th><th>שירות</th><th>ערוץ</th><th>נרשמה ב</th></tr></thead>
+          <tbody id="b-tbody"><tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody>
         </table>
       </div>
-      <div id="b-empty" class="empty-state" hidden>
-        <span class="empty-icon">📋</span>
-        אין הזמנות עדיין
-      </div>
+      <div id="b-empty" class="empty-state" hidden><span class="empty-icon">📋</span>אין הזמנות עדיין</div>
     </div>
 
     <!-- COMMISSION TAB -->
     <div id="tab-commission" hidden>
       <div class="stats-row s4">
-        <div class="stat-card">
-          <div class="stat-lbl">💰 סה"כ עמלה</div>
-          <div class="stat-val gold" id="cm-total">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">✅ אושר</div>
-          <div class="stat-val" id="cm-approved">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">⏳ ממתין לאישור</div>
-          <div class="stat-val" id="cm-pending">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">לקוחות מהקמפיין</div>
-          <div class="stat-val" id="cm-clients">—</div>
-        </div>
+        <div class="stat-card"><div class="stat-lbl">💰 סה"כ עמלה</div><div class="stat-val gold" id="cm-total">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">✅ אושר</div><div class="stat-val" id="cm-approved">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">⏳ ממתין לאישור</div><div class="stat-val" id="cm-pending">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">לקוחות מהקמפיין</div><div class="stat-val" id="cm-clients">—</div></div>
       </div>
-
       <div class="cm-note">
-        💡 <strong>איך זה עובד:</strong> כל לקוחה חדשה שלא היתה ב-Good Lak בחצי שנה האחרונה מזכה אותך ב-20% עמלה על 3 הביקורים הראשונים שלה. גאיה מאשרת את המחיר מהדשבורד שלה.
+        💡 <strong>איך זה עובד:</strong> כל לקוחה חדשה שלא היתה ב-Good Lak בחצי שנה האחרונה מזכה אותך ב-20% על 3 הביקורים הראשונים. גאיה מאשרת את המחיר מהדשבורד שלה.
       </div>
-
       <div class="section-title">לקוחות מהקמפיין</div>
       <div class="toolbar">
         <div style="flex:1"></div>
@@ -348,64 +293,31 @@ tbody tr:hover{background:var(--ivory)}
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr>
-            <th>שם לקוחה</th>
-            <th>טלפון</th>
-            <th>ביקור</th>
-            <th>שירות</th>
-            <th>תאריך תור</th>
-            <th>מחיר אושר</th>
-            <th>עמלה</th>
-            <th>סטטוס</th>
-          </tr></thead>
-          <tbody id="cm-tbody">
-            <tr class="loading-row"><td colspan="8"><div class="spinner"></div></td></tr>
-          </tbody>
+          <thead><tr><th>שם לקוחה</th><th>טלפון</th><th>ביקור</th><th>שירות ומחיר</th><th>תאריך תור</th><th>מחיר אושר</th><th>עמלה</th><th>סטטוס</th></tr></thead>
+          <tbody id="cm-tbody"><tr class="loading-row"><td colspan="8"><div class="spinner"></div></td></tr></tbody>
         </table>
       </div>
       <div id="cm-empty" class="empty-state" hidden>
-        <span class="empty-icon">💰</span>
-        אין לקוחות מהקמפיין עדיין<br>
-        <small>הנתונים יופיעו כאן כשלקוחות חדשות יזמינו דרך המודעה</small>
+        <span class="empty-icon">💰</span>אין לקוחות מהקמפיין עדיין<br><small>הנתונים יופיעו כשלקוחות חדשות יזמינו דרך המודעה</small>
       </div>
     </div>
 
     <!-- CONTENT TAB (Tomer) -->
     <div id="tab-content" hidden>
       <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-lbl">סה״כ Reach</div>
-          <div class="stat-val" id="c-reach">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">ממוצע אינטראקציות</div>
-          <div class="stat-val" id="c-avg">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">פוסטים במעקב</div>
-          <div class="stat-val" id="c-count">—</div>
-        </div>
+        <div class="stat-card"><div class="stat-lbl">סה״כ Reach</div><div class="stat-val" id="c-reach">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">ממוצע אינטראקציות</div><div class="stat-val" id="c-avg">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">פוסטים במעקב</div><div class="stat-val" id="c-count">—</div></div>
       </div>
-      <div class="toolbar">
-        <div style="flex:1"></div>
-        <button class="refresh-btn" onclick="loadContent()">↻ רענן</button>
-      </div>
+      <div class="toolbar"><div style="flex:1"></div><button class="refresh-btn" onclick="loadContent()">↻ רענן</button></div>
       <div class="table-wrap">
         <table>
-          <thead><tr>
-            <th>תאריך</th><th>סוג</th>
-            <th>👁 Reach</th><th>❤️</th><th>💬</th>
-            <th>🔖 שמורים</th><th>✨ סה״כ</th><th>קישור</th>
-          </tr></thead>
-          <tbody id="c-tbody">
-            <tr class="loading-row"><td colspan="8"><div class="spinner"></div></td></tr>
-          </tbody>
+          <thead><tr><th>תאריך</th><th>סוג</th><th>👁 Reach</th><th>❤️</th><th>💬</th><th>🔖</th><th>✨ סה״כ</th><th>קישור</th></tr></thead>
+          <tbody id="c-tbody"><tr class="loading-row"><td colspan="8"><div class="spinner"></div></td></tr></tbody>
         </table>
       </div>
       <div id="c-empty" class="empty-state" hidden>
-        <span class="empty-icon">📸</span>
-        הנתונים יופיעו כאן לאחר שהאוטומציה תרוץ לראשונה<br>
-        <small>(כל לילה בשעה 2:00)</small>
+        <span class="empty-icon">📸</span>הנתונים יופיעו לאחר שהאוטומציה תרוץ לראשונה<br><small>(כל לילה בשעה 2:00)</small>
       </div>
     </div>
 
@@ -423,49 +335,35 @@ tbody tr:hover{background:var(--ivory)}
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" id="tbtn-g-bookings" onclick="switchGayaTab('bookings')">📅 תורים</button>
-    <button class="tab-btn" id="tbtn-g-new" onclick="switchGayaTab('new')">✨ לקוחות חדשות</button>
+    <button class="tab-btn active" id="tbtn-g-week" onclick="switchGayaTab('week')">🗓️ השבוע</button>
+    <button class="tab-btn" id="tbtn-g-new" onclick="switchGayaTab('new')">✨ חדשות</button>
+    <button class="tab-btn" id="tbtn-g-rev" onclick="switchGayaTab('rev')">💰 הכנסות</button>
     <button class="tab-btn" id="tbtn-g-content" onclick="switchGayaTab('content')">📸 תוכן</button>
   </div>
 
   <div class="view-body">
 
-    <!-- GAYA - תורים -->
-    <div id="tab-g-bookings">
+    <!-- GAYA - השבוע -->
+    <div id="tab-g-week">
       <div class="bot-section">
         <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
-          <span class="bot-icon">🤖</span> פתחי את בוט התוכן
+          <span style="font-size:20px">🤖</span> פתחי את בוט התוכן
         </a>
-        <div class="bot-hint">
-          שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
-        </div>
+        <div class="bot-hint">שלחי תמונה לבוט ← פוסט / סטורי / שניהם ← תמונה מעוצבת + כיתוב AI 🌸</div>
       </div>
 
-      <div class="section-title">📅 הזמנות</div>
       <div class="stats-row s4">
-        <div class="stat-card">
-          <div class="stat-lbl">הזמנות החודש</div>
-          <div class="stat-val" id="g-b-month">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">✨ חדשות החודש</div>
-          <div class="stat-val" id="g-b-new">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">🔄 חוזרות החודש</div>
-          <div class="stat-val" id="g-b-ret">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">סה״כ לקוחות</div>
-          <div class="stat-val" id="g-b-total">—</div>
-        </div>
+        <div class="stat-card"><div class="stat-lbl">תורים השבוע</div><div class="stat-val" id="g-week-count">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">✨ חדשות החודש</div><div class="stat-val" id="g-b-new">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">🔄 חוזרות החודש</div><div class="stat-val" id="g-b-ret">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">סה״כ לקוחות</div><div class="stat-val" id="g-b-total">—</div></div>
       </div>
 
-      <div class="section-title">הזמנות אחרונות</div>
-      <div id="g-bookings-list"></div>
-      <div id="g-bookings-loading" class="empty-state"><div class="spinner"></div></div>
-      <div id="g-bookings-empty" class="empty-state" hidden>
-        <span class="empty-icon">📋</span>אין הזמנות עדיין
+      <div class="section-title">לוח שבועי</div>
+      <div class="cal-wrap">
+        <div class="cal-grid" id="cal-grid">
+          <div style="text-align:center;padding:40px;color:var(--muted)"><div class="spinner"></div></div>
+        </div>
       </div>
     </div>
 
@@ -473,76 +371,71 @@ tbody tr:hover{background:var(--ivory)}
     <div id="tab-g-new" hidden>
       <div class="bot-section">
         <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
-          <span class="bot-icon">🤖</span> פתחי את בוט התוכן
+          <span style="font-size:20px">🤖</span> פתחי את בוט התוכן
         </a>
-        <div class="bot-hint">
-          שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
-        </div>
+        <div class="bot-hint">שלחי תמונה לבוט ← פוסט / סטורי / שניהם ← תמונה מעוצבת + כיתוב AI 🌸</div>
       </div>
-
       <div class="cm-note">
-        💡 כאן מופיעות לקוחות חדשות שנכנסו דרך הקמפיין. בדקי את המחיר שגבית לכל לקוחה (אם נתת הנחה - עדכני) ולחצי <strong>אשר</strong>.
+        💡 לקוחות חדשות שנכנסו דרך הקמפיין. בדקי את המחיר שגבית לכל לקוחה ולחצי <strong>אשר</strong>.
       </div>
-
-      <div class="section-title">לקוחות ממתינות לאישור מחיר</div>
-      <div class="toolbar">
-        <div style="flex:1"></div>
-        <button class="refresh-btn" onclick="loadBookings().then(renderGayaNew)">↻ רענן</button>
-      </div>
+      <div class="section-title">ממתינות לאישור מחיר</div>
+      <div class="toolbar"><div style="flex:1"></div><button class="refresh-btn" onclick="loadBookings().then(renderGayaNew)">↻ רענן</button></div>
       <div class="table-wrap">
         <table>
-          <thead><tr>
-            <th>שם לקוחה</th>
-            <th>שירות</th>
-            <th>תאריך תור</th>
-            <th>מחיר (₪)</th>
-            <th>אישור</th>
-          </tr></thead>
-          <tbody id="g-new-tbody">
-            <tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr>
-          </tbody>
+          <thead><tr><th>שם לקוחה</th><th>שירות</th><th>תאריך תור</th><th>מחיר (₪)</th><th>אישור</th></tr></thead>
+          <tbody id="g-new-tbody"><tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody>
         </table>
       </div>
       <div id="g-new-empty" class="empty-state" hidden>
-        <span class="empty-icon">✨</span>
-        אין לקוחות חדשות ממתינות לאישור
+        <span class="empty-icon">✨</span>אין לקוחות חדשות ממתינות לאישור
       </div>
+    </div>
+
+    <!-- GAYA - הכנסות -->
+    <div id="tab-g-rev" hidden>
+      <div class="bot-section">
+        <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
+          <span style="font-size:20px">🤖</span> פתחי את בוט התוכן
+        </a>
+        <div class="bot-hint">שלחי תמונה לבוט ← פוסט / סטורי / שניהם ← תמונה מעוצבת + כיתוב AI 🌸</div>
+      </div>
+
+      <div class="stats-row s4">
+        <div class="stat-card"><div class="stat-lbl">💰 הכנסה החודש</div><div class="stat-val gold" id="rev-total">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">📈 שינוי מחודש קודם</div><div class="stat-val" id="rev-growth">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">ממוצע לטיפול</div><div class="stat-val" id="rev-avg">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">🔔 לקוחות לא פעילות</div><div class="stat-val" id="rev-inactive-count">—</div></div>
+      </div>
+
+      <div class="section-title">הכנסות לפי חודש</div>
+      <div class="rev-chart" id="rev-chart">
+        <div style="text-align:center;padding:20px;color:var(--muted)"><div class="spinner"></div></div>
+      </div>
+
+      <div class="section-title" style="margin-top:24px">🔔 לקוחות שלא חזרו <span id="inactive-count" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--rose)"></span></div>
+      <div class="cm-note">לקוחות שהביקור האחרון שלהן היה לפני יותר מ-45 יום ואין להן תור קבוע.</div>
+      <div id="inactive-list" style="display:flex;flex-direction:column;gap:8px;margin-top:4px"></div>
     </div>
 
     <!-- GAYA - תוכן -->
     <div id="tab-g-content" hidden>
       <div class="bot-section">
         <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
-          <span class="bot-icon">🤖</span> פתחי את בוט התוכן
+          <span style="font-size:20px">🤖</span> פתחי את בוט התוכן
         </a>
-        <div class="bot-hint">
-          שלחי תמונה לבוט ← בחרי פוסט / סטורי / שניהם ← קבלי תמונה מעוצבת עם לוגו + כיתוב מ-AI בעברית 🌸
-        </div>
+        <div class="bot-hint">שלחי תמונה לבוט ← פוסט / סטורי / שניהם ← תמונה מעוצבת + כיתוב AI 🌸</div>
       </div>
 
       <div class="section-title" style="margin-top:4px">📸 אינסטגרם</div>
       <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-lbl">Reach החודש</div>
-          <div class="stat-val" id="g-reach">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">ממוצע אינטראקציות</div>
-          <div class="stat-val" id="g-avg">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-lbl">פוסטים החודש</div>
-          <div class="stat-val" id="g-posts">—</div>
-        </div>
+        <div class="stat-card"><div class="stat-lbl">Reach החודש</div><div class="stat-val" id="g-reach">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">ממוצע אינטראקציות</div><div class="stat-val" id="g-avg">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">פוסטים החודש</div><div class="stat-val" id="g-posts">—</div></div>
       </div>
-
       <div class="section-title">הפוסטים האחרונים</div>
       <div id="g-grid" class="posts-grid"></div>
-      <div id="g-loading" class="empty-state" hidden><div class="spinner"></div></div>
       <div id="g-empty" class="empty-state" hidden>
-        <span class="empty-icon">🌸</span>
-        הנתונים יופיעו כאן לאחר שהפוסטים הראשונים ייסרקו<br>
-        <small>(האוטומציה רצה כל לילה בשעה 2:00)</small>
+        <span class="empty-icon">🌸</span>הנתונים יופיעו לאחר שהפוסטים הראשונים ייסרקו<br><small>(כל לילה ב-2:00)</small>
       </div>
     </div>
 
@@ -562,12 +455,9 @@ let bRows = [], cRows = [], contentLoaded = false;
 function doLogin() {
   const pw = document.getElementById('pw-input').value.trim();
   const role = ROLES[pw];
-  if (role) {
-    sessionStorage.setItem('gl_role', role);
-    showView(role);
-  } else {
-    const err = document.getElementById('login-err');
-    err.textContent = 'סיסמה שגויה - נסה שנית';
+  if (role) { sessionStorage.setItem('gl_role', role); showView(role); }
+  else {
+    document.getElementById('login-err').textContent = 'סיסמה שגויה - נסה שנית';
     document.getElementById('pw-input').value = '';
     document.getElementById('pw-input').focus();
   }
@@ -618,25 +508,24 @@ async function loadContent() {
 
 async function loadGaya() {
   [bRows, cRows] = await Promise.all([fetchRows(API.bookings), fetchRows(API.content)]);
-  document.getElementById('g-bookings-loading').hidden = true;
-  renderGayaBookings();
+  renderWeeklyCalendar();
   renderGayaNew();
+  renderRevenue();
   renderGaya();
 }
 
-// TABS - TOMER
+// TABS
 function switchTomerTab(tab) {
   ['bookings','commission','content'].forEach(t => {
-    document.getElementById('tab-' + t).hidden = (t !== tab);
+    document.getElementById('tab-' + t).hidden = t !== tab;
     document.getElementById('tbtn-' + t).classList.toggle('active', t === tab);
   });
   if (tab === 'content' && !contentLoaded) loadContent();
 }
 
-// TABS - GAYA
 function switchGayaTab(tab) {
-  ['bookings','new','content'].forEach(t => {
-    document.getElementById('tab-g-' + t).hidden = (t !== tab);
+  ['week','new','rev','content'].forEach(t => {
+    document.getElementById('tab-g-' + t).hidden = t !== tab;
     document.getElementById('tbtn-g-' + t).classList.toggle('active', t === tab);
   });
 }
@@ -644,21 +533,21 @@ function switchGayaTab(tab) {
 // HELPERS
 function fmtDate(d) {
   if (!d) return '-';
-  if (d.includes('/')) return d.split(' ')[0];
-  try { return new Date(d).toLocaleDateString('he-IL'); } catch { return d; }
+  if (typeof d === 'object') return d.toLocaleDateString('he-IL');
+  if (String(d).includes('/')) return String(d).split(' ')[0];
+  try { return new Date(d).toLocaleDateString('he-IL'); } catch { return String(d); }
 }
 
 function num(v) { return Number(v) || 0; }
 
-function sourceBadge(ch, src, isNew) {
-  if (src === 'existing') return `<span class="badge badge-existing">לפני פרסום</span>`;
-  if (isNew === 'לא') return `<span class="badge badge-returning">חוזרת</span>`;
-  const c = (ch || '').toLowerCase();
-  if (c.includes('פייסבוק')) return `<span class="badge badge-fb">${ch}</span>`;
-  if (c.includes('אינסטגרם')) return `<span class="badge badge-ig">${ch}</span>`;
-  if (c.includes('ישיר') || c.includes('אורגני')) return `<span class="badge badge-direct">${ch}</span>`;
-  if (c.includes('נחיתה')) return `<span class="badge badge-land">${ch}</span>`;
-  return `<span class="badge badge-other">${ch || '-'}</span>`;
+function parseApptDate(dateStr) {
+  if (!dateStr) return null;
+  const parts = String(dateStr).split(' ')[0].split('/');
+  if (parts.length < 3) return null;
+  const [dd, mm, yyyy] = parts;
+  const d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
+  d.setHours(0, 0, 0, 0);
+  return isNaN(d) ? null : d;
 }
 
 function currentMonthHe() {
@@ -670,8 +559,8 @@ function currentMonthHe() {
 const PRICES = [
   ['מיקרובליידינג',1500],['שיטת הפודרה',1500],
   ['בנייה באקריל',300],['פדיקור עם לק',200],
-  ['מילוי באקריל',150],['פדיקור ללא לק',150],
-  ['פדיקור רפואי',170],["לק ג'ל רגליים",120],['לק גל רגליים',120],
+  ['מילוי באקריל',150],['פדיקור ללא לק',150],['פדיקור רפואי',170],
+  ["לק ג'ל רגליים",120],['לק גל רגליים',120],
   ['עיצוב גבות ושפם',60],['עיצוב גבות טבעיות',50],['עיצוב גבות',60],
   ["לק ג'ל מבנה",140],['לק גל מבנה',140],["לק ג'ל אנטומי",140],["לק ג'ל אנסומי",140],
   ["לק ג'ל",140],['לק גל',140],
@@ -693,56 +582,54 @@ function serviceBreakdown(serviceStr) {
   }
   return parts.map(svc => {
     const p = lookupPrice(svc);
-    return `<div style="font-size:12px;line-height:1.7">${svc}${p ? ` <span style="color:var(--muted);font-size:11px">· ${p}₪</span>` : ''}</div>`;
+    return `<div style="font-size:12px;line-height:1.8">${svc}${p ? ` <span style="color:var(--muted);font-size:11px">· ${p}₪</span>` : ''}</div>`;
   }).join('');
+}
+
+function sourceBadge(ch, src, isNew) {
+  if (src === 'existing') return `<span class="badge badge-existing">לפני פרסום</span>`;
+  if (isNew === 'לא') return `<span class="badge badge-returning">חוזרת</span>`;
+  const c = (ch || '').toLowerCase();
+  if (c.includes('פייסבוק')) return `<span class="badge badge-fb">${ch}</span>`;
+  if (c.includes('אינסטגרם')) return `<span class="badge badge-ig">${ch}</span>`;
+  if (c.includes('ישיר') || c.includes('אורגני')) return `<span class="badge badge-direct">${ch}</span>`;
+  if (c.includes('נחיתה')) return `<span class="badge badge-land">${ch}</span>`;
+  return `<span class="badge badge-other">${ch || '-'}</span>`;
 }
 
 // RENDER BOOKINGS (Tomer)
 function renderBookings() {
-  const rows = bRows;
-  if (!rows.length) {
-    document.getElementById('b-tbody').innerHTML = '';
-    document.getElementById('b-empty').hidden = false;
-    return;
-  }
+  if (!bRows.length) { document.getElementById('b-empty').hidden = false; return; }
   document.getElementById('b-empty').hidden = true;
-
-  const existing  = rows.filter(r => r['מקור'] === 'existing');
-  const fromMktg  = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
-  const returning = rows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] === 'לא');
-
+  const existing  = bRows.filter(r => r['מקור'] === 'existing');
+  const fromMktg  = bRows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
+  const returning = bRows.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] === 'לא');
   const curMonth = currentMonthHe();
   const newThisMonth = fromMktg.filter(r => r['חודש'] === curMonth).length;
-
-  document.getElementById('b-total').textContent = rows.length;
+  document.getElementById('b-total').textContent = bRows.length;
   document.getElementById('b-new').textContent = fromMktg.length;
   document.getElementById('b-new-month').textContent = newThisMonth ? `החודש: ${newThisMonth}` : '';
   document.getElementById('b-returning').textContent = returning.length;
   document.getElementById('b-existing').textContent = existing.length;
-
   const srcMap = {};
   fromMktg.forEach(r => { const k = r['ערוץ'] || 'אחר'; srcMap[k] = (srcMap[k] || 0) + 1; });
   const sorted = Object.entries(srcMap).sort((a,b) => b[1] - a[1]);
   document.getElementById('b-sources').innerHTML = sorted.length
     ? sorted.map(([ch,n]) => `<div class="src-chip">${ch}<span class="src-count">${n}</span></div>`).join('')
     : '<span style="color:var(--muted);font-size:13px">יופיע כאן כשלקוחות חדשות יכנסו דרך הפרסום</span>';
-
-  renderBookingRows(rows);
+  renderBookingRows(bRows);
 }
 
 function renderBookingRows(rows) {
-  if (!rows.length) {
-    document.getElementById('b-tbody').innerHTML = `<tr><td colspan="5" class="loading-row" style="color:var(--muted)">אין תוצאות לחיפוש זה</td></tr>`;
-    return;
-  }
-  document.getElementById('b-tbody').innerHTML = rows.map(r => `
-    <tr>
-      <td>${fmtDate(r['תאריך תור'])}</td>
-      <td><strong>${r['שם לקוחה'] || '-'}</strong></td>
-      <td>${r['שירות'] || '-'}</td>
-      <td>${sourceBadge(r['ערוץ'], r['מקור'], r['לקוחה חדשה'])}</td>
-      <td style="color:var(--muted);font-size:12px">${fmtDate(r['תאריך קביעה'])}</td>
-    </tr>`).join('');
+  document.getElementById('b-tbody').innerHTML = rows.length
+    ? rows.map(r => `<tr>
+        <td>${fmtDate(r['תאריך תור'])}</td>
+        <td><strong>${r['שם לקוחה'] || '-'}</strong></td>
+        <td style="font-size:12px">${r['שירות'] || '-'}</td>
+        <td>${sourceBadge(r['ערוץ'], r['מקור'], r['לקוחה חדשה'])}</td>
+        <td style="color:var(--muted);font-size:12px">${fmtDate(r['תאריך קביעה'])}</td>
+      </tr>`).join('')
+    : `<tr><td colspan="5" class="loading-row" style="color:var(--muted)">אין תוצאות</td></tr>`;
 }
 
 function filterBookings() {
@@ -753,168 +640,259 @@ function filterBookings() {
 // RENDER COMMISSIONS (Tomer)
 function renderCommissions() {
   const rows = bRows.filter(r => r['סיווג'] === 'חדש' || r['סיווג'] === 'חוזר');
-
   if (!rows.length) {
     document.getElementById('cm-tbody').innerHTML = '';
     document.getElementById('cm-empty').hidden = false;
-    ['cm-total','cm-approved','cm-pending','cm-clients'].forEach(id => {
-      document.getElementById(id).textContent = '0';
-    });
+    ['cm-total','cm-approved','cm-pending','cm-clients'].forEach(id => document.getElementById(id).textContent = '0');
     return;
   }
   document.getElementById('cm-empty').hidden = true;
-
-  const totalCommission    = rows.reduce((s, r) => s + num(r['עמלה']), 0);
-  const approvedCommission = rows.filter(r => r['סטטוס'] === 'אושר').reduce((s, r) => s + num(r['עמלה']), 0);
-  const pendingCommission  = totalCommission - approvedCommission;
-  const uniqueClients      = new Set(rows.map(r => r['טלפון']).filter(Boolean)).size;
-
-  document.getElementById('cm-total').textContent    = totalCommission   ? totalCommission + '₪'    : '0';
-  document.getElementById('cm-approved').textContent = approvedCommission ? approvedCommission + '₪' : '0';
-  document.getElementById('cm-pending').textContent  = pendingCommission  ? pendingCommission + '₪'  : '0';
-  document.getElementById('cm-clients').textContent  = uniqueClients;
-
-  const sorted = [...rows].sort((a, b) => {
+  const total    = rows.reduce((s, r) => s + num(r['עמלה']), 0);
+  const approved = rows.filter(r => r['סטטוס'] === 'אושר').reduce((s, r) => s + num(r['עמלה']), 0);
+  document.getElementById('cm-total').textContent    = total    ? total + '₪'    : '0';
+  document.getElementById('cm-approved').textContent = approved ? approved + '₪' : '0';
+  document.getElementById('cm-pending').textContent  = (total - approved) ? (total - approved) + '₪' : '0';
+  document.getElementById('cm-clients').textContent  = new Set(rows.map(r => r['טלפון']).filter(Boolean)).size;
+  const sorted = [...rows].sort((a,b) => {
     const da = (a['תאריך תור'] || '').split('/').reverse().join('-');
     const db = (b['תאריך תור'] || '').split('/').reverse().join('-');
     return db.localeCompare(da);
   });
-
   document.getElementById('cm-tbody').innerHTML = sorted.map(r => {
-    const status = r['סטטוס'] || 'ממתין לאישור';
-    const isApproved = status === 'אושר';
-    const statusBadge = isApproved
-      ? '<span class="badge badge-approved">✅ אושר</span>'
-      : '<span class="badge badge-pending">⏳ ממתין</span>';
-    const visitBadge = r['מספר ביקור']
-      ? `<span class="badge badge-campaign">${r['מספר ביקור']}/3</span>`
-      : '-';
-    const approvedPrice = r['מחיר אושר'] || r['מחיר לפי מחירון'] || '';
-    const commission    = r['עמלה'] || '';
-    return `
-      <tr>
-        <td><strong>${r['שם לקוחה'] || '-'}</strong></td>
-        <td style="font-size:12px;color:var(--muted)">${r['טלפון'] || '-'}</td>
-        <td style="text-align:center">${visitBadge}</td>
-        <td>${serviceBreakdown(r['שירות'])}</td>
-        <td style="white-space:nowrap">${fmtDate(r['תאריך תור'])}</td>
-        <td style="font-weight:600">${approvedPrice ? approvedPrice + '₪' : '-'}</td>
-        <td style="font-weight:700;color:var(--gold)">${commission ? commission + '₪' : '-'}</td>
-        <td>${statusBadge}</td>
-      </tr>`;
+    const isApproved = r['סטטוס'] === 'אושר';
+    const visitBadge = r['מספר ביקור'] ? `<span class="badge badge-campaign">${r['מספר ביקור']}/3</span>` : '-';
+    return `<tr>
+      <td><strong>${r['שם לקוחה'] || '-'}</strong></td>
+      <td style="font-size:11px;color:var(--muted)">${r['טלפון'] || '-'}</td>
+      <td style="text-align:center">${visitBadge}</td>
+      <td>${serviceBreakdown(r['שירות'])}</td>
+      <td style="white-space:nowrap">${fmtDate(r['תאריך תור'])}</td>
+      <td style="font-weight:600">${r['מחיר אושר'] || r['מחיר לפי מחירון'] ? (r['מחיר אושר'] || r['מחיר לפי מחירון']) + '₪' : '-'}</td>
+      <td style="font-weight:700;color:var(--gold)">${r['עמלה'] ? r['עמלה'] + '₪' : '-'}</td>
+      <td>${isApproved ? '<span class="badge badge-approved">✅ אושר</span>' : '<span class="badge badge-pending">⏳ ממתין</span>'}</td>
+    </tr>`;
   }).join('');
 }
 
 // RENDER CONTENT (Tomer)
 function renderContent() {
-  const rows = cRows;
-  if (!rows.length) {
-    document.getElementById('c-tbody').innerHTML = '';
-    document.getElementById('c-empty').hidden = false;
-    return;
-  }
+  if (!cRows.length) { document.getElementById('c-empty').hidden = false; return; }
   document.getElementById('c-empty').hidden = true;
-
-  const totalReach = rows.reduce((s,r) => s + num(r.reach), 0);
-  const avgInt = Math.round(rows.reduce((s,r) => s + num(r.totalInteractions), 0) / rows.length);
-  document.getElementById('c-reach').textContent = totalReach.toLocaleString('he-IL');
-  document.getElementById('c-avg').textContent = avgInt.toLocaleString('he-IL');
-  document.getElementById('c-count').textContent = rows.length;
-
-  const sorted = [...rows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+  document.getElementById('c-reach').textContent = cRows.reduce((s,r) => s + num(r.reach), 0).toLocaleString('he-IL');
+  document.getElementById('c-avg').textContent = Math.round(cRows.reduce((s,r) => s + num(r.totalInteractions), 0) / cRows.length).toLocaleString('he-IL');
+  document.getElementById('c-count').textContent = cRows.length;
+  const sorted = [...cRows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
   document.getElementById('c-tbody').innerHTML = sorted.map(r => `
     <tr>
       <td style="white-space:nowrap">${fmtDate(r.timestamp)}</td>
       <td>${r.mediaType || '-'}</td>
       <td><strong>${num(r.reach).toLocaleString()}</strong></td>
-      <td>${num(r.likeCount)}</td>
-      <td>${num(r.commentsCount)}</td>
-      <td>${num(r.saved)}</td>
+      <td>${num(r.likeCount)}</td><td>${num(r.commentsCount)}</td><td>${num(r.saved)}</td>
       <td style="font-weight:600">${num(r.totalInteractions)}</td>
       <td>${r.permalink ? `<a href="${r.permalink}" target="_blank" style="color:var(--gold);font-size:16px">↗</a>` : '-'}</td>
     </tr>`).join('');
 }
 
-// RENDER GAYA - BOOKINGS TAB
-function renderGayaBookings() {
-  const rows = bRows;
+// WEEKLY CALENDAR
+function renderWeeklyCalendar() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const heDay = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+
+  const days = Array.from({length:7}, (_, i) => {
+    const d = new Date(today); d.setDate(d.getDate() + i); return d;
+  });
+
+  const byDay = {};
+  days.forEach(d => { byDay[d.toDateString()] = []; });
+
+  bRows.forEach(r => {
+    const dateStr = (r['תאריך תור'] || '').trim();
+    const parts = dateStr.split(' ');
+    const d = parseApptDate(parts[0]);
+    if (!d) return;
+    const key = d.toDateString();
+    if (byDay[key] !== undefined) byDay[key].push({...r, _time: parts[1] || ''});
+  });
+
+  days.forEach(d => {
+    byDay[d.toDateString()].sort((a,b) => (a._time || '').localeCompare(b._time || ''));
+  });
+
+  // Stats
+  let weekTotal = 0;
+  days.forEach(d => { weekTotal += byDay[d.toDateString()].length; });
+  document.getElementById('g-week-count').textContent = weekTotal;
+
   const curMonth = currentMonthHe();
+  const newMonth  = bRows.filter(r => r['חודש'] === curMonth && r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא').length;
+  const retMonth  = bRows.filter(r => r['חודש'] === curMonth && r['לקוחה חדשה'] === 'לא').length;
+  document.getElementById('g-b-new').textContent   = newMonth;
+  document.getElementById('g-b-ret').textContent   = retMonth;
+  document.getElementById('g-b-total').textContent = bRows.length;
 
-  const thisMonth = rows.filter(r => r['חודש'] === curMonth);
-  const newMonth  = thisMonth.filter(r => r['מקור'] !== 'existing' && r['לקוחה חדשה'] !== 'לא');
-  const retMonth  = thisMonth.filter(r => r['לקוחה חדשה'] === 'לא');
+  document.getElementById('cal-grid').innerHTML = days.map(d => {
+    const isToday = d.toDateString() === today.toDateString();
+    const appts   = byDay[d.toDateString()];
+    const cnt     = appts.filter(r => r['שם לקוחה'] && !r['שם לקוחה'].includes('אירוע פרטי') && !r['שם לקוחה'].includes('ללא')).length;
 
-  document.getElementById('g-b-month').textContent  = thisMonth.length;
-  document.getElementById('g-b-new').textContent    = newMonth.length;
-  document.getElementById('g-b-ret').textContent    = retMonth.length;
-  document.getElementById('g-b-total').textContent  = rows.length;
-
-  if (!rows.length) {
-    document.getElementById('g-bookings-empty').hidden = false;
-    return;
-  }
-  document.getElementById('g-bookings-empty').hidden = true;
-
-  const recent = [...rows]
-    .filter(r => r['שם לקוחה'] && r['שם לקוחה'] !== 'דוגמה - מחקי שורה זו')
-    .sort((a, b) => {
-      const da = a['תאריך תור'] ? a['תאריך תור'].split('/').reverse().join('-') : '';
-      const db = b['תאריך תור'] ? b['תאריך תור'].split('/').reverse().join('-') : '';
-      return db.localeCompare(da);
-    })
-    .slice(0, 12);
-
-  document.getElementById('g-bookings-list').innerHTML = `
-    <div class="booking-list">
-      ${recent.map(r => {
-        const name = r['שם לקוחה'] || '-';
-        const initial = name.trim()[0] || '?';
-        const isRet = r['לקוחה חדשה'] === 'לא';
-        const isExist = r['מקור'] === 'existing';
-        const tag = isExist ? '' : isRet
-          ? '<span class="badge badge-returning" style="font-size:10px">חוזרת</span>'
-          : '<span class="badge badge-ig" style="font-size:10px">חדשה</span>';
-        const dateParts = (r['תאריך תור'] || '').split(' ');
-        return `
-          <div class="booking-item">
-            <div class="booking-avatar">${initial}</div>
-            <div class="booking-info">
-              <div class="booking-name">${name} ${tag}</div>
-              <div class="booking-sub">${r['שירות'] || '-'}</div>
-            </div>
-            <div class="booking-right">
-              <div class="booking-date">${dateParts[0] || '-'}</div>
-              <div class="booking-time">${dateParts[1] || ''}</div>
-            </div>
+    const cards = appts.length
+      ? appts.map(r => {
+          const name = r['שם לקוחה'] || '';
+          if (!name || name.includes('אירוע פרטי') || name.includes('ללא')) {
+            return `<div class="cal-appt oth-c"><div class="cal-time">${r._time}</div><div class="cal-svc" style="color:var(--ivory3)">אירוע פרטי</div></div>`;
+          }
+          const isNew = r['סיווג'] === 'חדש' || r['סיווג'] === 'חוזר';
+          const isRet = r['לקוחה חדשה'] === 'לא';
+          const cls   = isNew ? 'new-c' : isRet ? 'ret-c' : 'oth-c';
+          const svc   = (r['שירות'] || '').split(/[,،~]/)[0].trim();
+          return `<div class="cal-appt ${cls}">
+            <div class="cal-time">${r._time || '-'}</div>
+            <div class="cal-name">${name}</div>
+            <div class="cal-svc">${svc}</div>
           </div>`;
-      }).join('')}
-    </div>`;
+        }).join('')
+      : '<div class="cal-empty-day">—</div>';
+
+    return `
+      <div class="cal-day ${isToday ? 'today' : ''}">
+        <div class="cal-day-hdr">
+          ${isToday ? '<div class="cal-today-lbl">היום</div>' : ''}
+          <div class="cal-day-name">${heDay[d.getDay()]}</div>
+          <div class="cal-day-num">${d.getDate()}</div>
+          ${cnt > 0 ? `<div class="cal-appt-count">${cnt} ${cnt === 1 ? 'תור' : 'תורים'}</div>` : ''}
+        </div>
+        <div class="cal-body">${cards}</div>
+      </div>`;
+  }).join('');
 }
 
-// RENDER GAYA - NEW CLIENTS TAB
+// REVENUE & INACTIVE
+function renderRevenue() {
+  const heMonths = {ינואר:1,פברואר:2,'מרץ':3,אפריל:4,מאי:5,יוני:6,יולי:7,אוגוסט:8,ספטמבר:9,אוקטובר:10,נובמבר:11,דצמבר:12};
+
+  // Monthly totals
+  const monthTotals = {};
+  bRows.forEach(r => {
+    const month = r['חודש'];
+    if (!month) return;
+    const price = num(r['מחיר אושר']) || num(r['מחיר לפי מחירון']);
+    if (price <= 0) return;
+    monthTotals[month] = (monthTotals[month] || 0) + price;
+  });
+
+  const sortedMonths = Object.keys(monthTotals).sort((a, b) => {
+    const [am, ay] = a.split(' '), [bm, by] = b.split(' ');
+    const dy = parseInt(ay||0) - parseInt(by||0);
+    return dy !== 0 ? dy : (heMonths[am]||0) - (heMonths[bm]||0);
+  });
+
+  const curMonth  = currentMonthHe();
+  const curRev    = monthTotals[curMonth] || 0;
+  const prevIdx   = sortedMonths.indexOf(curMonth) - 1;
+  const prevRev   = prevIdx >= 0 ? (monthTotals[sortedMonths[prevIdx]] || 0) : 0;
+  const growth    = prevRev > 0 ? Math.round((curRev - prevRev) / prevRev * 100) : null;
+  const curRows   = bRows.filter(r => r['חודש'] === curMonth && (num(r['מחיר אושר']) || num(r['מחיר לפי מחירון'])) > 0);
+  const avgPrice  = curRows.length > 0 ? Math.round(curRev / curRows.length) : 0;
+
+  // Inactive
+  const inactive = findInactiveClients();
+
+  document.getElementById('rev-total').textContent = curRev ? curRev.toLocaleString('he-IL') + '₪' : '-';
+  const growthEl = document.getElementById('rev-growth');
+  if (growth !== null) {
+    growthEl.textContent = (growth >= 0 ? '+' : '') + growth + '%';
+    growthEl.style.color = growth > 0 ? 'var(--green)' : growth < 0 ? '#991B1B' : 'var(--muted)';
+  } else { growthEl.textContent = '-'; }
+  document.getElementById('rev-avg').textContent = avgPrice ? avgPrice + '₪' : '-';
+  document.getElementById('rev-inactive-count').textContent = inactive.length || '0';
+  document.getElementById('rev-inactive-count').style.color = inactive.length > 0 ? 'var(--rose)' : 'var(--burg)';
+
+  // Chart - last 4 months
+  const last4 = sortedMonths.slice(-4);
+  const maxRev = Math.max(...last4.map(m => monthTotals[m] || 0), 1);
+  const chartEl = document.getElementById('rev-chart');
+
+  if (!last4.length) {
+    chartEl.innerHTML = '<div class="empty-state" style="padding:20px"><span class="empty-icon">💰</span>אין נתוני הכנסות עדיין.<br><small>יתעדכן אוטומטית ככל שמחירים יאושרו.</small></div>';
+  } else {
+    chartEl.innerHTML = last4.map(month => {
+      const rev = monthTotals[month] || 0;
+      const pct = Math.round(rev / maxRev * 100);
+      const isCur = month === curMonth;
+      const lbl = month.split(' ')[0];
+      const gBadge = isCur && growth !== null
+        ? `<span class="growth-badge ${growth > 0 ? 'growth-up' : growth < 0 ? 'growth-dn' : 'growth-fl'}">${growth > 0 ? '+' : ''}${growth}%</span>`
+        : '';
+      return `
+        <div class="rev-row">
+          <div class="rev-lbl">${lbl}</div>
+          <div class="rev-track">
+            <div class="rev-fill ${isCur ? 'cur' : ''}" style="width:${pct}%"></div>
+          </div>
+          <div class="rev-amt">${rev ? rev.toLocaleString() + '₪' : '-'} ${gBadge}</div>
+        </div>`;
+    }).join('');
+  }
+
+  // Inactive list
+  const inactiveEl = document.getElementById('inactive-list');
+  document.getElementById('inactive-count').textContent = inactive.length ? `(${inactive.length})` : '';
+  if (!inactive.length) {
+    inactiveEl.innerHTML = '<div class="empty-state" style="padding:20px"><span class="empty-icon">🎉</span>כל הלקוחות פעילות!</div>';
+  } else {
+    inactiveEl.innerHTML = inactive.slice(0, 12).map(c => `
+      <div class="inactive-item">
+        <div class="booking-avatar" style="width:36px;height:36px;font-size:14px">${(c.name||'?')[0]}</div>
+        <div class="booking-info">
+          <div class="booking-name" style="font-size:13px">${c.name}</div>
+          <div class="booking-sub">${c.service || ''} · ${fmtDate(c.lastDate)}</div>
+        </div>
+        <div class="days-badge">${c.daysSince} ימים</div>
+      </div>`).join('');
+  }
+}
+
+function findInactiveClients() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const cutoff = new Date(today); cutoff.setDate(cutoff.getDate() - 45);
+  const clients = {};
+
+  bRows.forEach(r => {
+    const phone = r['טלפון'], name = r['שם לקוחה'];
+    if (!phone || !name || name.includes('אירוע פרטי') || name.includes('ללא') || r['מקור'] === 'existing') return;
+    const d = parseApptDate(r['תאריך תור']);
+    if (!d) return;
+    const isUpcoming = d >= today;
+    if (!clients[phone]) {
+      clients[phone] = { name, lastDate: d, hasUpcoming: isUpcoming, service: r['שירות'] };
+    } else {
+      if (d > clients[phone].lastDate) { clients[phone].lastDate = d; clients[phone].service = r['שירות']; }
+      if (isUpcoming) clients[phone].hasUpcoming = true;
+    }
+  });
+
+  return Object.values(clients)
+    .filter(c => !c.hasUpcoming && c.lastDate < cutoff)
+    .map(c => ({ ...c, daysSince: Math.floor((today - c.lastDate) / 86400000) }))
+    .sort((a, b) => b.daysSince - a.daysSince);
+}
+
+// GAYA NEW CLIENTS
 function renderGayaNew() {
-  const pending = bRows
-    .map((r, i) => ({ ...r, _rowIndex: i + 2 }))
+  const pending = bRows.map((r, i) => ({...r, _rowIndex: i + 2}))
     .filter(r => r['סיווג'] === 'חדש' || r['סיווג'] === 'חוזר');
+
+  const pendingCount = pending.filter(r => r['סטטוס'] !== 'אושר').length;
+  document.getElementById('tbtn-g-new').innerHTML = pendingCount > 0
+    ? `✨ חדשות <span class="tab-count">${pendingCount}</span>`
+    : '✨ חדשות';
 
   const tbody = document.getElementById('g-new-tbody');
   const emptyEl = document.getElementById('g-new-empty');
-
-  // Update tab badge
-  const pendingCount = pending.filter(r => r['סטטוס'] !== 'אושר').length;
-  const tabBtn = document.getElementById('tbtn-g-new');
-  tabBtn.innerHTML = pendingCount > 0
-    ? `✨ לקוחות חדשות <span class="tab-count">${pendingCount}</span>`
-    : '✨ לקוחות חדשות';
-
-  if (!pending.length) {
-    tbody.innerHTML = '';
-    emptyEl.hidden = false;
-    return;
-  }
+  if (!pending.length) { tbody.innerHTML = ''; emptyEl.hidden = false; return; }
   emptyEl.hidden = true;
 
-  const sorted = [...pending].sort((a, b) => {
+  const sorted = [...pending].sort((a,b) => {
     const da = (a['תאריך תור'] || '').split('/').reverse().join('-');
     const db = (b['תאריך תור'] || '').split('/').reverse().join('-');
     return db.localeCompare(da);
@@ -922,128 +900,75 @@ function renderGayaNew() {
 
   tbody.innerHTML = sorted.map(r => {
     const isApproved = r['סטטוס'] === 'אושר';
-    const defaultPrice = r['מחיר אושר'] || r['מחיר לפי מחירון'] || '';
-    const visitBadge = r['מספר ביקור']
-      ? `<span class="badge badge-campaign" style="font-size:10px">${r['מספר ביקור']}/3</span> `
-      : '';
+    const defPrice = r['מחיר אושר'] || r['מחיר לפי מחירון'] || '';
+    const visitBadge = r['מספר ביקור'] ? `<span class="badge badge-campaign" style="font-size:10px">${r['מספר ביקור']}/3</span> ` : '';
     return `
       <tr id="grow-${r._rowIndex}">
-        <td>
-          <strong>${r['שם לקוחה'] || '-'}</strong><br>
-          <small style="color:var(--muted)">${visitBadge}${r['טלפון'] || ''}</small>
-        </td>
+        <td><strong>${r['שם לקוחה'] || '-'}</strong><br><small style="color:var(--muted)">${visitBadge}${r['טלפון'] || ''}</small></td>
         <td style="font-size:12px">${r['שירות'] || '-'}</td>
         <td style="white-space:nowrap">${fmtDate(r['תאריך תור'])}</td>
-        <td>
-          <input type="number" class="price-input" id="gprice-${r._rowIndex}"
-            value="${defaultPrice}" min="1" ${isApproved ? 'disabled' : ''}>
-        </td>
-        <td>
-          ${isApproved
-            ? '<span class="badge badge-approved">✅ אושר</span>'
-            : `<button class="approve-btn" id="gbtn-${r._rowIndex}" onclick="approveRow(${r._rowIndex})">✅ אשר</button>`
-          }
-        </td>
+        <td><input type="number" class="price-input" id="gprice-${r._rowIndex}" value="${defPrice}" min="1" ${isApproved ? 'disabled' : ''}></td>
+        <td>${isApproved
+          ? '<span class="badge badge-approved">✅ אושר</span>'
+          : `<button class="approve-btn" id="gbtn-${r._rowIndex}" onclick="approveRow(${r._rowIndex})">✅ אשר</button>`
+        }</td>
       </tr>`;
   }).join('');
 }
 
-// APPROVE ROW
 async function approveRow(rowIndex) {
   const priceEl = document.getElementById('gprice-' + rowIndex);
   const btnEl   = document.getElementById('gbtn-' + rowIndex);
   const price   = Number(priceEl.value);
-
-  if (!price || price <= 0) {
-    priceEl.style.borderColor = 'var(--rose)';
-    priceEl.focus();
-    return;
-  }
-
-  btnEl.disabled = true;
-  btnEl.textContent = '...';
-
+  if (!price || price <= 0) { priceEl.style.borderColor = 'var(--rose)'; priceEl.focus(); return; }
+  btnEl.disabled = true; btnEl.textContent = '...';
   try {
     const r = await fetch(API.approve, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rowIndex, approvedPrice: price })
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({rowIndex, approvedPrice: price})
     });
-
     if (r.ok) {
       btnEl.outerHTML = '<span class="badge badge-approved">✅ אושר</span>';
       priceEl.disabled = true;
-
-      // Update local state
       const idx = rowIndex - 2;
       if (bRows[idx]) {
         bRows[idx]['סטטוס'] = 'אושר';
         bRows[idx]['מחיר אושר'] = String(price);
         bRows[idx]['עמלה'] = String(Math.round(price * 0.2));
       }
-
-      // Refresh badge count
-      const stillPending = bRows
-        .filter(row => (row['סיווג'] === 'חדש' || row['סיווג'] === 'חוזר') && row['סטטוס'] !== 'אושר').length;
-      const tabBtn = document.getElementById('tbtn-g-new');
-      tabBtn.innerHTML = stillPending > 0
-        ? `✨ לקוחות חדשות <span class="tab-count">${stillPending}</span>`
-        : '✨ לקוחות חדשות';
-    } else {
-      btnEl.disabled = false;
-      btnEl.textContent = '✅ אשר';
-      alert('שגיאה בעדכון, נסי שוב');
-    }
-  } catch(e) {
-    btnEl.disabled = false;
-    btnEl.textContent = '✅ אשר';
-    alert('שגיאה בחיבור');
-  }
+      const stillPending = bRows.filter(row => (row['סיווג'] === 'חדש' || row['סיווג'] === 'חוזר') && row['סטטוס'] !== 'אושר').length;
+      document.getElementById('tbtn-g-new').innerHTML = stillPending > 0
+        ? `✨ חדשות <span class="tab-count">${stillPending}</span>` : '✨ חדשות';
+    } else { btnEl.disabled = false; btnEl.textContent = '✅ אשר'; alert('שגיאה בעדכון, נסי שוב'); }
+  } catch { btnEl.disabled = false; btnEl.textContent = '✅ אשר'; alert('שגיאה בחיבור'); }
 }
 
-// RENDER GAYA - CONTENT TAB
+// GAYA CONTENT
 function renderGaya() {
-  const rows = cRows;
-
   const now = new Date();
   const ym = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  const thisMonth = rows.filter(r => (r.timestamp || '').startsWith(ym));
-  const reachMonth = thisMonth.reduce((s,r) => s + num(r.reach), 0);
-  const avgInt = rows.length ? Math.round(rows.reduce((s,r) => s + num(r.totalInteractions), 0) / rows.length) : 0;
-  document.getElementById('g-reach').textContent = reachMonth.toLocaleString('he-IL');
-  document.getElementById('g-avg').textContent = avgInt.toLocaleString('he-IL');
+  const thisMonth = cRows.filter(r => (r.timestamp || '').startsWith(ym));
+  document.getElementById('g-reach').textContent = thisMonth.reduce((s,r) => s + num(r.reach), 0).toLocaleString('he-IL');
+  document.getElementById('g-avg').textContent = cRows.length ? Math.round(cRows.reduce((s,r) => s + num(r.totalInteractions), 0) / cRows.length).toLocaleString('he-IL') : '0';
   document.getElementById('g-posts').textContent = thisMonth.length;
-
-  if (!rows.length) {
-    document.getElementById('g-empty').hidden = false;
-    return;
-  }
-
-  const recent = [...rows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
+  if (!cRows.length) { document.getElementById('g-empty').hidden = false; return; }
+  const recent = [...cRows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
   document.getElementById('g-grid').innerHTML = recent.map(r => `
     <div class="post-card">
       <div class="post-date">${fmtDate(r.timestamp)}</div>
       <span class="post-type-badge">${r.mediaType || 'פוסט'}</span>
       <div class="post-metrics">
-        <div class="pm">
-          <div class="pm-val">${num(r.reach).toLocaleString()}</div>
-          <span class="pm-lbl">👁 Reach</span>
-        </div>
-        <div class="pm">
-          <div class="pm-val">${num(r.likeCount)}</div>
-          <span class="pm-lbl">❤️ לייקים</span>
-        </div>
-        <div class="pm">
-          <div class="pm-val">${num(r.totalInteractions)}</div>
-          <span class="pm-lbl">✨ אינטראקציות</span>
-        </div>
+        <div class="pm"><div class="pm-val">${num(r.reach).toLocaleString()}</div><span class="pm-lbl">👁 Reach</span></div>
+        <div class="pm"><div class="pm-val">${num(r.likeCount)}</div><span class="pm-lbl">❤️ לייקים</span></div>
+        <div class="pm"><div class="pm-val">${num(r.totalInteractions)}</div><span class="pm-lbl">✨ אינטראקציות</span></div>
       </div>
       ${r.permalink ? `<a class="post-link" href="${r.permalink}" target="_blank">צפי בפוסט ↗</a>` : ''}
     </div>`).join('');
 }
 
 // INIT
-(function init() {
+(function() {
   const role = sessionStorage.getItem('gl_role');
   if (role === 'tomer' || role === 'gaya') showView(role);
 })();
