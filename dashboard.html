@@ -374,6 +374,9 @@ tbody tr:hover{background:var(--ivory)}
         <div class="stat-card"><div class="stat-lbl">👥 עוקבים</div><div class="stat-val" id="c-followers">—</div></div>
       </div>
 
+      <!-- Month filter -->
+      <div id="c-month-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+
       <!-- Type filter + refresh -->
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
         <div id="c-type-filters" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
@@ -566,7 +569,7 @@ function doLogout() {
   document.getElementById('pg-login').removeAttribute('hidden');
   document.getElementById('pw-input').value = '';
   document.getElementById('login-err').textContent = '';
-  bRows = []; cRows = []; contentLoaded = false;
+  bRows = []; cRows = []; cProfile = {}; cActiveMonth = null; contentLoaded = false;
 }
 
 function showView(role) {
@@ -798,9 +801,11 @@ function renderCommissions() {
 
 // RENDER CONTENT (Tomer) — rich version with thumbnails
 let cActiveFilter = 'הכל';
+let cActiveMonth = null; // null = auto-select current month on first render
 
-function renderContent(filterType) {
+function renderContent(filterType, monthFilter) {
   if (filterType !== undefined) cActiveFilter = filterType;
+  if (monthFilter !== undefined) { cActiveMonth = monthFilter; cActiveFilter = 'הכל'; }
   if (!cRows.length) {
     document.getElementById('c-empty').hidden = false;
     document.getElementById('c-grid').innerHTML = '';
@@ -808,31 +813,48 @@ function renderContent(filterType) {
   }
   document.getElementById('c-empty').hidden = true;
 
-  const posts = cRows.filter(r => r.postId); // exclude non-posts
-  const feedPosts = posts.filter(r => r.mediaType !== 'סטורי');
+  const posts = cRows.filter(r => r.postId);
 
-  // Stats
-  const totalReach = posts.reduce((s, r) => s + num(r.reach), 0);
+  // Month filtering
+  const heMonthsMap = {ינואר:1,פברואר:2,'מרץ':3,אפריל:4,מאי:5,יוני:6,יולי:7,אוגוסט:8,ספטמבר:9,אוקטובר:10,נובמבר:11,דצמבר:12};
+  const postMonthKey = r => {
+    const d = r.timestamp ? new Date(r.timestamp) : null;
+    return d && !isNaN(d) ? `${HE_MONTHS[d.getMonth()]} ${d.getFullYear()}` : null;
+  };
+  const postMonths = [...new Set(posts.map(postMonthKey).filter(Boolean))].sort((a,b) => {
+    const [am,ay]=a.split(' '),[bm,by]=b.split(' ');
+    const dy=parseInt(ay)-parseInt(by);
+    return dy!==0?dy:(heMonthsMap[am]||0)-(heMonthsMap[bm]||0);
+  });
+  if (cActiveMonth === null) cActiveMonth = currentMonthHe();
+  if (postMonths.length && !postMonths.includes(cActiveMonth)) cActiveMonth = postMonths[postMonths.length-1];
+
+  const monthPosts = postMonths.length ? posts.filter(r => postMonthKey(r) === cActiveMonth) : posts;
+  const feedPosts = monthPosts.filter(r => r.mediaType !== 'סטורי');
+
+  // Stats (month-scoped)
+  const totalReach = monthPosts.reduce((s, r) => s + num(r.reach), 0);
   const totalInter = feedPosts.reduce((s, r) => s + num(r.totalInteractions), 0);
   const totalReachFeed = feedPosts.reduce((s, r) => s + num(r.reach), 0);
   const engRate = totalReachFeed > 0 ? ((totalInter / totalReachFeed) * 100).toFixed(1) + '%' : '—';
 
   document.getElementById('c-reach').textContent = totalReach.toLocaleString('he-IL');
   document.getElementById('c-engrate').textContent = engRate;
-  document.getElementById('c-count').textContent = posts.length;
+  document.getElementById('c-count').textContent = monthPosts.length;
 
-  // Followers from profile
+  // Followers from profile (not month-scoped)
   const followersEl = document.getElementById('c-followers');
   if (followersEl) followersEl.textContent = cProfile.followers_count ? Number(cProfile.followers_count).toLocaleString('he-IL') : '—';
 
-  // 🔥 Viral badge: any feed post with 2x+ average reach
-  const avgFeedReach = feedPosts.length ? feedPosts.reduce((s,r) => s + num(r.reach), 0) / feedPosts.length : 0;
-  const hasViral = feedPosts.some(r => num(r.reach) >= avgFeedReach * 2);
+  // 🔥 Viral badge: based on all-time average so a post truly stands out
+  const allFeed = posts.filter(r => r.mediaType !== 'סטורי');
+  const avgFeedReach = allFeed.length ? allFeed.reduce((s,r) => s + num(r.reach), 0) / allFeed.length : 0;
+  const hasViral = allFeed.some(r => num(r.reach) >= avgFeedReach * 2);
   document.getElementById('tbtn-content').innerHTML = hasViral
     ? '📸 תוכן <span style="background:#ef4444;color:#fff;border-radius:50px;padding:1px 6px;font-size:10px;font-weight:700;vertical-align:middle">🔥</span>'
     : '📸 תוכן';
 
-  // Top post by reach
+  // Top post by reach (month-scoped)
   const topPost = [...feedPosts].sort((a, b) => num(b.reach) - num(a.reach))[0];
   if (topPost) {
     document.getElementById('c-top-reach').textContent = num(topPost.reach).toLocaleString('he-IL');
@@ -851,15 +873,21 @@ function renderContent(filterType) {
       {l:'🔖 שמירות', v: num(topPost.saved)},
       {l:'✨ אינטראקציות', v: num(topPost.totalInteractions)}
     ].map(x => `<div><div style="font-size:16px;font-weight:800;color:var(--burg)">${x.v}</div><div style="font-size:10px;color:var(--muted)">${x.l}</div></div>`).join('');
+  } else {
+    document.getElementById('c-top-card').hidden = true;
   }
 
-  // Type filter pills
-  const types = ['הכל', ...new Set(posts.map(r => r.mediaType || 'אחר').filter(Boolean))];
-  document.getElementById('c-type-filters').innerHTML = types.map(t => `
-    <button onclick="renderContent('${t}')" style="padding:5px 14px;border-radius:50px;border:1.5px solid ${cActiveFilter===t?'var(--burg)':'var(--ivory3)'};background:${cActiveFilter===t?'var(--burg)':'var(--white)'};color:${cActiveFilter===t?'#fff':'var(--muted)'};font-family:Rubik,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s">${t}</button>`).join('');
+  // Month filter pills
+  document.getElementById('c-month-filters').innerHTML = postMonths.map(m => `
+    <button onclick="renderContent(undefined,'${m}')" style="padding:5px 14px;border-radius:50px;border:1.5px solid ${cActiveMonth===m?'var(--burg)':'var(--ivory3)'};background:${cActiveMonth===m?'var(--burg)':'var(--white)'};color:${cActiveMonth===m?'#fff':'var(--muted)'};font-family:Rubik,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s">${m}</button>`).join('');
 
-  // Filter posts
-  const filtered = cActiveFilter === 'הכל' ? posts : posts.filter(r => r.mediaType === cActiveFilter);
+  // Type filter pills (scoped to current month)
+  const types = ['הכל', ...new Set(monthPosts.map(r => r.mediaType || 'אחר').filter(Boolean))];
+  document.getElementById('c-type-filters').innerHTML = types.map(t => `
+    <button onclick="renderContent('${t}')" style="padding:5px 14px;border-radius:50px;border:1.5px solid ${cActiveFilter===t?'var(--rose)':'var(--ivory3)'};background:${cActiveFilter===t?'var(--rose)':'var(--white)'};color:${cActiveFilter===t?'#fff':'var(--muted)'};font-family:Rubik,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s">${t}</button>`).join('');
+
+  // Filter posts (type filter on top of month filter)
+  const filtered = cActiveFilter === 'הכל' ? monthPosts : monthPosts.filter(r => r.mediaType === cActiveFilter);
   const sorted = [...filtered].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
   // Grid of post cards
@@ -892,8 +920,8 @@ function renderContent(filterType) {
     </div>`;
   }).join('');
 
-  // Patterns analysis
-  renderContentPatterns(posts);
+  // Patterns analysis (month-scoped)
+  renderContentPatterns(monthPosts);
 }
 
 function renderContentPatterns(posts) {
