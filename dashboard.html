@@ -380,6 +380,7 @@ tbody tr:hover{background:var(--ivory)}
       <!-- Type filter + refresh -->
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
         <div id="c-type-filters" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+        <button class="refresh-btn" id="c-sync-btn" onclick="syncAndReloadContent()" title="סנכרן פוסטים חדשים מאינסטגרם">🔄 סנכרן</button>
         <button class="refresh-btn" onclick="loadContent()">↻ רענן</button>
       </div>
 
@@ -546,7 +547,8 @@ const API = {
   content:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content',
   approve:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/approve',
   ads:         'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/ads',
-  contentRich: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content-rich'
+  contentRich: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content-rich',
+  syncContent: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/sync-content'
 };
 let bRows = [], cRows = [], cProfile = {}, contentLoaded = false, adsLoaded = false, adsData = null;
 
@@ -615,6 +617,21 @@ async function loadContent() {
   contentLoaded = true;
   document.getElementById('c-loading').style.display = 'none';
   renderContent();
+}
+
+async function syncAndReloadContent() {
+  const btn = document.getElementById('c-sync-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ מסנכרן...'; }
+  try {
+    await fetch(API.syncContent, {method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'});
+    // Wait for n8n to finish (usually ~10-15s for full sync)
+    await new Promise(r => setTimeout(r, 16000));
+    await loadContent();
+  } catch {
+    await loadContent();
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '🔄 סנכרן'; }
+  }
 }
 
 async function loadGaya() {
