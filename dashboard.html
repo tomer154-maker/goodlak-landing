@@ -72,7 +72,8 @@ a{text-decoration:none;color:inherit}
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .stats-row.s4{grid-template-columns:repeat(4,1fr)}
 .stats-row.s2{grid-template-columns:repeat(2,1fr)}
-@media(max-width:600px){.stats-row,.stats-row.s4{grid-template-columns:repeat(2,1fr)}}
+.stats-row.s5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:600px){.stats-row,.stats-row.s4,.stats-row.s5{grid-template-columns:repeat(2,1fr)}}
 .stat-card{background:var(--white);border-radius:var(--r);padding:16px 12px;box-shadow:var(--shadow);text-align:center}
 .stat-lbl{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px}
 .stat-val{font-size:28px;font-weight:800;color:var(--burg);line-height:1}
@@ -365,11 +366,12 @@ tbody tr:hover{background:var(--ivory)}
     <!-- CONTENT TAB (Tomer) -->
     <div id="tab-content" hidden>
       <!-- Stats row -->
-      <div class="stats-row s4">
+      <div class="stats-row s5">
         <div class="stat-card"><div class="stat-lbl">👁 Reach סה"כ</div><div class="stat-val" id="c-reach">—</div></div>
         <div class="stat-card"><div class="stat-lbl">📊 Engagement Rate</div><div class="stat-val" id="c-engrate">—</div><div class="stat-sub">ממוצע אינטראקציות/Reach</div></div>
         <div class="stat-card"><div class="stat-lbl">✨ הפוסט הטוב ביותר</div><div class="stat-val" id="c-top-reach">—</div><div class="stat-sub" id="c-top-date"></div></div>
         <div class="stat-card"><div class="stat-lbl">📅 פוסטים במעקב</div><div class="stat-val" id="c-count">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">👥 עוקבים</div><div class="stat-val" id="c-followers">—</div></div>
       </div>
 
       <!-- Type filter + refresh -->
@@ -543,7 +545,7 @@ const API = {
   ads:         'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/ads',
   contentRich: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content-rich'
 };
-let bRows = [], cRows = [], contentLoaded = false, adsLoaded = false, adsData = null;
+let bRows = [], cRows = [], cProfile = {}, contentLoaded = false, adsLoaded = false, adsData = null;
 
 // AUTH
 function doLogin() {
@@ -597,8 +599,16 @@ async function loadBookings() {
 async function loadContent() {
   document.getElementById('c-loading').style.display = 'block';
   document.getElementById('c-grid').innerHTML = '';
-  cRows = await fetchRows(API.contentRich);
-  if (!cRows.length) cRows = await fetchRows(API.content); // fallback
+  cProfile = {};
+  try {
+    const r = await fetch(API.contentRich);
+    if (r.ok) {
+      const d = await r.json();
+      cRows = Array.isArray(d.rows) ? d.rows : [];
+      cProfile = d.profile || {};
+    }
+  } catch {}
+  if (!cRows.length) cRows = await fetchRows(API.content);
   contentLoaded = true;
   document.getElementById('c-loading').style.display = 'none';
   renderContent();
@@ -811,6 +821,17 @@ function renderContent(filterType) {
   document.getElementById('c-engrate').textContent = engRate;
   document.getElementById('c-count').textContent = posts.length;
 
+  // Followers from profile
+  const followersEl = document.getElementById('c-followers');
+  if (followersEl) followersEl.textContent = cProfile.followers_count ? Number(cProfile.followers_count).toLocaleString('he-IL') : '—';
+
+  // 🔥 Viral badge: any feed post with 2x+ average reach
+  const avgFeedReach = feedPosts.length ? feedPosts.reduce((s,r) => s + num(r.reach), 0) / feedPosts.length : 0;
+  const hasViral = feedPosts.some(r => num(r.reach) >= avgFeedReach * 2);
+  document.getElementById('tbtn-content').innerHTML = hasViral
+    ? '📸 תוכן <span style="background:#ef4444;color:#fff;border-radius:50px;padding:1px 6px;font-size:10px;font-weight:700;vertical-align:middle">🔥</span>'
+    : '📸 תוכן';
+
   // Top post by reach
   const topPost = [...feedPosts].sort((a, b) => num(b.reach) - num(a.reach))[0];
   if (topPost) {
@@ -879,13 +900,14 @@ function renderContentPatterns(posts) {
   const feedPosts = posts.filter(r => r.mediaType !== 'סטורי' && num(r.reach) > 0);
   if (feedPosts.length < 3) { document.getElementById('c-patterns').innerHTML = ''; return; }
 
-  // By type
+  // By type (A/B comparison)
   const typeStats = {};
   feedPosts.forEach(r => {
     const t = r.mediaType || 'אחר';
-    if (!typeStats[t]) typeStats[t] = {reach:0, inter:0, n:0};
+    if (!typeStats[t]) typeStats[t] = {reach:0, inter:0, saved:0, n:0};
     typeStats[t].reach += num(r.reach);
     typeStats[t].inter += num(r.totalInteractions);
+    typeStats[t].saved += num(r.saved);
     typeStats[t].n++;
   });
 
@@ -901,18 +923,62 @@ function renderContentPatterns(posts) {
     dayStats[dn].n++;
   });
   const bestDay = Object.entries(dayStats).sort((a,b) => (b[1].reach/b[1].n) - (a[1].reach/a[1].n))[0];
-
-  // Best type
   const bestType = Object.entries(typeStats).sort((a,b) => (b[1].reach/b[1].n) - (a[1].reach/a[1].n))[0];
-
+  const bestTypeName = bestType ? bestType[0] : '';
   const avgReach = Math.round(feedPosts.reduce((s,r) => s + num(r.reach), 0) / feedPosts.length);
+
+  // Weekly reach trend (last 8 weeks)
+  const weeklyMap = {};
+  feedPosts.forEach(r => {
+    if (!r.timestamp) return;
+    const d = new Date(r.timestamp);
+    const start = new Date(d); start.setDate(d.getDate() - d.getDay()); start.setHours(0,0,0,0);
+    const wk = start.toISOString().slice(0,10);
+    if (!weeklyMap[wk]) weeklyMap[wk] = {reach:0, n:0};
+    weeklyMap[wk].reach += num(r.reach); weeklyMap[wk].n++;
+  });
+  const weeks = Object.entries(weeklyMap).sort(([a],[b]) => a.localeCompare(b)).slice(-8);
+  const maxWeekReach = weeks.length ? Math.max(...weeks.map(([,w]) => w.n ? Math.round(w.reach/w.n) : 0), 1) : 1;
+  const weekBars = weeks.map(([wk, w]) => {
+    const avg = w.n ? Math.round(w.reach/w.n) : 0;
+    const h = Math.max(Math.round((avg/maxWeekReach) * 100), avg ? 3 : 0);
+    const lbl = wk.slice(5).replace('-','/');
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px" title="שבוע ${lbl} · ממוצע Reach: ${avg.toLocaleString()}">
+      <div style="width:100%;height:100px;display:flex;align-items:flex-end">
+        <div style="width:100%;height:${h}px;background:linear-gradient(180deg,var(--rose),var(--burg));border-radius:3px 3px 0 0;transition:height .7s ease"></div>
+      </div>
+      <div style="font-size:9px;color:var(--muted)">${lbl}</div>
+    </div>`;
+  }).join('');
+
+  // A/B format comparison rows
+  const typeRows = Object.entries(typeStats).sort((a,b) => (b[1].reach/b[1].n) - (a[1].reach/a[1].n));
+  const maxAvgReach = typeRows.length ? Math.max(...typeRows.map(([,s]) => Math.round(s.reach/s.n)), 1) : 1;
+  const formatRows = typeRows.map(([type, s]) => {
+    const avgR = Math.round(s.reach/s.n);
+    const engR = s.reach > 0 ? ((s.inter/s.reach)*100).toFixed(1) : '0';
+    const barW = Math.round((avgR/maxAvgReach)*100);
+    const isBest = type === bestTypeName;
+    return `<div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="font-weight:700;font-size:13px;color:var(--text);width:72px;flex-shrink:0">${type}${isBest ? ' 🏆' : ''}</div>
+        <div style="flex:1;background:var(--ivory2);border-radius:50px;height:16px;overflow:hidden">
+          <div style="width:${barW}%;height:100%;background:linear-gradient(90deg,var(--rose-lt),var(--burg));border-radius:50px;transition:width .7s ease"></div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--burg);width:60px;text-align:left;flex-shrink:0">${avgR.toLocaleString()}</div>
+      </div>
+      <div style="display:flex;gap:14px;font-size:11px;color:var(--muted);margin-right:80px">
+        <span>${s.n} פוסטים</span><span>Eng: ${engR}%</span>${s.saved ? `<span>💾 ${Math.round(s.saved/s.n)} שמירות</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
 
   document.getElementById('c-patterns').innerHTML = `
     <div class="section-title">📊 תובנות מהתוכן</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px">
       ${bestType ? `<div style="background:var(--white);border-radius:12px;padding:14px;box-shadow:var(--shadow)">
         <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">סוג תוכן מוצלח</div>
-        <div style="font-size:18px;font-weight:800;color:var(--burg)">${bestType[0]}</div>
+        <div style="font-size:18px;font-weight:800;color:var(--burg)">${bestTypeName}</div>
         <div style="font-size:12px;color:var(--muted);margin-top:3px">ממוצע Reach: ${Math.round(bestType[1].reach/bestType[1].n).toLocaleString()}</div>
       </div>` : ''}
       ${bestDay ? `<div style="background:var(--white);border-radius:12px;padding:14px;box-shadow:var(--shadow)">
@@ -925,7 +991,19 @@ function renderContentPatterns(posts) {
         <div style="font-size:18px;font-weight:800;color:var(--burg)">${avgReach.toLocaleString()}</div>
         <div style="font-size:12px;color:var(--muted);margin-top:3px">מתוך ${feedPosts.length} פוסטים</div>
       </div>
-    </div>`;
+    </div>
+    ${weeks.length >= 2 ? `
+    <div class="section-title">📈 מגמת Reach שבועי</div>
+    <div style="background:var(--white);border-radius:var(--r);padding:16px 16px 10px;box-shadow:var(--shadow);margin-bottom:18px">
+      <div style="display:flex;align-items:flex-end;gap:4px">${weekBars}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">ממוצע Reach שבועי · ${weeks.length} שבועות אחרונים</div>
+    </div>` : ''}
+    ${typeRows.length >= 2 ? `
+    <div class="section-title">🔬 השוואת פורמטים</div>
+    <div style="background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:18px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">ממוצע Reach לפוסט לפי סוג תוכן</div>
+      ${formatRows}
+    </div>` : ''}`;
 }
 
 // WEEKLY CALENDAR
