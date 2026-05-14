@@ -364,21 +364,40 @@ tbody tr:hover{background:var(--ivory)}
 
     <!-- CONTENT TAB (Tomer) -->
     <div id="tab-content" hidden>
-      <div class="stats-row">
-        <div class="stat-card"><div class="stat-lbl">סה״כ Reach</div><div class="stat-val" id="c-reach">—</div></div>
-        <div class="stat-card"><div class="stat-lbl">ממוצע אינטראקציות</div><div class="stat-val" id="c-avg">—</div></div>
-        <div class="stat-card"><div class="stat-lbl">פוסטים במעקב</div><div class="stat-val" id="c-count">—</div></div>
+      <!-- Stats row -->
+      <div class="stats-row s4">
+        <div class="stat-card"><div class="stat-lbl">👁 Reach סה"כ</div><div class="stat-val" id="c-reach">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">📊 Engagement Rate</div><div class="stat-val" id="c-engrate">—</div><div class="stat-sub">ממוצע אינטראקציות/Reach</div></div>
+        <div class="stat-card"><div class="stat-lbl">✨ הפוסט הטוב ביותר</div><div class="stat-val" id="c-top-reach">—</div><div class="stat-sub" id="c-top-date"></div></div>
+        <div class="stat-card"><div class="stat-lbl">📅 פוסטים במעקב</div><div class="stat-val" id="c-count">—</div></div>
       </div>
-      <div class="toolbar"><div style="flex:1"></div><button class="refresh-btn" onclick="loadContent()">↻ רענן</button></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>תאריך</th><th>סוג</th><th>👁 Reach</th><th>❤️</th><th>💬</th><th>🔖</th><th>✨ סה״כ</th><th>קישור</th></tr></thead>
-          <tbody id="c-tbody"><tr class="loading-row"><td colspan="8"><div class="spinner"></div></td></tr></tbody>
-        </table>
+
+      <!-- Type filter + refresh -->
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <div id="c-type-filters" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+        <button class="refresh-btn" onclick="loadContent()">↻ רענן</button>
       </div>
+
+      <!-- Top post highlight (hidden until loaded) -->
+      <div id="c-top-card" hidden style="background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:18px;display:flex;gap:16px;align-items:flex-start">
+        <img id="c-top-img" src="" alt="top post" style="width:80px;height:80px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--ivory2)">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px">🏆 הפוסט הטוב ביותר</div>
+          <div id="c-top-stats" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px"></div>
+          <div id="c-top-caption" style="font-size:12px;color:var(--muted);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical"></div>
+        </div>
+        <a id="c-top-link" href="#" target="_blank" style="color:var(--gold);font-size:20px;flex-shrink:0" title="פתח פוסט">↗</a>
+      </div>
+
+      <!-- Posts grid -->
       <div id="c-empty" class="empty-state" hidden>
         <span class="empty-icon">📸</span>הנתונים יופיעו לאחר שהאוטומציה תרוץ לראשונה<br><small>(כל לילה בשעה 2:00)</small>
       </div>
+      <div id="c-loading" style="text-align:center;padding:48px"><div class="spinner"></div></div>
+      <div id="c-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px"></div>
+
+      <!-- Pattern insights (filled by renderContent) -->
+      <div id="c-patterns" style="margin-top:24px"></div>
     </div>
 
   </div>
@@ -521,7 +540,8 @@ const API = {
   bookings: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/bookings',
   content:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content',
   approve:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/approve',
-  ads:      'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/ads'
+  ads:         'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/ads',
+  contentRich: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content-rich'
 };
 let bRows = [], cRows = [], contentLoaded = false, adsLoaded = false, adsData = null;
 
@@ -575,8 +595,12 @@ async function loadBookings() {
 }
 
 async function loadContent() {
-  cRows = await fetchRows(API.content);
+  document.getElementById('c-loading').style.display = 'block';
+  document.getElementById('c-grid').innerHTML = '';
+  cRows = await fetchRows(API.contentRich);
+  if (!cRows.length) cRows = await fetchRows(API.content); // fallback
   contentLoaded = true;
+  document.getElementById('c-loading').style.display = 'none';
   renderContent();
 }
 
@@ -594,7 +618,7 @@ function switchTomerTab(tab) {
     document.getElementById('tab-' + t).hidden = t !== tab;
     document.getElementById('tbtn-' + t).classList.toggle('active', t === tab);
   });
-  if (tab === 'content' && !contentLoaded) loadContent();
+  if (tab === 'content') loadContent();
   if (tab === 'ads' && !adsLoaded) loadAds();
 }
 
@@ -762,23 +786,146 @@ function renderCommissions() {
   }).join('');
 }
 
-// RENDER CONTENT (Tomer)
-function renderContent() {
-  if (!cRows.length) { document.getElementById('c-empty').hidden = false; return; }
+// RENDER CONTENT (Tomer) — rich version with thumbnails
+let cActiveFilter = 'הכל';
+
+function renderContent(filterType) {
+  if (filterType !== undefined) cActiveFilter = filterType;
+  if (!cRows.length) {
+    document.getElementById('c-empty').hidden = false;
+    document.getElementById('c-grid').innerHTML = '';
+    return;
+  }
   document.getElementById('c-empty').hidden = true;
-  document.getElementById('c-reach').textContent = cRows.reduce((s,r) => s + num(r.reach), 0).toLocaleString('he-IL');
-  document.getElementById('c-avg').textContent = Math.round(cRows.reduce((s,r) => s + num(r.totalInteractions), 0) / cRows.length).toLocaleString('he-IL');
-  document.getElementById('c-count').textContent = cRows.length;
-  const sorted = [...cRows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-  document.getElementById('c-tbody').innerHTML = sorted.map(r => `
-    <tr>
-      <td style="white-space:nowrap">${fmtDate(r.timestamp)}</td>
-      <td>${r.mediaType || '-'}</td>
-      <td><strong>${num(r.reach).toLocaleString()}</strong></td>
-      <td>${num(r.likeCount)}</td><td>${num(r.commentsCount)}</td><td>${num(r.saved)}</td>
-      <td style="font-weight:600">${num(r.totalInteractions)}</td>
-      <td>${r.permalink ? `<a href="${r.permalink}" target="_blank" style="color:var(--gold);font-size:16px">↗</a>` : '-'}</td>
-    </tr>`).join('');
+
+  const posts = cRows.filter(r => r.postId); // exclude non-posts
+  const feedPosts = posts.filter(r => r.mediaType !== 'סטורי');
+
+  // Stats
+  const totalReach = posts.reduce((s, r) => s + num(r.reach), 0);
+  const totalInter = feedPosts.reduce((s, r) => s + num(r.totalInteractions), 0);
+  const totalReachFeed = feedPosts.reduce((s, r) => s + num(r.reach), 0);
+  const engRate = totalReachFeed > 0 ? ((totalInter / totalReachFeed) * 100).toFixed(1) + '%' : '—';
+
+  document.getElementById('c-reach').textContent = totalReach.toLocaleString('he-IL');
+  document.getElementById('c-engrate').textContent = engRate;
+  document.getElementById('c-count').textContent = posts.length;
+
+  // Top post by reach
+  const topPost = [...feedPosts].sort((a, b) => num(b.reach) - num(a.reach))[0];
+  if (topPost) {
+    document.getElementById('c-top-reach').textContent = num(topPost.reach).toLocaleString('he-IL');
+    document.getElementById('c-top-date').textContent = fmtDate(topPost.timestamp);
+    const card = document.getElementById('c-top-card');
+    card.hidden = false;
+    const img = document.getElementById('c-top-img');
+    if (topPost.thumbnailUrl) { img.src = topPost.thumbnailUrl; img.onerror = () => { img.style.display = 'none'; }; }
+    else img.style.display = 'none';
+    document.getElementById('c-top-link').href = topPost.permalink || '#';
+    document.getElementById('c-top-caption').textContent = topPost.caption || '';
+    document.getElementById('c-top-stats').innerHTML = [
+      {l:'👁 Reach', v: num(topPost.reach).toLocaleString()},
+      {l:'❤️ לייקים', v: num(topPost.likeCount)},
+      {l:'💬 תגובות', v: num(topPost.commentsCount)},
+      {l:'🔖 שמירות', v: num(topPost.saved)},
+      {l:'✨ אינטראקציות', v: num(topPost.totalInteractions)}
+    ].map(x => `<div><div style="font-size:16px;font-weight:800;color:var(--burg)">${x.v}</div><div style="font-size:10px;color:var(--muted)">${x.l}</div></div>`).join('');
+  }
+
+  // Type filter pills
+  const types = ['הכל', ...new Set(posts.map(r => r.mediaType || 'אחר').filter(Boolean))];
+  document.getElementById('c-type-filters').innerHTML = types.map(t => `
+    <button onclick="renderContent('${t}')" style="padding:5px 14px;border-radius:50px;border:1.5px solid ${cActiveFilter===t?'var(--burg)':'var(--ivory3)'};background:${cActiveFilter===t?'var(--burg)':'var(--white)'};color:${cActiveFilter===t?'#fff':'var(--muted)'};font-family:Rubik,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s">${t}</button>`).join('');
+
+  // Filter posts
+  const filtered = cActiveFilter === 'הכל' ? posts : posts.filter(r => r.mediaType === cActiveFilter);
+  const sorted = [...filtered].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  // Grid of post cards
+  document.getElementById('c-grid').innerHTML = sorted.map(r => {
+    const reach = num(r.reach), inter = num(r.totalInteractions);
+    const engR = reach > 0 ? ((inter / reach) * 100).toFixed(1) + '%' : '—';
+    const typeBadgeColor = r.mediaType === 'וידאו' ? '#EEF2FF' : r.mediaType === 'קרוסלה' ? '#FDF8EE' : r.mediaType === 'סטורי' ? '#FCE7F3' : '#F0FDF4';
+    const typeBadgeText = r.mediaType === 'וידאו' ? '#4338CA' : r.mediaType === 'קרוסלה' ? '#92400E' : r.mediaType === 'סטורי' ? '#9D174D' : '#166534';
+    const hasThumb = r.thumbnailUrl && r.thumbnailUrl.length > 0;
+    return `<div style="background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column">
+      <div style="position:relative;padding-top:100%;background:var(--ivory2);overflow:hidden">
+        ${hasThumb
+          ? `<img src="${r.thumbnailUrl}" alt="post" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<div style=\\"position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px\\">📸</div>'">`
+          : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px">📸</div>`}
+        <div style="position:absolute;top:7px;right:7px">
+          <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:50px;background:${typeBadgeColor};color:${typeBadgeText}">${r.mediaType||'?'}</span>
+        </div>
+        ${r.permalink ? `<a href="${r.permalink}" target="_blank" style="position:absolute;bottom:7px;left:7px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:13px;text-decoration:none">↗</a>` : ''}
+      </div>
+      <div style="padding:10px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${fmtDate(r.timestamp)}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <div style="text-align:center"><div style="font-size:14px;font-weight:800;color:var(--burg)">${reach.toLocaleString()}</div><div style="font-size:9px;color:var(--muted)">👁 Reach</div></div>
+          <div style="text-align:center"><div style="font-size:14px;font-weight:800;color:var(--burg)">${inter}</div><div style="font-size:9px;color:var(--muted)">✨ אינטר'</div></div>
+          <div style="text-align:center"><div style="font-size:13px;font-weight:700;color:var(--gold)">${num(r.likeCount)}</div><div style="font-size:9px;color:var(--muted)">❤️ לייקים</div></div>
+          <div style="text-align:center"><div style="font-size:13px;font-weight:700;color:var(--gold)">${engR}</div><div style="font-size:9px;color:var(--muted)">📊 Eng%</div></div>
+        </div>
+        ${r.caption ? `<div style="font-size:11px;color:var(--muted);margin-top:7px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${r.caption}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Patterns analysis
+  renderContentPatterns(posts);
+}
+
+function renderContentPatterns(posts) {
+  const feedPosts = posts.filter(r => r.mediaType !== 'סטורי' && num(r.reach) > 0);
+  if (feedPosts.length < 3) { document.getElementById('c-patterns').innerHTML = ''; return; }
+
+  // By type
+  const typeStats = {};
+  feedPosts.forEach(r => {
+    const t = r.mediaType || 'אחר';
+    if (!typeStats[t]) typeStats[t] = {reach:0, inter:0, n:0};
+    typeStats[t].reach += num(r.reach);
+    typeStats[t].inter += num(r.totalInteractions);
+    typeStats[t].n++;
+  });
+
+  // By day of week
+  const dayStats = {};
+  const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+  feedPosts.forEach(r => {
+    const d = r.timestamp ? new Date(r.timestamp).getDay() : -1;
+    if (d < 0) return;
+    const dn = dayNames[d];
+    if (!dayStats[dn]) dayStats[dn] = {reach:0, n:0};
+    dayStats[dn].reach += num(r.reach);
+    dayStats[dn].n++;
+  });
+  const bestDay = Object.entries(dayStats).sort((a,b) => (b[1].reach/b[1].n) - (a[1].reach/a[1].n))[0];
+
+  // Best type
+  const bestType = Object.entries(typeStats).sort((a,b) => (b[1].reach/b[1].n) - (a[1].reach/a[1].n))[0];
+
+  const avgReach = Math.round(feedPosts.reduce((s,r) => s + num(r.reach), 0) / feedPosts.length);
+
+  document.getElementById('c-patterns').innerHTML = `
+    <div class="section-title">📊 תובנות מהתוכן</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px">
+      ${bestType ? `<div style="background:var(--white);border-radius:12px;padding:14px;box-shadow:var(--shadow)">
+        <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">סוג תוכן מוצלח</div>
+        <div style="font-size:18px;font-weight:800;color:var(--burg)">${bestType[0]}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">ממוצע Reach: ${Math.round(bestType[1].reach/bestType[1].n).toLocaleString()}</div>
+      </div>` : ''}
+      ${bestDay ? `<div style="background:var(--white);border-radius:12px;padding:14px;box-shadow:var(--shadow)">
+        <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">יום מוצלח לפרסום</div>
+        <div style="font-size:18px;font-weight:800;color:var(--burg)">יום ${bestDay[0]}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">ממוצע Reach: ${Math.round(bestDay[1].reach/bestDay[1].n).toLocaleString()}</div>
+      </div>` : ''}
+      <div style="background:var(--white);border-radius:12px;padding:14px;box-shadow:var(--shadow)">
+        <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">ממוצע Reach לפוסט</div>
+        <div style="font-size:18px;font-weight:800;color:var(--burg)">${avgReach.toLocaleString()}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">מתוך ${feedPosts.length} פוסטים</div>
+      </div>
+    </div>`;
 }
 
 // WEEKLY CALENDAR
