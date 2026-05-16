@@ -492,6 +492,15 @@ tbody tr:hover{background:var(--ivory)}
         <div class="stat-card"><div class="stat-lbl">🔔 לקוחות לא פעילות</div><div class="stat-val" id="rev-inactive-count">—</div></div>
       </div>
 
+      <!-- Campaign mini section -->
+      <div class="section-title" style="margin-top:20px">📢 ביצועי הקמפיין</div>
+      <div class="stats-row s4" id="g-ads-row">
+        <div class="stat-card"><div class="stat-lbl">🎯 פניות מהפרסום</div><div class="stat-val gold" id="g-ads-leads">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">💸 הוצאה על פרסום</div><div class="stat-val" id="g-ads-spend">—</div></div>
+        <div class="stat-card"><div class="stat-lbl">💰 עלות לפנייה</div><div class="stat-val" id="g-ads-cpl">—</div></div>
+        <div class="stat-card" id="g-ads-status-card"><div class="stat-lbl">מצב הקמפיין</div><div class="stat-val" id="g-ads-status">—</div></div>
+      </div>
+
       <div class="toolbar" style="margin-bottom:12px">
         <div style="flex:1;font-size:12px;color:var(--muted)">מתעדכן אוטומטית לפי תאריכי התורים</div>
         <button class="refresh-btn" onclick="loadGaya()">↻ רענן נתונים</button>
@@ -640,6 +649,33 @@ async function loadGaya() {
   renderGayaNew();
   renderRevenue();
   renderGaya();
+  loadGayaAds();
+}
+
+async function loadGayaAds() {
+  try {
+    const r = await fetch(API.ads);
+    if (!r.ok) return;
+    const d = await r.json();
+    if (!d.ok) return;
+    const ins = d.insights || {};
+    const leads = ins.leads ?? '—';
+    const spend = ins.spend != null ? '₪' + ins.spend : '—';
+    const cpl = ins.cost_per_lead ? '₪' + ins.cost_per_lead : (leads === 0 ? '—' : '—');
+    const score = (d.score || {}).total || 0;
+    let statusText, statusColor;
+    if (ins.leads > 0 && ins.cost_per_lead < 150) { statusText = 'משתלם 🟢'; statusColor = 'var(--approved)'; }
+    else if (ins.leads > 0 && ins.cost_per_lead < 250) { statusText = 'סביר 🟡'; statusColor = '#b45309'; }
+    else if (ins.leads > 0) { statusText = 'יקר 🔴'; statusColor = 'var(--burg)'; }
+    else { statusText = 'ממתין לנתונים'; statusColor = 'var(--muted)'; }
+    document.getElementById('g-ads-leads').textContent = leads !== '—' ? leads : '—';
+    document.getElementById('g-ads-spend').textContent = spend;
+    document.getElementById('g-ads-cpl').textContent = cpl;
+    const statusEl = document.getElementById('g-ads-status');
+    statusEl.textContent = statusText;
+    statusEl.style.color = statusColor;
+    statusEl.style.fontSize = '14px';
+  } catch {}
 }
 
 // TABS
