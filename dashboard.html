@@ -644,7 +644,14 @@ async function syncAndReloadContent() {
 }
 
 async function loadGaya() {
-  [bRows, cRows] = await Promise.all([fetchRows(API.bookings), fetchRows(API.content)]);
+  const richFetch = (async () => {
+    try {
+      const r = await fetch(API.contentRich);
+      if (r.ok) { const d = await r.json(); return Array.isArray(d.rows) ? d.rows : []; }
+    } catch {}
+    return fetchRows(API.content);
+  })();
+  [bRows, cRows] = await Promise.all([fetchRows(API.bookings), richFetch]);
   renderWeeklyCalendar();
   renderGayaNew();
   renderRevenue();
@@ -707,12 +714,23 @@ function num(v) { return Number(v) || 0; }
 
 function parseApptDate(dateStr) {
   if (!dateStr) return null;
-  const parts = String(dateStr).split(' ')[0].split('/');
-  if (parts.length < 3) return null;
-  const [dd, mm, yyyy] = parts;
-  const d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
-  d.setHours(0, 0, 0, 0);
-  return isNaN(d) ? null : d;
+  const s = String(dateStr).trim().split(' ')[0].split('T')[0];
+  // DD/MM/YYYY
+  const slashParts = s.split('/');
+  if (slashParts.length >= 3) {
+    const [dd, mm, yyyy] = slashParts;
+    const d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
+    d.setHours(0, 0, 0, 0);
+    if (!isNaN(d)) return d;
+  }
+  // YYYY-MM-DD (ISO)
+  const dashParts = s.split('-');
+  if (dashParts.length >= 3) {
+    const d = new Date(parseInt(dashParts[0]), parseInt(dashParts[1]) - 1, parseInt(dashParts[2]));
+    d.setHours(0, 0, 0, 0);
+    if (!isNaN(d)) return d;
+  }
+  return null;
 }
 
 const HE_MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
@@ -866,7 +884,7 @@ function renderContent(filterType, monthFilter) {
   }
   document.getElementById('c-empty').hidden = true;
 
-  const posts = cRows.filter(r => r.postId);
+  const posts = cRows.filter(r => r.postId && r.mediaType !== 'סטורי');
 
   // Month filtering
   const heMonthsMap = {ינואר:1,פברואר:2,'מרץ':3,אפריל:4,מאי:5,יוני:6,יולי:7,אוגוסט:8,ספטמבר:9,אוקטובר:10,נובמבר:11,דצמבר:12};
@@ -1101,11 +1119,13 @@ function renderWeeklyCalendar() {
 
   bRows.forEach(r => {
     const dateStr = (r['תאריך תור'] || '').trim();
-    const parts = dateStr.split(' ');
-    const d = parseApptDate(parts[0]);
+    const spaceParts = dateStr.split(' ');
+    const d = parseApptDate(spaceParts[0]);
     if (!d) return;
+    let time = spaceParts[1] || '';
+    if (!time && spaceParts[0].includes('T')) time = (spaceParts[0].split('T')[1] || '').substring(0, 5);
     const key = d.toDateString();
-    if (byDay[key] !== undefined) byDay[key].push({...r, _time: parts[1] || ''});
+    if (byDay[key] !== undefined) byDay[key].push({...r, _time: time});
   });
 
   days.forEach(d => {
@@ -1448,22 +1468,32 @@ async function approveRow(rowIndex) {
 function renderGaya() {
   const now = new Date();
   const ym = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  const thisMonth = cRows.filter(r => (r.timestamp || '').startsWith(ym));
+  const feedRows = cRows.filter(r => r.mediaType !== 'סטורי');
+  const thisMonth = feedRows.filter(r => (r.timestamp || '').startsWith(ym));
   document.getElementById('g-reach').textContent = thisMonth.reduce((s,r) => s + num(r.reach), 0).toLocaleString('he-IL');
-  document.getElementById('g-avg').textContent = cRows.length ? Math.round(cRows.reduce((s,r) => s + num(r.totalInteractions), 0) / cRows.length).toLocaleString('he-IL') : '0';
+  document.getElementById('g-avg').textContent = feedRows.length ? Math.round(feedRows.reduce((s,r) => s + num(r.totalInteractions), 0) / feedRows.length).toLocaleString('he-IL') : '0';
   document.getElementById('g-posts').textContent = thisMonth.length;
-  if (!cRows.length) { document.getElementById('g-empty').hidden = false; return; }
-  const recent = [...cRows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
+  if (!feedRows.length) { document.getElementById('g-empty').hidden = false; return; }
+  const recent = [...feedRows].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
   document.getElementById('g-grid').innerHTML = recent.map(r => `
-    <div class="post-card">
-      <div class="post-date">${fmtDate(r.timestamp)}</div>
-      <span class="post-type-badge">${r.mediaType || 'פוסט'}</span>
-      <div class="post-metrics">
-        <div class="pm"><div class="pm-val">${num(r.reach).toLocaleString()}</div><span class="pm-lbl">👁 Reach</span></div>
-        <div class="pm"><div class="pm-val">${num(r.likeCount)}</div><span class="pm-lbl">❤️ לייקים</span></div>
-        <div class="pm"><div class="pm-val">${num(r.totalInteractions)}</div><span class="pm-lbl">✨ אינטראקציות</span></div>
+    <div class="post-card" style="padding:0;overflow:hidden">
+      <div style="position:relative;padding-top:100%;background:var(--ivory2)">
+        ${r.thumbnailUrl
+          ? `<img src="${r.thumbnailUrl}" alt="post" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<div style=\\"position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px\\">📸</div>'">`
+          : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px">📸</div>`}
+        <div style="position:absolute;top:7px;right:7px">
+          <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:50px;background:rgba(255,255,255,.88);color:var(--burg)">${r.mediaType || 'פוסט'}</span>
+        </div>
+        ${r.permalink ? `<a href="${r.permalink}" target="_blank" style="position:absolute;bottom:7px;left:7px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:13px;text-decoration:none">↗</a>` : ''}
       </div>
-      ${r.permalink ? `<a class="post-link" href="${r.permalink}" target="_blank">צפי בפוסט ↗</a>` : ''}
+      <div style="padding:10px">
+        <div class="post-date">${fmtDate(r.timestamp)}</div>
+        <div class="post-metrics">
+          <div class="pm"><div class="pm-val">${num(r.reach).toLocaleString()}</div><span class="pm-lbl">👁 Reach</span></div>
+          <div class="pm"><div class="pm-val">${num(r.likeCount)}</div><span class="pm-lbl">❤️ לייקים</span></div>
+          <div class="pm"><div class="pm-val">${num(r.totalInteractions)}</div><span class="pm-lbl">✨ אינטר'</span></div>
+        </div>
+      </div>
     </div>`).join('');
 }
 
