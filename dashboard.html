@@ -285,6 +285,19 @@ tbody tr:hover{background:var(--ivory)}
 .prom-notes{font-size:12px;color:var(--muted);line-height:1.5;font-style:italic}
 .prom-copy{font-size:11px;color:var(--gold);font-weight:600;background:none;border:none;cursor:pointer;padding:0;float:left}
 
+/* CONTENT RULES */
+.rules-cat-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin:20px 0 10px;padding-bottom:6px;border-bottom:1.5px solid var(--ivory3)}
+.rules-cat-title:first-child{margin-top:4px}
+.rule-card{background:var(--white);border-radius:var(--r);padding:13px 15px;box-shadow:var(--shadow);margin-bottom:7px;display:flex;align-items:flex-start;gap:12px}
+.rule-card.rule-inactive{opacity:.55}
+.rule-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.rule-dot.on{background:var(--green)}
+.rule-dot.off{background:var(--ivory3)}
+.rule-text{flex:1;font-size:13px;color:var(--text);line-height:1.5}
+.rule-card.rule-inactive .rule-text{text-decoration:line-through;color:var(--muted)}
+.rule-toggle-btn{padding:4px 10px;border-radius:8px;border:1.5px solid var(--ivory3);background:var(--white);font-family:Rubik,sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;flex-shrink:0;transition:all .2s;white-space:nowrap}
+.rule-toggle-btn:hover{border-color:var(--rose);color:var(--burg)}
+
 /* ADD PROMPT MODAL */
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:flex-end;justify-content:center}
 .modal-sh{background:var(--white);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto}
@@ -453,6 +466,7 @@ tbody tr:hover{background:var(--ivory)}
         <button class="stab-btn"        id="cstab-board"   onclick="switchCSubTab('board')">🗓️ לוח שבועי</button>
         <button class="stab-btn"        id="cstab-library" onclick="switchCSubTab('library')">🗂️ ספריה</button>
         <button class="stab-btn"        id="cstab-prompts" onclick="switchCSubTab('prompts')">💡 פרומפטים</button>
+        <button class="stab-btn"        id="cstab-rules"   onclick="switchCSubTab('rules')">📋 כללי תוכן</button>
       </div>
 
       <!-- PERFORMANCE (existing analytics) -->
@@ -517,6 +531,17 @@ tbody tr:hover{background:var(--ivory)}
         <div id="cs-prom-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
         <div id="cs-prom-empty" class="empty-state" hidden><span class="empty-icon">💡</span>אין פרומפטים שמורים עדיין<br><small>לחצו + כדי להוסיף את הראשון</small></div>
         <div id="cs-prom-grid"></div>
+      </div>
+
+      <!-- CONTENT RULES (Tomer - edit) -->
+      <div id="cs-rules" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">כללים שמדריכים אותנו ביצירת תוכן נכון לעסק 📋<br>לחץ ⏸ להשבית / ▶️ להפעיל כלל</div>
+          <button class="approve-btn" onclick="showAddRuleModal()">+ הוסף כלל</button>
+        </div>
+        <div id="cs-rules-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
+        <div id="cs-rules-empty" class="empty-state" hidden><span class="empty-icon">📋</span>אין כללים עדיין<br><small>לחצו + כדי להוסיף את הראשון</small></div>
+        <div id="cs-rules-grid"></div>
       </div>
 
     </div>
@@ -653,6 +678,7 @@ tbody tr:hover{background:var(--ivory)}
         <button class="stab-btn active" id="gstab-board"   onclick="switchGCSubTab('board')">🗓️ לוח שבועי</button>
         <button class="stab-btn"        id="gstab-library" onclick="switchGCSubTab('library')">🗂️ ספריה</button>
         <button class="stab-btn"        id="gstab-prompts" onclick="switchGCSubTab('prompts')">💡 פרומפטים</button>
+        <button class="stab-btn"        id="gstab-rules"   onclick="switchGCSubTab('rules')">📋 כללי תוכן</button>
       </div>
 
       <!-- WEEKLY BOARD -->
@@ -689,6 +715,14 @@ tbody tr:hover{background:var(--ivory)}
         <div id="gcs-prom-grid"></div>
       </div>
 
+      <!-- CONTENT RULES (Gaya - read only) -->
+      <div id="gcs-rules" hidden>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px">כללים שמדריכים אותנו ביצירת תוכן נכון לעסק 📋</div>
+        <div id="gcs-rules-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
+        <div id="gcs-rules-empty" class="empty-state" hidden><span class="empty-icon">📋</span>אין כללים עדיין</div>
+        <div id="gcs-rules-grid"></div>
+      </div>
+
     </div>
 
   </div>
@@ -706,10 +740,14 @@ const API = {
   scheduleView:'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/schedule-view',
   contentLib:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content-library',
   promptsLib:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/prompts-lib',
-  savePrompt:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/save-prompt'
+  savePrompt:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/save-prompt',
+  contentRules:'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content-rules',
+  saveRule:    'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/save-rule',
+  toggleRule:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/toggle-rule'
 };
 let bRows = [], cRows = [], cProfile = {}, contentLoaded = false, adsLoaded = false, adsData = null;
-let schedRows = [], libRows = [], promRows = [], schedLoaded = false, libLoaded = false, promLoaded = false;
+let schedRows = [], libRows = [], promRows = [], rulesRows = [];
+let schedLoaded = false, libLoaded = false, promLoaded = false, rulesLoaded = false;
 let wbWeekOffset = 0; // 0 = current week
 
 // AUTH
@@ -732,7 +770,9 @@ function doLogout() {
   document.getElementById('pw-input').value = '';
   document.getElementById('login-err').textContent = '';
   bRows = []; cRows = []; cProfile = {}; cActiveMonth = null; contentLoaded = false;
-  schedRows = []; libRows = []; promRows = []; schedLoaded = false; libLoaded = false; promLoaded = false; wbWeekOffset = 0; libFilter = 'הכל';
+  schedRows = []; libRows = []; promRows = []; rulesRows = [];
+  schedLoaded = false; libLoaded = false; promLoaded = false; rulesLoaded = false;
+  wbWeekOffset = 0; libFilter = 'הכל';
 }
 
 function showView(role) {
@@ -857,23 +897,25 @@ function switchGayaTab(tab) {
 
 // ── CONTENT SUB-TAB SWITCHING ──────────────────────────────────────────────
 function switchCSubTab(tab) {
-  ['perf','board','library','prompts'].forEach(t => {
+  ['perf','board','library','prompts','rules'].forEach(t => {
     document.getElementById('cs-' + t).hidden = t !== tab;
     document.getElementById('cstab-' + t).classList.toggle('active', t === tab);
   });
   if (tab === 'board')   loadScheduleView('cs');
   if (tab === 'library') loadLibrary('cs');
   if (tab === 'prompts') loadPromptsLib('cs');
+  if (tab === 'rules')   loadContentRules('cs');
 }
 
 function switchGCSubTab(tab) {
-  ['board','library','prompts'].forEach(t => {
+  ['board','library','prompts','rules'].forEach(t => {
     document.getElementById('gcs-' + t).hidden = t !== tab;
     document.getElementById('gstab-' + t).classList.toggle('active', t === tab);
   });
   if (tab === 'board')   loadScheduleView('gcs');
   if (tab === 'library') loadLibrary('gcs');
   if (tab === 'prompts') loadPromptsLib('gcs');
+  if (tab === 'rules')   loadContentRules('gcs');
 }
 
 // ── WEEKLY BOARD ──────────────────────────────────────────────────────────
@@ -1170,6 +1212,112 @@ async function submitPrompt() {
     loadPromptsLib(role === 'tomer' ? 'cs' : 'gcs');
   } catch {
     btn.disabled = false; btn.textContent = 'שמור פרומפט';
+    alert('שגיאה בשמירה - נסה שנית');
+  }
+}
+
+// ── CONTENT RULES ─────────────────────────────────────────────────────────
+async function loadContentRules(prefix) {
+  const gridEl  = document.getElementById(prefix + '-rules-grid');
+  const loadEl  = document.getElementById(prefix + '-rules-load');
+  const emptyEl = document.getElementById(prefix + '-rules-empty');
+  if (!gridEl) return;
+  loadEl.hidden = false; gridEl.innerHTML = ''; if(emptyEl) emptyEl.hidden = true;
+  if (!rulesLoaded) {
+    try {
+      const r = await fetch(API.contentRules);
+      const d = await r.json();
+      rulesRows = (d.rows || []).filter(row => row['rule']);
+      rulesLoaded = true;
+    } catch { rulesRows = []; }
+  }
+  loadEl.hidden = true;
+  if (!rulesRows.length) { if(emptyEl) emptyEl.hidden = false; return; }
+  renderRulesGrid(prefix, rulesRows);
+}
+
+function renderRulesGrid(prefix, rows) {
+  const gridEl = document.getElementById(prefix + '-rules-grid');
+  const isTomer = sessionStorage.getItem('gl_role') === 'tomer';
+  if (!gridEl) return;
+  const cats = {};
+  rows.forEach(r => { const c = r['category'] || 'כללי'; (cats[c] = cats[c] || []).push(r); });
+  gridEl.innerHTML = Object.entries(cats).map(([cat, items]) => `
+    <div class="rules-cat-title">${cat} <span style="font-weight:400;font-size:11px;letter-spacing:0;text-transform:none;color:var(--muted)">(${items.filter(r=>(r['active']||'TRUE').toUpperCase()!=='FALSE').length} פעילים)</span></div>
+    ${items.map(r => {
+      const active = (r['active'] || 'TRUE').toUpperCase() !== 'FALSE';
+      const rowNum = r['_rowNumber'] || '';
+      const toggleBtn = (isTomer && rowNum)
+        ? `<button class="rule-toggle-btn" onclick="toggleRule(${rowNum},${active})">${active ? '⏸ השבת' : '▶️ הפעל'}</button>`
+        : '';
+      return `<div class="rule-card${active ? '' : ' rule-inactive'}">
+        <div class="rule-dot ${active ? 'on' : 'off'}"></div>
+        <div class="rule-text">${r['rule']}</div>
+        ${toggleBtn}
+      </div>`;
+    }).join('')}
+  `).join('');
+}
+
+async function toggleRule(rowNumber, currentActive) {
+  try {
+    const newActive = currentActive ? 'FALSE' : 'TRUE';
+    await fetch(API.toggleRule, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ rowNumber, active: newActive })
+    });
+    rulesLoaded = false;
+    const role = sessionStorage.getItem('gl_role');
+    loadContentRules(role === 'tomer' ? 'cs' : 'gcs');
+  } catch { alert('שגיאה בעדכון'); }
+}
+
+function showAddRuleModal() {
+  const ov = document.createElement('div');
+  ov.className = 'modal-ov'; ov.id = 'rule-modal-ov';
+  ov.innerHTML = `
+    <div class="modal-sh" onclick="event.stopPropagation()">
+      <div class="modal-ttl">📋 הוסף כלל תוכן</div>
+      <div class="mfield">
+        <label class="mlbl">קטגוריה</label>
+        <select id="rm-cat" class="mselect">
+          <option>טון וסגנון</option><option>מבנה פוסט</option><option>ויזואל ומדיה</option>
+          <option>hashtags</option><option>מה להימנע</option><option>כללי</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label class="mlbl">הכלל</label>
+        <textarea id="rm-rule" class="mtextarea" style="min-height:80px" placeholder="לדוגמה: כותרת פותחת עם שאלה או אמוג'י שמושך תשומת לב"></textarea>
+      </div>
+      <div class="modal-acts">
+        <button class="modal-cancel" onclick="closeRuleModal()">ביטול</button>
+        <button class="modal-save" id="rm-save-btn" onclick="submitRule()">שמור כלל</button>
+      </div>
+    </div>`;
+  ov.onclick = closeRuleModal;
+  document.body.appendChild(ov);
+}
+
+function closeRuleModal() {
+  const ov = document.getElementById('rule-modal-ov');
+  if (ov) ov.remove();
+}
+
+async function submitRule() {
+  const btn = document.getElementById('rm-save-btn');
+  const rule = document.getElementById('rm-rule').value.trim();
+  if (!rule) { document.getElementById('rm-rule').style.borderColor = 'var(--rose)'; return; }
+  btn.disabled = true; btn.textContent = 'שומר...';
+  try {
+    await fetch(API.saveRule, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ category: document.getElementById('rm-cat').value, rule, active: 'TRUE' })
+    });
+    rulesLoaded = false;
+    closeRuleModal();
+    loadContentRules('cs');
+  } catch {
+    btn.disabled = false; btn.textContent = 'שמור כלל';
     alert('שגיאה בשמירה - נסה שנית');
   }
 }
