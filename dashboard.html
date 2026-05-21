@@ -221,6 +221,87 @@ tbody tr:hover{background:var(--ivory)}
 .pm-lbl{font-size:10px;color:var(--muted);display:block;margin-top:2px}
 .post-link{margin-top:12px;display:inline-block;font-size:12px;color:var(--gold);font-weight:600}
 .post-link:hover{text-decoration:underline}
+
+/* CONTENT MANAGEMENT - Sub-tabs */
+.stab-nav{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.stab-btn{padding:7px 16px;border-radius:50px;border:1.5px solid var(--ivory3);background:var(--white);
+  color:var(--muted);font-family:Rubik,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.stab-btn.active{background:var(--burg);color:#fff;border-color:var(--burg)}
+
+/* WEEKLY BOARD */
+.wb-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+.wb-grid{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:8px;min-width:700px}
+.wb-day{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.wb-day-hdr{padding:8px 10px;text-align:center;background:var(--ivory2)}
+.wb-day.wb-today .wb-day-hdr{background:linear-gradient(135deg,var(--rose-lt),#f5dde5)}
+.wb-day-name{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.4px}
+.wb-day-num{font-size:22px;font-weight:800;color:var(--burg);line-height:1.1;margin-top:2px}
+.wb-day.wb-today .wb-day-num{color:var(--rose)}
+.wb-day-body{padding:7px;min-height:60px;display:flex;flex-direction:column;gap:5px}
+.wb-post{border-radius:7px;padding:6px 8px;font-size:11px;cursor:default}
+.wb-post.wp-sched{background:#EEF2FF;border-right:3px solid #4338CA}
+.wb-post.wp-pub{background:var(--green-lt);border-right:3px solid var(--green)}
+.wb-post.wp-fail{background:#FEE2E2;border-right:3px solid #991B1B}
+.wb-post-time{font-size:10px;font-weight:700;color:var(--muted)}
+.wb-post-type{display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:50px;background:var(--rose-lt);color:var(--burg);margin-right:3px}
+.wb-post-cap{font-size:11px;color:var(--text);margin-top:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.3}
+.wb-empty-day{text-align:center;padding:14px 0;color:var(--ivory3);font-size:20px}
+
+/* CONTENT LIBRARY */
+.clib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.clib-card{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.clib-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(122,21,21,.13)}
+.clib-thumb{position:relative;padding-top:100%;background:var(--ivory2);flex-shrink:0}
+.clib-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.clib-thumb-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px}
+.clib-badge-tl{position:absolute;top:8px;right:8px}
+.clib-badge-tr{position:absolute;top:8px;left:8px}
+.clib-body{padding:12px;flex:1;display:flex;flex-direction:column;gap:5px}
+.clib-date{font-size:11px;color:var(--muted)}
+.clib-caption{font-size:12px;color:var(--text);line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;flex:1}
+.clib-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.clib-tag{font-size:10px;background:var(--ivory2);color:var(--muted);padding:1px 7px;border-radius:50px}
+.clib-actions{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--ivory3)}
+.clib-act{flex:1;padding:6px 4px;border:1.5px solid var(--ivory3);border-radius:8px;background:var(--white);
+  font-family:Rubik,sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center}
+.clib-act:hover{border-color:var(--rose);color:var(--burg)}
+
+/* STATUS BADGES */
+.sbadge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:50px}
+.sbadge-sched{background:#EEF2FF;color:#4338CA}
+.sbadge-pub{background:var(--green-lt);color:var(--green)}
+.sbadge-draft{background:var(--gold-lt);color:#92400E}
+.sbadge-fail{background:#FEE2E2;color:#991B1B}
+
+/* PROMPTS */
+.prom-section-title{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin:18px 0 10px;padding-bottom:6px;border-bottom:1.5px solid var(--ivory3)}
+.prom-card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:10px}
+.prom-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.prom-tool{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;background:var(--gold-lt);color:#92400E;flex-shrink:0;white-space:nowrap}
+.prom-title{font-weight:700;font-size:14px;color:var(--text)}
+.prom-cat{font-size:11px;color:var(--muted);margin-top:1px}
+.prom-text{background:var(--ivory2);border-radius:8px;padding:10px 12px;font-size:12px;
+  color:var(--text);line-height:1.6;white-space:pre-wrap;word-break:break-word;margin-bottom:6px;font-family:monospace}
+.prom-notes{font-size:12px;color:var(--muted);line-height:1.5;font-style:italic}
+.prom-copy{font-size:11px;color:var(--gold);font-weight:600;background:none;border:none;cursor:pointer;padding:0;float:left}
+
+/* ADD PROMPT MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:flex-end;justify-content:center}
+.modal-sh{background:var(--white);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto}
+.modal-ttl{font-size:17px;font-weight:800;color:var(--burg);margin-bottom:20px}
+.mfield{margin-bottom:14px}
+.mlbl{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;display:block}
+.minput,.mselect,.mtextarea{width:100%;padding:10px 14px;border:1.5px solid var(--ivory3);border-radius:10px;
+  font-family:Rubik,sans-serif;font-size:14px;color:var(--text);background:var(--ivory);outline:none;transition:border-color .2s;-webkit-appearance:none}
+.minput:focus,.mselect:focus,.mtextarea:focus{border-color:var(--rose)}
+.mtextarea{min-height:100px;resize:vertical}
+.modal-acts{display:flex;gap:10px;margin-top:20px}
+.modal-cancel{flex:1;padding:12px;border:1.5px solid var(--ivory3);border-radius:10px;background:var(--white);
+  font-family:Rubik,sans-serif;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer}
+.modal-save{flex:2;padding:12px;border:none;border-radius:10px;
+  background:linear-gradient(135deg,var(--burg),var(--burg2));color:#fff;
+  font-family:Rubik,sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.modal-save:disabled{opacity:.5;cursor:default}
 </style>
 </head>
 <body>
@@ -365,45 +446,79 @@ tbody tr:hover{background:var(--ivory)}
 
     <!-- CONTENT TAB (Tomer) -->
     <div id="tab-content" hidden>
-      <!-- Stats row -->
-      <div class="stats-row s5">
-        <div class="stat-card"><div class="stat-lbl">👁 Reach סה"כ</div><div class="stat-val" id="c-reach">—</div></div>
-        <div class="stat-card"><div class="stat-lbl">📊 Engagement Rate</div><div class="stat-val" id="c-engrate">—</div><div class="stat-sub">ממוצע אינטראקציות/Reach</div></div>
-        <div class="stat-card"><div class="stat-lbl">✨ הפוסט הטוב ביותר</div><div class="stat-val" id="c-top-reach">—</div><div class="stat-sub" id="c-top-date"></div></div>
-        <div class="stat-card"><div class="stat-lbl">📅 פוסטים במעקב</div><div class="stat-val" id="c-count">—</div></div>
-        <div class="stat-card"><div class="stat-lbl">👥 עוקבים</div><div class="stat-val" id="c-followers">—</div></div>
+
+      <!-- Sub-tab nav -->
+      <div class="stab-nav">
+        <button class="stab-btn active" id="cstab-perf"    onclick="switchCSubTab('perf')">📊 ביצועים</button>
+        <button class="stab-btn"        id="cstab-board"   onclick="switchCSubTab('board')">🗓️ לוח שבועי</button>
+        <button class="stab-btn"        id="cstab-library" onclick="switchCSubTab('library')">🗂️ ספריה</button>
+        <button class="stab-btn"        id="cstab-prompts" onclick="switchCSubTab('prompts')">💡 פרומפטים</button>
       </div>
 
-      <!-- Month filter -->
-      <div id="c-month-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
-
-      <!-- Type filter + refresh -->
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-        <div id="c-type-filters" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
-        <button class="refresh-btn" id="c-sync-btn" onclick="syncAndReloadContent()" title="סנכרן פוסטים חדשים מאינסטגרם">🔄 סנכרן</button>
-        <button class="refresh-btn" onclick="loadContent()">↻ רענן</button>
-      </div>
-
-      <!-- Top post highlight (hidden until loaded) -->
-      <div id="c-top-card" hidden style="background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:18px;display:flex;gap:16px;align-items:flex-start">
-        <img id="c-top-img" src="" alt="top post" style="width:80px;height:80px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--ivory2)">
-        <div style="flex:1;min-width:0">
-          <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px">🏆 הפוסט הטוב ביותר</div>
-          <div id="c-top-stats" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px"></div>
-          <div id="c-top-caption" style="font-size:12px;color:var(--muted);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical"></div>
+      <!-- PERFORMANCE (existing analytics) -->
+      <div id="cs-perf">
+        <div class="stats-row s5">
+          <div class="stat-card"><div class="stat-lbl">👁 Reach סה"כ</div><div class="stat-val" id="c-reach">—</div></div>
+          <div class="stat-card"><div class="stat-lbl">📊 Engagement Rate</div><div class="stat-val" id="c-engrate">—</div><div class="stat-sub">ממוצע אינטראקציות/Reach</div></div>
+          <div class="stat-card"><div class="stat-lbl">✨ הפוסט הטוב ביותר</div><div class="stat-val" id="c-top-reach">—</div><div class="stat-sub" id="c-top-date"></div></div>
+          <div class="stat-card"><div class="stat-lbl">📅 פוסטים במעקב</div><div class="stat-val" id="c-count">—</div></div>
+          <div class="stat-card"><div class="stat-lbl">👥 עוקבים</div><div class="stat-val" id="c-followers">—</div></div>
         </div>
-        <a id="c-top-link" href="#" target="_blank" style="color:var(--gold);font-size:20px;flex-shrink:0" title="פתח פוסט">↗</a>
+        <div id="c-month-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+          <div id="c-type-filters" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+          <button class="refresh-btn" id="c-sync-btn" onclick="syncAndReloadContent()" title="סנכרן פוסטים חדשים מאינסטגרם">🔄 סנכרן</button>
+          <button class="refresh-btn" onclick="loadContent()">↻ רענן</button>
+        </div>
+        <div id="c-top-card" hidden style="background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:18px;display:flex;gap:16px;align-items:flex-start">
+          <img id="c-top-img" src="" alt="top post" style="width:80px;height:80px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--ivory2)">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px">🏆 הפוסט הטוב ביותר</div>
+            <div id="c-top-stats" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px"></div>
+            <div id="c-top-caption" style="font-size:12px;color:var(--muted);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical"></div>
+          </div>
+          <a id="c-top-link" href="#" target="_blank" style="color:var(--gold);font-size:20px;flex-shrink:0" title="פתח פוסט">↗</a>
+        </div>
+        <div id="c-empty" class="empty-state" hidden><span class="empty-icon">📸</span>הנתונים יופיעו לאחר שהאוטומציה תרוץ לראשונה<br><small>(כל לילה בשעה 2:00)</small></div>
+        <div id="c-loading" style="text-align:center;padding:48px"><div class="spinner"></div></div>
+        <div id="c-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px"></div>
+        <div id="c-patterns" style="margin-top:24px"></div>
       </div>
 
-      <!-- Posts grid -->
-      <div id="c-empty" class="empty-state" hidden>
-        <span class="empty-icon">📸</span>הנתונים יופיעו לאחר שהאוטומציה תרוץ לראשונה<br><small>(כל לילה בשעה 2:00)</small>
+      <!-- WEEKLY BOARD -->
+      <div id="cs-board" hidden>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <button class="refresh-btn" onclick="shiftWeek(-1)">→ שבוע קודם</button>
+          <div id="cs-board-lbl" style="font-size:13px;font-weight:700;color:var(--burg);text-align:center"></div>
+          <button class="refresh-btn" onclick="shiftWeek(1)">שבוע הבא ←</button>
+        </div>
+        <div id="cs-board-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
+        <div id="cs-board-empty" class="empty-state" hidden><span class="empty-icon">🗓️</span>אין פרסומים מתוכננים לשבוע זה</div>
+        <div class="wb-wrap"><div id="cs-board-grid" class="wb-grid"></div></div>
       </div>
-      <div id="c-loading" style="text-align:center;padding:48px"><div class="spinner"></div></div>
-      <div id="c-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px"></div>
 
-      <!-- Pattern insights (filled by renderContent) -->
-      <div id="c-patterns" style="margin-top:24px"></div>
+      <!-- CONTENT LIBRARY -->
+      <div id="cs-library" hidden>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <div id="cs-lib-filters" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+          <button class="refresh-btn" onclick="loadLibrary('cs')">↻ רענן</button>
+        </div>
+        <div id="cs-lib-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
+        <div id="cs-lib-empty" class="empty-state" hidden><span class="empty-icon">🗂️</span>ספריית התוכן ריקה<br><small>הוסיפו תוכן דרך הגיליון</small></div>
+        <div id="cs-lib-grid" class="clib-grid"></div>
+      </div>
+
+      <!-- PROMPTS -->
+      <div id="cs-prompts" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">כשמשהו יוצא יפה — שומרים כאן את הפרומפט כדי לחזור עליו 💡</div>
+          <button class="approve-btn" onclick="showPromptModal()">+ הוסף פרומפט</button>
+        </div>
+        <div id="cs-prom-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
+        <div id="cs-prom-empty" class="empty-state" hidden><span class="empty-icon">💡</span>אין פרומפטים שמורים עדיין<br><small>לחצו + כדי להוסיף את הראשון</small></div>
+        <div id="cs-prom-grid"></div>
+      </div>
+
     </div>
 
   </div>
@@ -526,24 +641,54 @@ tbody tr:hover{background:var(--ivory)}
 
     <!-- GAYA - תוכן -->
     <div id="tab-g-content" hidden>
-      <div class="bot-section">
+      <div class="bot-section" style="padding-bottom:12px">
         <a href="https://t.me/goodlak_content_bot" target="_blank" class="bot-btn">
           <span style="font-size:20px">🤖</span> פתחי את בוט התוכן
         </a>
         <div class="bot-hint">שלחי תמונה לבוט ← פוסט / סטורי / שניהם ← תמונה מעוצבת + כיתוב AI 🌸</div>
       </div>
 
-      <div class="section-title" style="margin-top:4px">📸 אינסטגרם</div>
-      <div class="stats-row">
-        <div class="stat-card"><div class="stat-lbl">Reach החודש</div><div class="stat-val" id="g-reach">—</div></div>
-        <div class="stat-card"><div class="stat-lbl">ממוצע אינטראקציות</div><div class="stat-val" id="g-avg">—</div></div>
-        <div class="stat-card"><div class="stat-lbl">פוסטים החודש</div><div class="stat-val" id="g-posts">—</div></div>
+      <!-- Sub-tab nav -->
+      <div class="stab-nav">
+        <button class="stab-btn active" id="gstab-board"   onclick="switchGCSubTab('board')">🗓️ לוח שבועי</button>
+        <button class="stab-btn"        id="gstab-library" onclick="switchGCSubTab('library')">🗂️ ספריה</button>
+        <button class="stab-btn"        id="gstab-prompts" onclick="switchGCSubTab('prompts')">💡 פרומפטים</button>
       </div>
-      <div class="section-title">הפוסטים האחרונים</div>
-      <div id="g-grid" class="posts-grid"></div>
-      <div id="g-empty" class="empty-state" hidden>
-        <span class="empty-icon">🌸</span>הנתונים יופיעו לאחר שהפוסטים הראשונים ייסרקו<br><small>(כל לילה ב-2:00)</small>
+
+      <!-- WEEKLY BOARD -->
+      <div id="gcs-board">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <button class="refresh-btn" onclick="shiftWeek(-1)">→ שבוע קודם</button>
+          <div id="gcs-board-lbl" style="font-size:13px;font-weight:700;color:var(--rose);text-align:center"></div>
+          <button class="refresh-btn" onclick="shiftWeek(1)">שבוע הבא ←</button>
+        </div>
+        <div id="gcs-board-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
+        <div id="gcs-board-empty" class="empty-state" hidden><span class="empty-icon">🗓️</span>אין פרסומים מתוכננים לשבוע זה</div>
+        <div class="wb-wrap"><div id="gcs-board-grid" class="wb-grid"></div></div>
       </div>
+
+      <!-- CONTENT LIBRARY -->
+      <div id="gcs-library" hidden>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <div id="gcs-lib-filters" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+          <button class="refresh-btn" onclick="loadLibrary('gcs')">↻ רענן</button>
+        </div>
+        <div id="gcs-lib-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
+        <div id="gcs-lib-empty" class="empty-state" hidden><span class="empty-icon">🗂️</span>ספריית התוכן ריקה<br><small>הוסיפי תוכן דרך הגיליון</small></div>
+        <div id="gcs-lib-grid" class="clib-grid"></div>
+      </div>
+
+      <!-- PROMPTS -->
+      <div id="gcs-prompts" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">כשמשהו יוצא יפה — שומרים כאן 💡</div>
+          <button class="approve-btn" onclick="showPromptModal()">+ הוסף פרומפט</button>
+        </div>
+        <div id="gcs-prom-load" style="text-align:center;padding:30px"><div class="spinner"></div></div>
+        <div id="gcs-prom-empty" class="empty-state" hidden><span class="empty-icon">💡</span>אין פרומפטים שמורים עדיין</div>
+        <div id="gcs-prom-grid"></div>
+      </div>
+
     </div>
 
   </div>
@@ -552,14 +697,20 @@ tbody tr:hover{background:var(--ivory)}
 <script>
 const ROLES = {'Tomer123':'tomer','Gaya123':'gaya'};
 const API = {
-  bookings: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/bookings',
-  content:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content',
-  approve:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/approve',
+  bookings:    'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/bookings',
+  content:     'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content',
+  approve:     'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/approve',
   ads:         'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/ads',
   contentRich: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content-rich',
-  syncContent: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/sync-content'
+  syncContent: 'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/sync-content',
+  scheduleView:'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/schedule-view',
+  contentLib:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/content-library',
+  promptsLib:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/prompts-lib',
+  savePrompt:  'https://n8n-production-e962.up.railway.app/webhook/goodlak-dash/save-prompt'
 };
 let bRows = [], cRows = [], cProfile = {}, contentLoaded = false, adsLoaded = false, adsData = null;
+let schedRows = [], libRows = [], promRows = [], schedLoaded = false, libLoaded = false, promLoaded = false;
+let wbWeekOffset = 0; // 0 = current week
 
 // AUTH
 function doLogin() {
@@ -581,6 +732,7 @@ function doLogout() {
   document.getElementById('pw-input').value = '';
   document.getElementById('login-err').textContent = '';
   bRows = []; cRows = []; cProfile = {}; cActiveMonth = null; contentLoaded = false;
+  schedRows = []; libRows = []; promRows = []; schedLoaded = false; libLoaded = false; promLoaded = false; wbWeekOffset = 0; libFilter = 'הכל';
 }
 
 function showView(role) {
@@ -691,7 +843,7 @@ function switchTomerTab(tab) {
     document.getElementById('tab-' + t).hidden = t !== tab;
     document.getElementById('tbtn-' + t).classList.toggle('active', t === tab);
   });
-  if (tab === 'content') loadContent();
+  if (tab === 'content') { loadContent(); switchCSubTab(document.querySelector('#tab-content .stab-btn.active')?.id?.replace('cstab-','') || 'perf'); }
   if (tab === 'ads' && !adsLoaded) loadAds();
 }
 
@@ -700,6 +852,338 @@ function switchGayaTab(tab) {
     document.getElementById('tab-g-' + t).hidden = t !== tab;
     document.getElementById('tbtn-g-' + t).classList.toggle('active', t === tab);
   });
+  if (tab === 'content') switchGCSubTab(document.querySelector('#tab-g-content .stab-btn.active')?.id?.replace('gstab-','') || 'board');
+}
+
+// ── CONTENT SUB-TAB SWITCHING ──────────────────────────────────────────────
+function switchCSubTab(tab) {
+  ['perf','board','library','prompts'].forEach(t => {
+    document.getElementById('cs-' + t).hidden = t !== tab;
+    document.getElementById('cstab-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'board')   loadScheduleView('cs');
+  if (tab === 'library') loadLibrary('cs');
+  if (tab === 'prompts') loadPromptsLib('cs');
+}
+
+function switchGCSubTab(tab) {
+  ['board','library','prompts'].forEach(t => {
+    document.getElementById('gcs-' + t).hidden = t !== tab;
+    document.getElementById('gstab-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'board')   loadScheduleView('gcs');
+  if (tab === 'library') loadLibrary('gcs');
+  if (tab === 'prompts') loadPromptsLib('gcs');
+}
+
+// ── WEEKLY BOARD ──────────────────────────────────────────────────────────
+const HE_DAYS = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+
+function getWeekDays(offset) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const sunday = new Date(today);
+  sunday.setDate(today.getDate() - today.getDay() + offset * 7);
+  return Array.from({length:7}, (_, i) => { const d = new Date(sunday); d.setDate(sunday.getDate() + i); return d; });
+}
+
+async function loadScheduleView(prefix) {
+  const gridEl  = document.getElementById(prefix + '-board-grid');
+  const loadEl  = document.getElementById(prefix + '-board-load');
+  const emptyEl = document.getElementById(prefix + '-board-empty');
+  const lblEl   = document.getElementById(prefix + '-board-lbl');
+  if (!gridEl) return;
+  loadEl.hidden = false; gridEl.innerHTML = ''; if(emptyEl) emptyEl.hidden = true;
+  if (!schedLoaded) {
+    try {
+      const r = await fetch(API.scheduleView);
+      const d = await r.json();
+      schedRows = d.rows || [];
+      schedLoaded = true;
+    } catch { schedRows = []; }
+  }
+  loadEl.hidden = true;
+  renderWeeklyBoard(prefix, schedRows);
+}
+
+function shiftWeek(delta) {
+  wbWeekOffset += delta;
+  // Re-render for whichever view is active
+  const role = sessionStorage.getItem('gl_role');
+  if (role === 'tomer') renderWeeklyBoard('cs', schedRows);
+  else renderWeeklyBoard('gcs', schedRows);
+}
+
+function renderWeeklyBoard(prefix, rows) {
+  const days = getWeekDays(wbWeekOffset);
+  const gridEl  = document.getElementById(prefix + '-board-grid');
+  const emptyEl = document.getElementById(prefix + '-board-empty');
+  const lblEl   = document.getElementById(prefix + '-board-lbl');
+  if (!gridEl) return;
+
+  // Label
+  const fmt = d => d.toLocaleDateString('he-IL', {day:'2-digit',month:'2-digit'});
+  if (lblEl) lblEl.textContent = fmt(days[0]) + ' – ' + fmt(days[6]);
+
+  // Index rows by date (scheduled_date col B: DD/MM/YYYY or YYYY-MM-DD)
+  const byDate = {};
+  days.forEach(d => { byDate[d.toDateString()] = []; });
+  rows.forEach(r => {
+    const ds = r['scheduled_date'] || r['B'] || '';
+    let dt = parseApptDate(ds);
+    if (!dt) return;
+    const k = dt.toDateString();
+    if (byDate[k]) byDate[k].push(r);
+  });
+
+  const hasAny = days.some(d => byDate[d.toDateString()].length > 0);
+  if (emptyEl) emptyEl.hidden = hasAny || rows.length > 0;
+
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  gridEl.innerHTML = days.map(d => {
+    const posts = byDate[d.toDateString()] || [];
+    const isToday = d.toDateString() === today.toDateString();
+    const dayName = HE_DAYS[d.getDay()];
+    const dayNum  = d.getDate();
+    const postsHtml = posts.length
+      ? posts.map(r => {
+          const status = (r['status'] || r['G'] || '').trim();
+          const cls = status === 'פורסם' || status === 'published' ? 'wp-pub' :
+                      status === 'נכשל'  || status === 'failed'    ? 'wp-fail' : 'wp-sched';
+          const time = r['scheduled_time'] || r['C'] || '';
+          const type = r['slot_type'] || r['D'] || '';
+          const cap  = r['caption'] || r['F'] || '';
+          return `<div class="wb-post ${cls}">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="wb-post-time">${time}</span>
+              ${type ? `<span class="wb-post-type">${type}</span>` : ''}
+            </div>
+            ${cap ? `<div class="wb-post-cap">${cap}</div>` : ''}
+          </div>`;
+        }).join('')
+      : `<div class="wb-empty-day">·</div>`;
+
+    return `<div class="wb-day${isToday ? ' wb-today' : ''}">
+      <div class="wb-day-hdr">
+        ${isToday ? '<div style="font-size:9px;font-weight:800;color:var(--rose);letter-spacing:.6px">היום</div>' : ''}
+        <div class="wb-day-name">${dayName}</div>
+        <div class="wb-day-num">${dayNum}</div>
+      </div>
+      <div class="wb-day-body">${postsHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── CONTENT LIBRARY ────────────────────────────────────────────────────────
+let libFilter = 'הכל';
+
+async function loadLibrary(prefix) {
+  const gridEl  = document.getElementById(prefix + '-lib-grid');
+  const loadEl  = document.getElementById(prefix + '-lib-load');
+  const emptyEl = document.getElementById(prefix + '-lib-empty');
+  const filtEl  = document.getElementById(prefix + '-lib-filters');
+  if (!gridEl) return;
+  loadEl.hidden = false; gridEl.innerHTML = ''; if(emptyEl) emptyEl.hidden = true;
+  if (!libLoaded) {
+    try {
+      const r = await fetch(API.contentLib);
+      const d = await r.json();
+      libRows = d.rows || [];
+      libLoaded = true;
+    } catch { libRows = []; }
+  }
+  loadEl.hidden = true;
+  renderLibFilters(prefix, libRows);
+  renderLibraryCards(prefix, libRows);
+}
+
+function renderLibFilters(prefix, rows) {
+  const filtEl = document.getElementById(prefix + '-lib-filters');
+  if (!filtEl) return;
+  const types = ['הכל', ...new Set(rows.map(r => r['type'] || '').filter(Boolean))];
+  filtEl.innerHTML = types.map(t => `
+    <button onclick="libFilter='${t}';renderLibraryCards('${prefix}',libRows)"
+      style="padding:5px 14px;border-radius:50px;border:1.5px solid ${libFilter===t?'var(--rose)':'var(--ivory3)'};background:${libFilter===t?'var(--rose)':'var(--white)'};color:${libFilter===t?'#fff':'var(--muted)'};font-family:Rubik,sans-serif;font-size:12px;font-weight:600;cursor:pointer">${t}</button>`).join('');
+}
+
+function renderLibraryCards(prefix, rows) {
+  const gridEl  = document.getElementById(prefix + '-lib-grid');
+  const emptyEl = document.getElementById(prefix + '-lib-empty');
+  if (!gridEl) return;
+  const filtered = libFilter === 'הכל' ? rows : rows.filter(r => r['type'] === libFilter);
+  if (!filtered.length) { if(emptyEl) emptyEl.hidden = false; gridEl.innerHTML = ''; return; }
+  if(emptyEl) emptyEl.hidden = true;
+
+  const typeEmoji = {post:'📷', reel:'🎬', story:'📱'};
+  const statusBadge = r => {
+    const u = (r['used'] || '').toUpperCase();
+    if (u === 'TRUE') return '<span class="sbadge sbadge-pub">✅ פורסם</span>';
+    return '<span class="sbadge sbadge-draft">📝 טיוטה</span>';
+  };
+  const typeBadge = t => {
+    const map = {post:'פוסט',reel:'ריל',story:'סטורי'};
+    return `<span class="sbadge sbadge-sched">${typeEmoji[t]||'📄'} ${map[t]||t}</span>`;
+  };
+
+  gridEl.innerHTML = filtered.map((r, i) => {
+    const media = r['media_url'] || '';
+    const cap   = r['caption'] || '';
+    const tags  = (r['tags'] || '').split(/[,#\s]+/).filter(s => s && s.length > 1).slice(0,5);
+    const date  = r['created_at'] || '';
+    const type  = r['type'] || 'post';
+    const notes = r['notes'] || '';
+
+    const thumbHtml = media
+      ? `<img src="${media}" alt="תוכן" onerror="this.parentElement.innerHTML='<div class=\\"clib-thumb-ph\\">${typeEmoji[type]||'📄'}</div>'">`
+      : `<div class="clib-thumb-ph">${typeEmoji[type]||'📄'}</div>`;
+
+    return `<div class="clib-card">
+      <div class="clib-thumb">
+        ${thumbHtml}
+        <div class="clib-badge-tl">${typeBadge(type)}</div>
+        <div class="clib-badge-tr">${statusBadge(r)}</div>
+      </div>
+      <div class="clib-body">
+        <div class="clib-date">${date}</div>
+        ${cap ? `<div class="clib-caption">${cap}</div>` : '<div class="clib-caption" style="color:var(--ivory3)">אין כיתוב</div>'}
+        ${tags.length ? `<div class="clib-tags">${tags.map(t=>`<span class="clib-tag">#${t}</span>`).join('')}</div>` : ''}
+        ${notes ? `<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:2px">${notes}</div>` : ''}
+        <div class="clib-actions">
+          <button class="clib-act" onclick="copyText(\`${cap.replace(/`/g,"'")}\`)" title="העתק כיתוב">📋 כיתוב</button>
+          ${media ? `<a class="clib-act" href="${media}" target="_blank" style="color:var(--muted);text-decoration:none">🔗 מדיה</a>` : '<span class="clib-act" style="opacity:.4;cursor:default">🔗 מדיה</span>'}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PROMPTS LIBRARY ───────────────────────────────────────────────────────
+async function loadPromptsLib(prefix) {
+  const gridEl = document.getElementById(prefix + '-prom-grid');
+  const loadEl = document.getElementById(prefix + '-prom-load');
+  const emptyEl = document.getElementById(prefix + '-prom-empty');
+  if (!gridEl) return;
+  loadEl.hidden = false; gridEl.innerHTML = ''; if(emptyEl) emptyEl.hidden = true;
+  if (!promLoaded) {
+    try {
+      const r = await fetch(API.promptsLib);
+      const d = await r.json();
+      promRows = (d.rows || []).filter(r => r['title'] || r['prompt']);
+      promLoaded = true;
+    } catch { promRows = []; }
+  }
+  loadEl.hidden = true;
+  if (!promRows.length) { if(emptyEl) emptyEl.hidden = false; return; }
+  renderPromptsGrid(prefix, promRows);
+}
+
+function renderPromptsGrid(prefix, rows) {
+  const gridEl = document.getElementById(prefix + '-prom-grid');
+  if (!gridEl) return;
+  // Group by category
+  const cats = {};
+  rows.forEach(r => { const c = r['category'] || 'כללי'; (cats[c] = cats[c] || []).push(r); });
+  gridEl.innerHTML = Object.entries(cats).map(([cat, items]) => `
+    <div class="prom-section-title">${cat}</div>
+    ${items.map(r => `
+      <div class="prom-card">
+        <div class="prom-header">
+          ${r['tool'] ? `<span class="prom-tool">${r['tool']}</span>` : ''}
+          <div style="flex:1">
+            <div class="prom-title">${r['title'] || '(ללא כותרת)'}</div>
+            ${r['created_date'] ? `<div class="prom-cat">${r['created_date']}</div>` : ''}
+          </div>
+          <button class="prom-copy" onclick="copyText(\`${(r['prompt']||'').replace(/`/g,"'")}\`)" title="העתק פרומפט">📋 העתק</button>
+        </div>
+        ${r['prompt'] ? `<div class="prom-text">${r['prompt']}</div>` : ''}
+        ${r['result_notes'] ? `<div class="prom-notes">💡 ${r['result_notes']}</div>` : ''}
+      </div>`).join('')}
+  `).join('');
+}
+
+// ── ADD PROMPT MODAL ──────────────────────────────────────────────────────
+function showPromptModal() {
+  const ov = document.createElement('div');
+  ov.className = 'modal-ov'; ov.id = 'prompt-modal-ov';
+  ov.innerHTML = `
+    <div class="modal-sh" onclick="event.stopPropagation()">
+      <div class="modal-ttl">💡 הוסף כלל פרומפט</div>
+      <div class="mfield">
+        <label class="mlbl">כלי</label>
+        <select id="pm-tool" class="mselect">
+          <option>Higgsfield</option><option>Eleven Labs</option><option>CapCut</option>
+          <option>Claude</option><option>Canva</option><option>ChatGPT</option><option>אחר</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label class="mlbl">קטגוריה</label>
+        <select id="pm-cat" class="mselect">
+          <option>סרטון</option><option>תמונה</option><option>אודיו</option><option>כיתוב</option><option>כללי</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label class="mlbl">כותרת קצרה</label>
+        <input id="pm-title" class="minput" placeholder="לדוגמה: ריל לפני/אחרי עם מוזיקה">
+      </div>
+      <div class="mfield">
+        <label class="mlbl">הפרומפט המלא</label>
+        <textarea id="pm-prompt" class="mtextarea" placeholder="הדבק כאן את הפרומפט המלא שעבד..."></textarea>
+      </div>
+      <div class="mfield">
+        <label class="mlbl">מה יצא יפה (אופציונלי)</label>
+        <input id="pm-notes" class="minput" placeholder="לדוגמה: הצבעים יצאו מרהיבים, האור רך">
+      </div>
+      <div class="modal-acts">
+        <button class="modal-cancel" onclick="closePromptModal()">ביטול</button>
+        <button class="modal-save" id="pm-save-btn" onclick="submitPrompt()">שמור פרומפט</button>
+      </div>
+    </div>`;
+  ov.onclick = closePromptModal;
+  document.body.appendChild(ov);
+}
+
+function closePromptModal() {
+  const ov = document.getElementById('prompt-modal-ov');
+  if (ov) ov.remove();
+}
+
+async function submitPrompt() {
+  const btn = document.getElementById('pm-save-btn');
+  const title = document.getElementById('pm-title').value.trim();
+  const prompt = document.getElementById('pm-prompt').value.trim();
+  if (!title || !prompt) { alert('כותרת ופרומפט הם שדות חובה'); return; }
+  btn.disabled = true; btn.textContent = 'שומר...';
+  try {
+    await fetch(API.savePrompt, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        category: document.getElementById('pm-cat').value,
+        tool:     document.getElementById('pm-tool').value,
+        title, prompt,
+        result_notes: document.getElementById('pm-notes').value.trim()
+      })
+    });
+    promLoaded = false; // force reload
+    closePromptModal();
+    // Re-render active prompts panel
+    const role = sessionStorage.getItem('gl_role');
+    loadPromptsLib(role === 'tomer' ? 'cs' : 'gcs');
+  } catch {
+    btn.disabled = false; btn.textContent = 'שמור פרומפט';
+    alert('שגיאה בשמירה - נסה שנית');
+  }
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    // Brief flash feedback
+    const el = document.createElement('div');
+    el.style.cssText = 'position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--burg);color:#fff;padding:8px 20px;border-radius:50px;font-size:13px;font-weight:600;z-index:9999;pointer-events:none';
+    el.textContent = '✅ הועתק!';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1800);
+  }).catch(() => alert(text));
 }
 
 // HELPERS
